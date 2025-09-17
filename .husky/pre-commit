@@ -1,0 +1,2 @@
+﻿#!/usr/bin/env sh
+npm run lint:fix && npm run format:write && npm run typecheck

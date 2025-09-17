@@ -1,0 +1,68 @@
+﻿name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, staging ]
+  pull_request:
+    branches: [ main, staging ]
+
+env:
+  DATABASE_URL: "postgresql://user:password@localhost:5432/test_db"
+  NEXTAUTH_SECRET: "test-secret"
+  NEXTAUTH_URL: "http://localhost:3000"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: npm
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run type checking
+      run: npm run typecheck
+
+    - name: Run linting
+      run: npm run lint
+
+    - name: Run tests
+      run: npm run test:run
+
+    - name: Build application
+      run: npm run build
+
+  deploy-staging:
+    if: github.ref == 'refs/heads/staging'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to Vercel Staging
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        scope: ${{ secrets.VERCEL_ORG_ID }}
+
+  deploy-production:
+    if: github.ref == 'refs/heads/main'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to Vercel Production
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        vercel-args: '--prod'
+        scope: ${{ secrets.VERCEL_ORG_ID }}
