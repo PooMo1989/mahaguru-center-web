@@ -1,0 +1,4 @@
+# 7. Next Steps
+
+* **UX Expert Prompt:** The PRD is complete. Please review it, along with the Project Brief, to create the detailed `front-end-spec.md`. Focus on translating the UI Design Goals and page structures into a comprehensive specification covering information architecture, user flows, and component design.
+* **Architect Prompt:** The PRD is complete. Please review it, along with the Project Brief, to create the `fullstack-architecture.md`. Focus on translating the technical assumptions and functional requirements into a robust architecture for the monorepo, monolith backend, and frontend, including the CI/CD pipeline.

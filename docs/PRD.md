@@ -1,0 +1,302 @@
+# Product Requirements Document: Mahaguru Center
+
+**Date:** September 10, 2025
+**Author:** John (PM) & Project Stakeholder
+**Version:** 1.0
+
+## 1. Goals and Background Context
+
+#### **Goals**
+
+* To establish a professional and welcoming online presence for the Mahaguru Center.
+* To clearly communicate the Mahaguru's unique spiritual journey and core teachings.
+* To provide detailed information on all services and events, encouraging community engagement.
+* To showcase the center's impactful projects and inspire financial support.
+* To offer clear and accessible channels for volunteering, contact, and donations.
+
+#### **Background Context**
+
+The Mahaguru Center requires a new portfolio website to serve as its primary digital touchpoint. The immediate need is to structure over 20 years of spiritual teachings and community activities into an accessible and professional website. This site will act as an informational hub for new seekers, existing followers, and potential supporters, consolidating information about the Mahaguru, services, events, and special projects into a single, cohesive platform.
+
+#### **Change Log**
+
+| Date          | Version | Description          | Author    |
+| :------------ | :------ | :------------------- | :-------- |
+| Sep 10, 2025 | 1.0     | Initial PRD Creation | John (PM) |
+
+---
+
+## 2. Requirements
+
+#### **Functional**
+
+1.  **FR1:** The website must display all agreed-upon pages (Homepage, Mahaguru, Services, Projects, Events, Contact Us, Book a Meetup, Gen Alpha Academy) with the exact section structure and content defined in the Project Brief.
+2.  **FR2:** The Events system must be powered by a backend portal where an administrator can create, update, and manage events, including fields for a Name, Description, Category, Date, and Photos.
+3.  **FR3:** The website must automatically display events in the "Upcoming Events" section or the "Past Events Archive" based on the event's date relative to the current date.
+4.  **FR4:** The "Contact Us" page must feature a dynamic, tabbed interface for donations. Selecting a tab (Daily Dana, Poya Day Event, Special Projects) must display the corresponding description, image, and donation form.
+5.  **FR5:** The "Projects" page must display a donation progress bar that tracks progress toward a monthly goal of LKR 750,000.
+6.  **FR6:** The Mahaguru page must present the five stages of his life using a dynamic, tabbed interface. Clicking a tab should display the content for that stage without a full page reload.
+7.  **FR7:** A backend portal must be created for administrators to manage projects. This portal must allow creating and editing projects with fields for: a Project Name, Description, Photos, a specific **Donation Goal Amount**, and the **Current Donation Amount**.
+8.  **FR8:** On the Projects page, each project's donation progress bar must dynamically display the **Donation Goal Amount** and reflect the **Current Donation Amount** as they are updated in the backend portal.
+
+#### **Non-Functional**
+
+1.  **NFR1:** To meet the "ASAP" timeline, the initial website architecture should be simple and prioritize rapid deployment.
+2.  **NFR2:** The backend portals for managing events and projects must be user-friendly for non-technical administrators.
+
+---
+
+## 3. User Interface Design Goals
+
+#### **Overall UX Vision**
+
+The user experience should be serene, intuitive, and welcoming. It must create a sense of peace and clarity, guiding visitors effortlessly to the information or connection they seek. The design should feel clean, uncluttered, and reflective of the center's mindful ethos.
+
+#### **Key Interaction Paradigms**
+
+The interface will primarily use a simple, clear navigation structure. Key interactions will involve dynamic content loading within sections (e.g., the tabs on the Mahaguru and Donate pages) to provide rich information without overwhelming the user or requiring full page reloads.
+
+#### **Core Screens and Views**
+
+Based on the Project Brief, the core screens and views are: Homepage, Mahaguru, Services, Projects, Events, Contact Us, Book a Meetup, and Gen Alpha Academy.
+
+#### **Branding**
+
+*Assumption:* No specific branding guidelines have been provided. The design will use a calm, natural color scheme (e.g., earth tones, soft whites, muted accent colors) to create a peaceful aesthetic. This can be replaced if a formal brand guide exists.
+
+#### **Target Device and Platforms**
+
+The website must be fully responsive, providing a seamless and high-quality experience on all major devices, including desktops, tablets, and mobile phones.
+
+---
+
+## 4. Technical Assumptions
+
+* **Repository Structure:** Monorepo
+* **Service Architecture:** Monolith
+* **Testing Requirements:** Unit + Integration Tests
+* **Deployment Process:** The project will use a CI/CD pipeline. Pushing code to the main branch in GitHub will automatically build, test, and deploy changes to the live website.
+
+---
+
+## 5. Epic & Story Breakdown
+
+### **Epic 1: Core Informational Pages**
+
+* **Goal:** Launch the initial version of the website with the Homepage, Services, 'Book a Meetup' page, and a basic informational page for the Gen Alpha Academy to establish the core online presence.
+* **Pages Included:** Homepage, Services, Book a Meetup, Gen Alpha Academy (Basic Version).
+
+#### **Story 1.1: Project Foundation**
+> As a developer, I want to set up the initial project structure and repository so that we have a solid foundation to build upon.
+* **Acceptance Criteria:**
+    1.  A new Git repository for the project must be initialized.
+    2.  The repository must follow the agreed-upon **Monorepo** structure, with distinct packages/directories for the `frontend` and `backend` applications.
+    3.  The `frontend` application must be initialized with a standard framework and its basic dependencies.
+    4.  The `backend` application (as a **Monolith**) must be initialized with a standard framework and its basic dependencies.
+    5.  Basic development tooling (e.g., a linter for code quality) must be configured at the root of the monorepo.
+    6.  A basic `README.md` file must be created with instructions on how to install dependencies and run the project locally.
+    7.  The initial, empty applications must be successfully deployed to a staging/development environment to confirm the deployment pipeline is functional.
+
+#### **Story 1.2: Homepage Implementation**
+> As a first-time visitor, I want to see a clean Homepage with clear navigation so that I can easily understand the purpose of the site and find the main sections.
+* **Acceptance Criteria:**
+    1.  The homepage must display a main navigation bar.
+    2.  The navigation bar must contain functional links for: Mahaguru, Services, Projects, Events, and Contact Us.
+    3.  The main content area of the homepage should contain simple placeholder text and images that establish the "serene and welcoming" visual theme.
+    4.  The page layout must be fully responsive, rendering correctly on desktop, tablet, and mobile screen sizes.
+    5.  All navigation links must correctly route to their respective pages, even if those pages are placeholders for now.
+
+#### **Story 1.3: Services Page Implementation**
+> As a potential follower, I want a Services page that clearly lists and describes all the offerings of the center, with relevant images and links, so that I can understand how to engage.
+* **Acceptance Criteria:**
+    1.  The page must display all seven services as defined in the Project Brief.
+    2.  For each service, the complete, unabridged description from the Project Brief must be displayed.
+    3.  The layout of the page must be fully responsive.
+    4.  Each service section must include a functional call-to-action button that links to the specified **internal page or external booking link**.
+    5.  The "Mahaguru Meetup" and "Gen Alpha Academy" sections must link correctly to their respective detailed pages.
+    6.  Each of the seven service sections must display one or more **relevant images** that visually represent the service.
+    7.  **Dependency:** The specific images for each service must be provided by the project owner before this story can be marked as complete.
+
+#### **Story 1.4: Book a Meetup Page Implementation**
+> As a user seeking guidance, I want a detailed 'Book a Meetup' page so that I can understand the options and book a session with the Mahaguru.
+* **Acceptance Criteria:**
+    1.  The page must be created and display all six sections as defined in the Project Brief.
+    2.  The exact, unabridged text from the Project Brief must be used for all sections, including contribution amounts.
+    3.  The page layout must be fully responsive.
+    4.  All call-to-action buttons must be present and functional.
+    5.  The page must be accessible via the link on the "Services" page.
+
+#### **Story 1.5: Gen Alpha Academy (Basic) Page Implementation**
+> As an interested parent or young adult, I want a basic informational page for the Gen Alpha Academy so that I can understand its mission and purpose, with the knowledge that full details will be coming soon.
+* **Acceptance Criteria:**
+    1.  The page must display the core introductory content from the Project Brief.
+    2.  The page must **not** include specific workshop details like the date, duration, price, or registration buttons.
+    3.  The page must include a clear message indicating that specific workshop details are "Coming Soon."
+    4.  The page layout must be fully responsive.
+    5.  The page must be accessible via the link on the "Services" page.
+
+### **Epic 2: Deep Content & Interactive UI**
+
+* **Goal:** Add the detailed Mahaguru and Contact Us pages, and implement the dynamic tabbed interfaces to enhance user engagement.
+* **Pages Included:** Mahaguru, Contact Us.
+
+#### **Story 2.1: Mahaguru Page Content Implementation**
+> As a visitor, I want to view a Mahaguru page that presents the five stages of his life so that I can understand his journey.
+* **Acceptance Criteria:**
+    1.  A new "Mahaguru" page must be created.
+    2.  The page must display all five sections corresponding to the stages of his life, using the exact, unabridged text from the Project Brief.
+    3.  The page layout must be fully responsive.
+    4.  For this story, the content should be presented in a simple, scrollable format.
+
+#### **Story 2.2: Mahaguru Page Interactive Tabs**
+> As a visitor, I want to navigate the five stages of the Mahaguru's life using an interactive tabbed interface so that I can easily explore the content without scrolling.
+* **Acceptance Criteria:**
+    1.  The Mahaguru page must display five clickable tabs for the five stages.
+    2.  When the page first loads, the content for the first tab must be visible.
+    3.  Clicking on a tab must display its content and hide the others.
+    4.  Switching between tabs must happen instantly, without a full page reload.
+    5.  The tabbed interface must be responsive.
+
+#### **Story 2.3: Contact Us Page (Volunteer Section)**
+> As a supporter, I want a 'Volunteer' section on the Contact Us page with a simple form so that I can express my interest in helping the center.
+* **Acceptance Criteria:**
+    1.  A new "Contact Us" page must be created.
+    2.  The page must display a "Volunteer" section with the text from the Project Brief.
+    3.  A simple contact form must be displayed within the Volunteer section.
+    4.  The form must include fields for Full Name, Email Address, and a Message.
+    5.  The form must have a functional "Submit" button.
+    6.  Upon submission, a simple success message must be displayed.
+    7.  The section and its form must be fully responsive.
+
+#### **Story 2.4: Contact Us Page (Donation Tabs)**
+> As a supporter, I want to use a tabbed interface in the 'Donate' section so that I can easily choose a specific fund to contribute to.
+* **Acceptance Criteria:**
+    1.  The "Contact Us" page must display a "Donate" section.
+    2.  The section must feature three clickable tabs: "Daily Dana," "Poya Day Event," and "Special Projects."
+    3.  When a tab is clicked, the specific description and image for that fund must be displayed.
+    4.  The content and form must change instantly without a full page reload.
+    5.  The donation form must include fields for Donation Amount, Full Name, and Email Address.
+    6.  The form must clearly indicate which fund the donation is for.
+    7.  Upon submission, a simple success message must be displayed.
+    8.  The tabbed interface and its forms must be fully responsive.
+
+### **Epic 3: Dynamic Events System**
+
+* **Goal:** Implement the complete, admin-managed Events system, allowing the center to manage and display recurring, past, and upcoming events automatically.
+
+#### **Story 3.1: Events Backend API Foundation (Revised)**
+> As an administrator, I want a basic backend system and API for Events so that I can programmatically create, read, update, and delete event data.
+* **Acceptance Criteria:**
+    1.  A database table/collection for "Events" must be created.
+    2.  The Event data model must include a mandatory **`EventDate`** (datetime) field.
+    3.  API endpoints for creating, updating, and deleting events must be functional.
+    4.  The API endpoint for reading events (`GET /api/events`) must support **filtering** by past or upcoming.
+    5.  The API endpoint for reading a single event must be functional.
+    6.  All API endpoints must be verified with automated tests.
+
+#### **Story 3.2: Admin Portal (Create & View Events) (Revised)**
+> As an administrator, I want a simple web portal where I can create new events with all required details and view a list of all existing events.
+* **Acceptance Criteria:**
+    1.  A new, simple, password-protected admin page must be created.
+    2.  The page must display a list of all events, showing the Event Name and **Event Date**.
+    3.  The page must contain a form for creating a new event.
+    4.  The form must include a user-friendly **date and time picker** for the `EventDate`.
+    5.  The "Create Event" button must send data to the backend API.
+    6.  After creation, the event list must refresh and show the new event.
+    7.  The admin portal must be functional on a desktop browser.
+
+#### **Story 3.3: Admin Portal (Update & Delete Events) (Revised)**
+> As an administrator, I want to be able to edit the details of existing events and delete them from the admin portal.
+* **Acceptance Criteria:**
+    1.  Each event in the admin list must have an "Edit" and a "Delete" button.
+    2.  Clicking "Edit" must open a form pre-populated with that event's data.
+    3.  The "Save Changes" button must send updated data to the API.
+    4.  After an update, the list must show the new information.
+    5.  Clicking "Delete" must trigger a confirmation prompt.
+    6.  If confirmed, the event must be deleted via the API.
+    7.  After deletion, the event must disappear from the list.
+
+#### **Story 3.4: Frontend Events Page & Automated Filtering (Final Version)**
+> As a visitor, I want to view an Events page and sidebar that automatically show upcoming and past events in the correct sections so that the information is always current and relevant.
+* **Acceptance Criteria:**
+    1.  A public "Events" page and a reusable "Upcoming Events" sidebar component must be created.
+    2.  The components must fetch **dynamic** event data from the API.
+    3.  The "Events" page must display a **static "Recurring Events" section**.
+    4.  The "Upcoming Events" sidebar must display events with a future date.
+    5.  The "Past Events Archive" must display events with a date in the past.
+    6.  Each **dynamic** event displayed must show its details including date and time.
+    7.  If a section has no dynamic events, a user-friendly message must be shown.
+    8.  The page and sidebar must be fully responsive.
+
+### **Epic 4: Dynamic Projects & Donations System**
+
+* **Goal:** Develop the backend portal for managing projects and implement the dynamic donation tracking system on the website.
+
+#### **Story 4.1: Projects Backend API Foundation (Revised)**
+> As an administrator, I want a backend system and API for Projects so that I can manage project and donation data.
+* **Acceptance Criteria:**
+    1.  A database table/collection for "Projects" must be created.
+    2.  The Project data model must include fields for `ProjectName`, `Description`, `DonationGoalAmount`, `CurrentDonationAmount`, `ProjectType`, `ProjectNature`, `StartDate`, and `EndDate`.
+    3.  API endpoints for CRUD operations on Projects must be functional.
+    4.  The `Create` and `Read` endpoints must be functional.
+    5.  The `Update` and `Delete` endpoints must be functional.
+    6.  All API endpoints must be verified with automated tests.
+
+#### **Story 4.2: Admin Portal (Manage All Project Details) (Final Version)**
+> As an administrator, I want an intuitive web portal where I can create, view, and edit all details of a project through a clear and logical workflow.
+* **Acceptance Criteria:**
+    1.  The admin portal must display a list of projects and an "Add New Project" button.
+    2.  Each project row must show key info and have an "Edit" button.
+    3.  The "Add" and "Edit" buttons must open a form.
+    4.  The form must contain fields for all project data.
+    5.  The `ProjectNature` field must be radio buttons ('Continuous'/'One-time').
+    6.  If 'Continuous' is selected, `StartDate` and `EndDate` fields must be **disabled**. If 'One-time' is selected, they must be **enabled**.
+    7.  The "Save" button must handle both create and update logic.
+    8.  After saving, the list must update and a success message must be shown.
+
+#### **Story 4.3: Frontend Projects Page & Progress Bars**
+> As a visitor, I want to view a Projects page that displays all the center's initiatives, their goals, and their current donation progress.
+* **Acceptance Criteria:**
+    1.  The public "Projects" page must be created.
+    2.  The page must fetch and display a section for each project.
+    3.  Each section must display the project's Name, Description, and Photos.
+    4.  Each section must display a visual progress bar.
+    5.  The progress bar must accurately represent the `CurrentDonationAmount` vs. the `DonationGoalAmount`.
+    6.  The raw donation numbers must also be displayed.
+    7.  The page must be fully responsive.
+
+#### **Story 4.4: Donate Button Redirect Logic**
+> As a supporter, I want to be redirected to the correct donation form when I click a 'Donate' button on the Projects page.
+* **Acceptance Criteria:**
+    1.  Each project on the "Projects" page must have a "Donate" button.
+    2.  Clicking the button must redirect the user to the "Contact Us" page.
+    3.  The "Donate" tab on the "Contact Us" page must be active.
+    4.  The **correct** sub-tab (Daily Dana, Poya Day, or Special Projects) must be active, based on the project's `DonationLinkTarget`.
+    5.  The redirect must be functional on all devices.
+
+### **Epic 5: Gen Alpha Academy Landing Page**
+
+* **Goal:** To launch a comprehensive, single-page landing page for the Gen Alpha Academy that provides all necessary information and directs users to an external link for registration.
+
+#### **Story 5.1: Gen Alpha Academy Landing Page Implementation (Final Version)**
+> As a parent, I want a comprehensive landing page for the Gen Alpha Academy with all workshop details and clear links to an external registration page, so I can easily sign up.
+* **Acceptance Criteria:**
+    1.  The basic Gen Alpha Academy page from Epic 1 must be replaced with the full landing page.
+    2.  The page must contain all sections and unabridged text from the Project Brief.
+    3.  There must be at least two "Reserve Now" call-to-action buttons.
+    4.  All "Reserve Now" buttons must link to a specified **external registration URL**.
+    5.  The "Inquire via WhatsApp" button must link to the specified WhatsApp contact.
+    6.  The page layout must be fully responsive.
+
+---
+
+## 6. Checklist Results Report
+
+* **Final Decision:** READY FOR ARCHITECT & UX EXPERT
+
+---
+
+## 7. Next Steps
+
+* **UX Expert Prompt:** The PRD is complete. Please review it, along with the Project Brief, to create the detailed `front-end-spec.md`. Focus on translating the UI Design Goals and page structures into a comprehensive specification covering information architecture, user flows, and component design.
+* **Architect Prompt:** The PRD is complete. Please review it, along with the Project Brief, to create the `fullstack-architecture.md`. Focus on translating the technical assumptions and functional requirements into a robust architecture for the monorepo, monolith backend, and frontend, including the CI/CD pipeline.
