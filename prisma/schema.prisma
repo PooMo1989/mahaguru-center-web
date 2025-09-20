@@ -69,3 +69,16 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+
+model Event {
+    id          String   @id @default(cuid())
+    name        String
+    description String
+    category    String
+    eventDate   DateTime
+    photos      String[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@index([eventDate])
+}

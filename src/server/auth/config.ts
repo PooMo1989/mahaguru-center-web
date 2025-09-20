@@ -1,5 +1,6 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 import DiscordProvider from "next-auth/providers/discord";
 
 import { db } from "~/server/db";
@@ -14,15 +15,15 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      role?: string;
       // ...other properties
-      // role: UserRole;
     } & DefaultSession["user"];
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    role?: string;
+    // ...other properties
+  }
 }
 
 /**
@@ -32,25 +33,73 @@ declare module "next-auth" {
  */
 export const authConfig = {
   providers: [
-    DiscordProvider,
-    /**
-     * ...add more providers here.
-     *
-     * Most other providers require a bit more work than the Discord provider. For example, the
-     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-     *
-     * @see https://next-auth.js.org/providers/github
-     */
-  ],
-  adapter: PrismaAdapter(db),
-  callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
+    CredentialsProvider({
+      name: "Admin Login",
+      credentials: {
+        username: { label: "Username", type: "text", placeholder: "admin" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials) {
+        console.log('Authorize called with:', credentials);
+        
+        // Simple admin credentials for development
+        if (
+          (credentials?.username === "admin" && credentials?.password === "admin123") ||
+          (credentials?.username === "severus" && credentials?.password === "severus")
+        ) {
+          const user = {
+            id: credentials.username === "severus" ? "severus-admin" : "admin-user",
+            name: credentials.username === "severus" ? "Severus Admin" : "Admin User",
+            email: credentials.username === "severus" ? "severus@mahaguru.com" : "admin@mahaguru.com",
+            role: "admin",
+          };
+          console.log('Returning user:', user);
+          return user;
+        }
+        console.log('Authorization failed - invalid credentials');
+        return null;
       },
     }),
+    // Keep Discord provider for when it's properly configured
+    ...(process.env.AUTH_DISCORD_ID && process.env.AUTH_DISCORD_SECRET 
+      ? [DiscordProvider] 
+      : []
+    ),
+  ],
+  // Use JWT strategy for credentials provider (no database needed)
+  session: {
+    strategy: "jwt" as const,
+    maxAge: 24 * 60 * 60, // 24 hours
   },
+  pages: {
+    signIn: '/auth/signin',
+  },
+  callbacks: {
+    async redirect({ url, baseUrl }) {
+      // Simplify redirect logic to prevent loops
+      if (url.startsWith("/")) {
+        return `${baseUrl}${url}`;
+      }
+      return url.startsWith(baseUrl) ? url : `${baseUrl}/admin`;
+    },
+    async jwt({ token, user }) {
+      // Persist user data in JWT token
+      if (user) {
+        token.id = user.id;
+        token.role = (user as any).role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // Send properties to client
+      if (token) {
+        session.user.id = token.id as string;
+        (session.user as any).role = token.role as string;
+      }
+      return session;
+    },
+  },
+  // Add some security options
+  secret: process.env.AUTH_SECRET,
+  debug: process.env.NODE_ENV === "development",
 } satisfies NextAuthConfig;
