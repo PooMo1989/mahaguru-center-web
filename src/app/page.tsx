@@ -1,115 +1,170 @@
 import { Navigation, Footer } from "~/components/navigation";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   return (
     <>
       <Navigation />
-      <main className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
-        {/* Hero Section */}
-        <section className="relative h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-          <div className="absolute inset-0 bg-black/20"></div>
+      <main className="min-h-screen">
+        {/* Hero Section with Background Image */}
+        <section className="relative h-screen flex items-center justify-center">
+          <div className="absolute inset-0">
+            <Image
+              src="/heroImage2.webp"
+              alt="Mahaguru Center"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-black/40"></div>
+          </div>
           <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-6 leading-tight">
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
               Welcome to Mahaguru Center
             </h1>
-            <p className="text-xl md:text-2xl text-gray-700 mb-8 italic">
+            <p className="text-xl md:text-2xl text-white/90 mb-8 italic">
               &ldquo;The mind is everything. What you think you become.&rdquo;
             </p>
-            <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors shadow-lg hover:shadow-xl">
-              Explore Our Journey
-            </button>
+            <Link href="/services">
+              <button className="bg-[#183F37] hover:bg-[#152F2E] text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors shadow-lg hover:shadow-xl">
+                Explore Our Offerings
+              </button>
+            </Link>
           </div>
         </section>
 
-        {/* Introduction Section */}
-        <section className="py-16 px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-8">
-              A Place of Peace and Learning
-            </h2>
-            <p className="text-lg text-gray-600 leading-relaxed">
-              Welcome to Mahaguru Center, a serene sanctuary dedicated to spiritual growth, community connection, 
-              and the timeless wisdom of Dhamma teachings. Our center serves as a peaceful haven where individuals 
-              from all walks of life can come together to explore mindfulness, participate in meaningful discussions, 
-              and contribute to compassionate community projects that make a positive impact in our world.
-            </p>
+        {/* Section 1: About Mahaguru - Image Right, Content Left */}
+        <section className="py-20 bg-gradient-to-b from-gray-50 to-slate-100">
+          <div className="max-w-7xl mx-auto px-4 lg:px-8">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-800">
+                    About Mahaguru
+                  </h2>
+                  <p className="text-lg text-gray-600 leading-relaxed">
+                    A rare human being who has walked a unique spiritual path for over 20 years.
+                    Learn about our spiritual teacher and the wisdom that guides our center.
+                  </p>
+                </div>
+                <Link href="/mahaguru">
+                  <button className="bg-[#183F37] hover:bg-[#152F2E] text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
+                    Witness
+                  </button>
+                </Link>
+              </div>
+              <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden">
+                <Image
+                  src="/Untitled design (1).jpg"
+                  alt="Mahaguru"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* Featured Pages Section */}
-        <section className="py-16 px-4 bg-white/50">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
-              Discover Our Community
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {/* Card 1: About Mahaguru */}
-              <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6 text-center">
-                <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🙏</span>
-                </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-3">About Mahaguru</h3>
-                <p className="text-gray-600 mb-4">
-                  Learn about our spiritual teacher and the wisdom that guides our center.
-                </p>
-                <a 
-                  href="/mahaguru" 
-                  className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg transition-colors"
-                >
-                  Learn More
-                </a>
+        {/* Section 2: Our Services - Image Above, Content Below */}
+        <section className="py-20 bg-white">
+          <div className="max-w-6xl mx-auto px-4 lg:px-8">
+            <div className="text-center mb-12">
+              <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden mb-8">
+                <Image
+                  src="/Screenshot 2025-08-20 185255.jpg"
+                  alt="Our Services"
+                  fill
+                  className="object-cover"
+                />
               </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+                Our Services
+              </h2>
+              <p className="text-lg text-gray-600 leading-relaxed max-w-4xl mx-auto mb-8">
+                From Dhamma Talks to Individual meetups we have a wide range of offering to fit anyones spiritual and life needs. 
+                We run Arahathmaga Center as our physical sanctuary and Maithribodhi Archive as the treasure trove of Dhamma.
+              </p>
+              <Link href="/services">
+                <button className="bg-[#183F37] hover:bg-[#152F2E] text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
+                  Explore
+                </button>
+              </Link>
+            </div>
+          </div>
+        </section>
 
-              {/* Card 2: Our Services */}
-              <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6 text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🌱</span>
+        {/* Section 3: Monthly Dhamma Discussion - Content Left, Image Right */}
+        <section className="py-20 bg-gradient-to-b from-gray-50 to-slate-100">
+          <div className="max-w-7xl mx-auto px-4 lg:px-8">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="space-y-6 lg:order-1">
+                <div className="space-y-4">
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-800">
+                    Monthly Dhamma Discussion
+                  </h2>
+                  <p className="text-lg text-gray-600 leading-relaxed">
+                    We had been continuously conducting Monthly Dhamma Discussion on poya day for years now. 
+                    However it is only one of the events that we offer to our community. Attend one of our events 
+                    and witness the difference for yourself.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-3">Our Services</h3>
-                <p className="text-gray-600 mb-4">
-                  Discover the various programs and services we offer for spiritual growth.
-                </p>
-                <a 
-                  href="/services" 
-                  className="inline-block bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors"
-                >
-                  Explore Services
-                </a>
+                <Link href="/events">
+                  <button className="bg-[#183F37] hover:bg-[#152F2E] text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
+                    View Events
+                  </button>
+                </Link>
               </div>
-
-              {/* Card 3: Monthly Dhamma Discussion */}
-              <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6 text-center">
-                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">💬</span>
-                </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-3">Monthly Dhamma Discussion</h3>
-                <p className="text-gray-600 mb-4">
-                  Join our monthly gatherings for meaningful discussions and shared learning.
-                </p>
-                <a 
-                  href="/events" 
-                  className="inline-block bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg transition-colors"
-                >
-                  View Events
-                </a>
+              <div className="relative h-96 lg:h-[400px] rounded-2xl overflow-hidden lg:order-2">
+                <Image
+                  src="/Screenshot 2025-07-29 161148.jpg"
+                  alt="Monthly Dhamma Discussion"
+                  fill
+                  className="object-cover"
+                />
               </div>
+            </div>
+          </div>
+        </section>
 
-              {/* Card 4: Our Community Projects */}
-              <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6 text-center">
-                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🤝</span>
-                </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-3">Our Community Projects</h3>
-                <p className="text-gray-600 mb-4">
-                  Explore our compassionate initiatives that serve our community and beyond.
-                </p>
-                <a 
-                  href="/projects" 
-                  className="inline-block bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-lg transition-colors"
-                >
+        {/* Section 4: Our Projects - Split Layout with Multiple Images */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+                Our Projects
+              </h2>
+              <p className="text-lg text-gray-600 leading-relaxed max-w-4xl mx-auto">
+                We have several ongoing physical and digital projects. From frequent publications to running and 
+                developing physical spiritual center our projects ranges and scale and impact.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-8 mb-12">
+              <div className="relative h-80 rounded-2xl overflow-hidden">
+                <Image
+                  src="/Screenshot 2025-08-20 223553.jpg"
+                  alt="Project 1"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="relative h-80 rounded-2xl overflow-hidden">
+                <Image
+                  src="/490061273_1097783239058409_8966922447246500945_n.jpg"
+                  alt="Project 2"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+            
+            <div className="text-center">
+              <Link href="/projects">
+                <button className="bg-[#183F37] hover:bg-[#152F2E] text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
                   See Projects
-                </a>
-              </div>
+                </button>
+              </Link>
             </div>
           </div>
         </section>

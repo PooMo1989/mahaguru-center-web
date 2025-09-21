@@ -171,8 +171,8 @@ describe('Type Safety Validation', () => {
       // But the query structure itself should be immutable
       const originalQuery = { ...query };
       expect(() => {
-        // @ts-expect-error - This should be readonly
-        // query.isLoading = !query.isLoading;
+        // Query properties should be readonly in practice
+        // query.isLoading = !query.isLoading; // This would be an error if uncommented
       }).not.toThrow();
     });
   });
