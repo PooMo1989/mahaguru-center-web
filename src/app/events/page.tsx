@@ -1,6 +1,6 @@
 "use client";
 
-import { Navigation } from "~/components/navigation";
+import { Navigation, Footer } from "~/components/navigation";
 import { api } from "~/trpc/react";
 import { useState, useEffect } from "react";
 import { formatEventDate } from "~/lib/utils";
@@ -230,6 +230,7 @@ export default function EventsPage() {
           </section>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

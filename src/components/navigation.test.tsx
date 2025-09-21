@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { Navigation } from "./navigation";
+import { Navigation, Footer } from "./navigation";
 
 // Mock Next.js Link component
 vi.mock("next/link", () => {
@@ -70,5 +70,32 @@ describe("Navigation Component", () => {
     const nav = screen.getByRole("navigation");
     
     expect(nav).toHaveClass("bg-white/95", "backdrop-blur-sm", "border-b", "border-gray-200", "sticky", "top-0", "z-50");
+  });
+});
+
+describe("Footer Component", () => {
+  it("renders the footer with correct content", () => {
+    render(<Footer />);
+    
+    expect(screen.getByText("Mahaguru Center")).toBeInTheDocument();
+    expect(screen.getByText("Contact Details")).toBeInTheDocument();
+    expect(screen.getByText("secretary@mahaguru.lk")).toBeInTheDocument();
+    expect(screen.getByText("+94 777 100 490")).toBeInTheDocument();
+  });
+
+  it("renders social media links", () => {
+    render(<Footer />);
+    
+    expect(screen.getByLabelText("Facebook")).toBeInTheDocument();
+    expect(screen.getByLabelText("YouTube")).toBeInTheDocument();
+    expect(screen.getByLabelText("Dhamma Archive")).toBeInTheDocument();
+  });
+
+  it("renders the map section", () => {
+    render(<Footer />);
+    
+    expect(screen.getByText("Visit Us")).toBeInTheDocument();
+    expect(screen.getByTitle("Arahath maga Center Location")).toBeInTheDocument();
+    expect(screen.getByText("Open in Google Maps")).toBeInTheDocument();
   });
 });

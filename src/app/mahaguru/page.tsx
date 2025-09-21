@@ -1,4 +1,4 @@
-import { Navigation } from "~/components/navigation";
+import { Navigation, Footer } from "~/components/navigation";
 import * as Tabs from "@radix-ui/react-tabs";
 
 export default function MahaguruPage() {
@@ -71,6 +71,7 @@ export default function MahaguruPage() {
           </Tabs.Root>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

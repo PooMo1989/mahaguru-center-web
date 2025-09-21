@@ -1,4 +1,4 @@
-import { Navigation } from "~/components/navigation";
+import { Navigation, Footer } from "~/components/navigation";
 import Link from "next/link";
 
 export default function MahaguruMeetupPage() {
@@ -154,6 +154,7 @@ export default function MahaguruMeetupPage() {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 }

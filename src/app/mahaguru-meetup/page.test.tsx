@@ -2,9 +2,10 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import MahaguruMeetupPage from './page';
 
-// Mock the Navigation component
+// Mock the Navigation component with both Navigation and Footer
 vi.mock('~/components/navigation', () => ({
   Navigation: () => <nav data-testid="navigation">Navigation</nav>,
+  Footer: () => <footer data-testid="footer">Mock Footer</footer>,
 }));
 
 describe('MahaguruMeetupPage', () => {

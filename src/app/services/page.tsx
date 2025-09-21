@@ -1,4 +1,4 @@
-import { Navigation } from "~/components/navigation";
+import { Navigation, Footer } from "~/components/navigation";
 import Link from "next/link";
 
 export default function ServicesPage() {
@@ -182,6 +182,7 @@ export default function ServicesPage() {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 }

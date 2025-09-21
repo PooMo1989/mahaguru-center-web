@@ -2,9 +2,10 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import EventsPage from "./page";
 
-// Mock the Navigation component
+// Mock the Navigation component with both Navigation and Footer
 vi.mock("~/components/navigation", () => ({
   Navigation: () => <nav data-testid="navigation">Navigation</nav>,
+  Footer: () => <footer data-testid="footer">Mock Footer</footer>,
 }));
 
 // Mock tRPC with a factory function that creates the mock

@@ -16,9 +16,10 @@ vi.mock("next/navigation", () => ({
   useSearchParams: () => mockUseSearchParams(),
 }));
 
-// Mock Navigation component
+// Mock Navigation component with both Navigation and Footer
 vi.mock("~/components/navigation", () => ({
   Navigation: () => <nav data-testid="navigation">Navigation</nav>,
+  Footer: () => <footer data-testid="footer">Mock Footer</footer>,
 }));
 
 describe("ContactPage URL Parameter Handling", () => {

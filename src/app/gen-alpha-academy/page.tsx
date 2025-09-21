@@ -1,4 +1,4 @@
-import { Navigation } from "~/components/navigation";
+import { Navigation, Footer } from "~/components/navigation";
 
 export default function GenAlphaAcademyPage() {
   // Placeholder URLs - to be configured with actual external links
@@ -210,6 +210,7 @@ export default function GenAlphaAcademyPage() {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 }

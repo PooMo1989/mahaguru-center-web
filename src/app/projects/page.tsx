@@ -1,7 +1,7 @@
 "use client";
 
 import Image from 'next/image';
-import { Navigation } from "~/components/navigation";
+import { Navigation, Footer } from "~/components/navigation";
 import { api } from "~/trpc/react";
 import { useState, useEffect } from "react";
 import type { Decimal } from "@prisma/client/runtime/library";
@@ -208,9 +208,9 @@ export default function ProjectsPage() {
               <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-8">
                 Our Projects
               </h1>
-              <div className="animate-pulse space-y-4">
-                <div className="h-4 bg-gray-300 rounded w-3/4 mx-auto"></div>
-                <div className="h-4 bg-gray-300 rounded w-1/2 mx-auto"></div>
+              <div className="flex items-center justify-center space-x-2 text-gray-600">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <span className="text-lg">Loading projects...</span>
               </div>
             </div>
             
@@ -228,6 +228,7 @@ export default function ProjectsPage() {
             </div>
           </div>
         </main>
+        <Footer />
       </>
     );
   }
@@ -302,6 +303,7 @@ export default function ProjectsPage() {
           />
         </div>
       </main>
+      <Footer />
     </>
   );
 }

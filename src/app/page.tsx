@@ -1,4 +1,4 @@
-import { Navigation } from "~/components/navigation";
+import { Navigation, Footer } from "~/components/navigation";
 
 export default function Home() {
   return (
@@ -114,6 +114,7 @@ export default function Home() {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 }

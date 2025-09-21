@@ -2,7 +2,7 @@
 
 import { useState, Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { Navigation } from "~/components/navigation";
+import { Navigation, Footer } from "~/components/navigation";
 import * as Tabs from "@radix-ui/react-tabs";
 
 // Wrap existing ContactPage in Suspense (Next.js requirement)
@@ -485,6 +485,7 @@ function ContactPageContent() {
       </Tabs.Root>
         </div>
       </main>
+      <Footer />
     </>
   );
 }
