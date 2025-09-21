@@ -1,242 +1,275 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import MahaguruPage from "./page";
 
 // Mock the Navigation component with both Navigation and Footer
 vi.mock("~/components/navigation", () => ({
-  Navigation: () => <nav data-testid="navigation">Navigation</nav>,
+  Navigation: () => <nav data-testid="navigation">Mock Navigation</nav>,
   Footer: () => <footer data-testid="footer">Mock Footer</footer>,
 }));
 
-// Mock user events to properly trigger Radix UI state changes
-const clickTab = async (tab: HTMLElement) => {
-  fireEvent.click(tab);
-  // Give time for Radix UI state updates
-  await new Promise(resolve => setTimeout(resolve, 100));
-};
+// Mock Next.js Image component
+vi.mock("next/image", () => ({
+  default: ({ src, alt, ...props }: any) => (
+    <img src={src} alt={alt} data-testid={`image-${alt?.toLowerCase().replace(/\s+/g, '-')}`} {...props} />
+  ),
+}));
 
-describe("MahaguruPage", () => {
+describe("Mahaguru Page UI Implementation (Story 7.2)", () => {
   beforeEach(() => {
     render(<MahaguruPage />);
   });
 
-  describe("Page Structure", () => {
-    it("renders the Navigation component", () => {
-      expect(screen.getByTestId("navigation")).toBeInTheDocument();
+  describe("Hero Section", () => {
+    it("renders hero section with background image and dramatic typography", () => {
+      expect(screen.getByRole("heading", { level: 1, name: "Mahaguru" })).toBeInTheDocument();
+      expect(screen.getByText("A Journey Through the Five Stages of Spiritual Realization")).toBeInTheDocument();
+      
+      // Hero background image
+      expect(screen.getByTestId("image-spiritual-journey-background")).toBeInTheDocument();
+      expect(screen.getByTestId("image-spiritual-journey-background")).toHaveAttribute("src", "/heroImage.webp");
     });
 
-    it("renders the main page title", () => {
-      expect(
-        screen.getByRole("heading", { level: 1, name: "Mahaguru" })
-      ).toBeInTheDocument();
-    });
-
-    it("has proper semantic HTML structure with main element", () => {
-      expect(screen.getByRole("main")).toBeInTheDocument();
+    it("has proper hero section height and styling", () => {
+      const heroSection = screen.getByRole("heading", { level: 1 }).closest("div");
+      expect(heroSection).toHaveClass("text-center", "text-white");
     });
   });
 
-  describe("Tabbed Interface Structure", () => {
-    it("renders all five tab buttons", () => {
-      const expectedTabs = [
-        "The Formative Years: An Era of Seeking",
-        "The Dawn of Realization: An Era of Fulfillment", 
-        "Insightful Experimentation: Understanding the Human Mind",
-        "A Framework for Wisdom: Systematizing the Teachings",
-        "The Enduring Legacy: A System for All Beings"
-      ];
-
+  describe("Interactive Tab Navigation", () => {
+    it("renders all five tab buttons with short titles", () => {
+      const expectedTabs = ["Early Age", "Dawn", "Mind Study", "Framework", "Legacy"];
+      
       expectedTabs.forEach((tabName) => {
         expect(screen.getByRole("tab", { name: tabName })).toBeInTheDocument();
       });
     });
 
-    it("sets first tab as default active tab", () => {
-      const firstTab = screen.getByRole("tab", { name: "The Formative Years: An Era of Seeking" });
+    it("sets 'Early Age' as default active tab", () => {
+      const firstTab = screen.getByRole("tab", { name: "Early Age" });
       expect(firstTab).toHaveAttribute("data-state", "active");
     });
 
-    it("renders tab list with proper accessibility", () => {
+    it("renders tab list with proper accessibility structure", () => {
       expect(screen.getByRole("tablist")).toBeInTheDocument();
+      
+      // Check that all tabs have proper ARIA attributes
+      const tabs = screen.getAllByRole("tab");
+      expect(tabs).toHaveLength(5);
+      
+      tabs.forEach(tab => {
+        expect(tab).toHaveAttribute("value");
+      });
     });
 
-    it("shows only active tab content initially", () => {
-      // First tab content should be visible
-      expect(
-        screen.getByText(
-          "This section would chronicle the Mahaguru's early life and the initial period of spiritual exploration and quest for truth."
-        )
-      ).toBeInTheDocument();
+    it("has connected tab design with visual connectors", () => {
+      const tabList = screen.getByRole("tablist");
+      expect(tabList).toHaveClass("flex", "flex-wrap", "justify-center");
+    });
+  });
 
-      // Other tab contents should not be visible (hidden by Radix UI)
-      expect(
-        screen.queryByText(
-          "Here, we would detail the pivotal moments of spiritual attainment and profound insight."
-        )
-      ).not.toBeInTheDocument();
+  describe("Stage Content Display", () => {
+    it("displays Stage 1 content by default", () => {
+      expect(screen.getByText("Stage 1: The Formative Years")).toBeInTheDocument();
+      expect(screen.getByText("An Era of Truth Seeking")).toBeInTheDocument();
+      expect(screen.getByText(/During his early years, Mahaguru embarked on an earnest quest/)).toBeInTheDocument();
+    });
+
+    it("includes poetic stanza for Stage 1", () => {
+      expect(screen.getByText(/In youth's earnest quest for truth divine/)).toBeInTheDocument();
+    });
+
+    it("displays stage images with proper alt text", () => {
+      // Stage 1 image should be visible by default
+      expect(screen.getByTestId("image-stage-1:-the-formative-years")).toBeInTheDocument();
+      expect(screen.getByTestId("image-stage-1:-the-formative-years")).toHaveAttribute("src", "/stage 01.png");
+    });
+
+    it("has proper content structure with paragraphs", () => {
+      // Check that content is split into paragraphs
+      const contentText = screen.getByText(/During his early years, Mahaguru embarked on an earnest quest/);
+      expect(contentText).toBeInTheDocument();
+      expect(contentText.tagName).toBe("P");
     });
   });
 
   describe("Tab Switching Functionality", () => {
-    it("switches content when clicking different tabs", async () => {
-      // Initially, first tab content should be visible
-      expect(
-        screen.getByText(
-          "This section would chronicle the Mahaguru's early life and the initial period of spiritual exploration and quest for truth."
-        )
-      ).toBeInTheDocument();
+    it("switches content when clicking different tabs", () => {
+      // Initially, Stage 1 content should be visible
+      expect(screen.getByText("Stage 1: The Formative Years")).toBeInTheDocument();
 
-      // Click on second tab using our helper
-      const secondTab = screen.getByRole("tab", { name: "The Dawn of Realization: An Era of Fulfillment" });
-      await clickTab(secondTab);
+      // Click on Dawn tab
+      const dawnTab = screen.getByRole("tab", { name: "Dawn" });
+      fireEvent.click(dawnTab);
 
-      // Verify clicking worked - tab should have been clicked
-      expect(secondTab).toHaveProperty('tagName', 'BUTTON');
-      
-      // Check tab panel structure exists
-      const allPanels = document.querySelectorAll('[role="tabpanel"]');
-      expect(allPanels.length).toBe(5);
+      // Verify that the tab is now active
+      expect(dawnTab).toHaveAttribute("data-state", "active");
     });
 
-    it("updates active state correctly for first tab initially", () => {
-      const firstTab = screen.getByRole("tab", { name: "The Formative Years: An Era of Seeking" });
-      const secondTab = screen.getByRole("tab", { name: "The Dawn of Realization: An Era of Fulfillment" });
-
-      // Initially first tab is active
-      expect(firstTab).toHaveAttribute("data-state", "active");
-      expect(secondTab).toHaveAttribute("data-state", "inactive");
-    });
-
-    it("has proper tablist structure and interactions", () => {
-      const tabs = screen.getAllByRole("tab");
-      expect(tabs).toHaveLength(5);
-      
-      // All tabs should be clickable buttons
-      tabs.forEach(tab => {
-        expect(tab.tagName).toBe('BUTTON');
-        expect(tab).toHaveAttribute('role', 'tab');
-      });
-    });
-  });
-
-  describe("Five Life Stages Content", () => {
-    it("renders proper tab structure for all five stages", () => {
-      const expectedTabs = [
-        "The Formative Years: An Era of Seeking",
-        "The Dawn of Realization: An Era of Fulfillment", 
-        "Insightful Experimentation: Understanding the Human Mind",
-        "A Framework for Wisdom: Systematizing the Teachings",
-        "The Enduring Legacy: A System for All Beings"
+    it("displays unique content for each stage", () => {
+      const stages = [
+        { tab: "Dawn", title: "Stage 2: The Dawn of Awakening", subtitle: "An Era of Fulfillment" },
+        { tab: "Mind Study", title: "Stage 3: Insightful Experimentation", subtitle: "Understanding the Human Mind" },
+        { tab: "Framework", title: "Stage 4: A Framework for Wisdom", subtitle: "Systematizing the Teachings" },
+        { tab: "Legacy", title: "Stage 5: The Enduring Legacy", subtitle: "A System for All Beings" }
       ];
 
-      expectedTabs.forEach((tabName) => {
-        const tab = screen.getByRole("tab", { name: tabName });
-        expect(tab).toBeInTheDocument();
-        expect(tab).toHaveAttribute('aria-controls');
+      stages.forEach(stage => {
+        const tabButton = screen.getByRole("tab", { name: stage.tab });
+        fireEvent.click(tabButton);
+        
+        expect(screen.getByText(stage.title)).toBeInTheDocument();
+        expect(screen.getByText(stage.subtitle)).toBeInTheDocument();
       });
     });
 
-    it("has the correct content structure in the active tab", () => {
-      // The first tab should be active and show its content
-      const activeContent = screen.getByText(
-        "This section would chronicle the Mahaguru's early life and the initial period of spiritual exploration and quest for truth."
-      );
-      expect(activeContent).toBeInTheDocument();
+    it("updates active tab visual state correctly", () => {
+      const earlyAgeTab = screen.getByRole("tab", { name: "Early Age" });
+      const dawnTab = screen.getByRole("tab", { name: "Dawn" });
+
+      // Initially Early Age should be active
+      expect(earlyAgeTab).toHaveAttribute("data-state", "active");
+      expect(dawnTab).toHaveAttribute("data-state", "inactive");
+
+      // Click Dawn tab
+      fireEvent.click(dawnTab);
+
+      // Dawn should now be active
+      expect(dawnTab).toHaveAttribute("data-state", "active");
+      expect(earlyAgeTab).toHaveAttribute("data-state", "inactive");
+    });
+  });
+
+  describe("Responsive Design", () => {
+    it("has proper responsive layout classes", () => {
+      const main = screen.getByRole("main");
+      expect(main).toHaveClass("min-h-screen");
       
-      // Should have proper heading structure
-      const heading = screen.getByRole("heading", { level: 2, name: "The Formative Years: An Era of Seeking" });
-      expect(heading).toBeInTheDocument();
+      // Check for responsive text classes on hero
+      const heroTitle = screen.getByRole("heading", { level: 1 });
+      expect(heroTitle).toHaveClass("text-5xl", "md:text-7xl");
+    });
+
+    it("has responsive content containers", () => {
+      // Check for max-width container
+      const contentContainer = document.querySelector('.max-w-6xl');
+      expect(contentContainer).toBeInTheDocument();
     });
   });
 
-  describe("Responsive Layout", () => {
-    it("applies responsive container classes", () => {
-      const container = screen.getByRole("main").firstChild;
-      expect(container).toHaveClass("max-w-4xl", "mx-auto", "px-4", "py-16");
-    });
-
-    it("applies responsive title classes", () => {
-      const title = screen.getByRole("heading", { level: 1 });
-      expect(title).toHaveClass("text-4xl", "md:text-5xl");
-    });
-
-    it("applies prose classes for content styling", () => {
-      const proseContainer = document.querySelector(".prose");
-      expect(proseContainer).toHaveClass("prose", "prose-lg", "max-w-none");
-    });
-
-    it("has responsive tab layout with flex-wrap", () => {
-      const tabList = screen.getByRole("tablist");
-      expect(tabList).toHaveClass("flex", "flex-wrap", "gap-2");
-    });
-  });
-
-  describe("Accessibility and SEO", () => {
-    it("has proper heading hierarchy (h1 followed by h2s)", () => {
-      const h1 = screen.getByRole("heading", { level: 1 });
-      expect(h1).toBeInTheDocument();
-
-      // Check h2 appears in active tab
-      const h2 = screen.getByRole("heading", { level: 2 });
-      expect(h2).toBeInTheDocument();
-    });
-
-    it("has semantic section elements in tab content", () => {
-      const sections = document.querySelectorAll("section");
-      expect(sections.length).toBeGreaterThan(0);
-    });
-
-    it("supports keyboard navigation", () => {
-      const firstTab = screen.getByRole("tab", { name: "The Formative Years: An Era of Seeking" });
-      expect(firstTab).toHaveClass("focus:outline-none", "focus:ring-2", "focus:ring-blue-500");
-    });
-
-    it("has proper ARIA attributes", () => {
+  describe("Professional Styling", () => {
+    it("uses correct brand color palette", () => {
+      // Check tab buttons use brand colors
       const tabs = screen.getAllByRole("tab");
       tabs.forEach(tab => {
-        expect(tab).toHaveAttribute("aria-controls");
-        expect(tab).toHaveAttribute("aria-selected");
+        expect(tab).toHaveClass("text-[#183F37]");
       });
+    });
 
-      const activeTabPanel = screen.getByRole("tabpanel");
-      expect(activeTabPanel).toBeInTheDocument();
+    it("has proper card styling for content", () => {
+      // Content should be in white cards with shadows
+      const contentCard = document.querySelector('.bg-white.rounded-2xl.shadow-xl');
+      expect(contentCard).toBeInTheDocument();
+    });
+
+    it("includes smooth transitions", () => {
+      const tabs = screen.getAllByRole("tab");
+      tabs.forEach(tab => {
+        expect(tab).toHaveClass("transition-all", "duration-300");
+      });
     });
   });
 
-  describe("Negative Test Cases", () => {
-    it("does not contain placeholder content", () => {
-      expect(
-        screen.queryByText(/currently under development/i)
-      ).not.toBeInTheDocument();
-      expect(
-        screen.queryByText(/coming soon/i)
-      ).not.toBeInTheDocument();
+  describe("Image Integration", () => {
+    it("includes hero background image with priority loading", () => {
+      const heroImage = screen.getByTestId("image-spiritual-journey-background");
+      expect(heroImage).toBeInTheDocument();
+      expect(heroImage).toHaveAttribute("src", "/heroImage.webp");
     });
 
-    it("does not have incorrect tab count", () => {
-      const tabs = screen.getAllByRole("tab");
-      expect(tabs).not.toHaveLength(4);
-      expect(tabs).not.toHaveLength(6);
-      expect(tabs).toHaveLength(5);
-    });
+    it("includes stage-specific images", () => {
+      // Default stage (Stage 1) image
+      expect(screen.getByTestId("image-stage-1:-the-formative-years")).toBeInTheDocument();
+      expect(screen.getByTestId("image-stage-1:-the-formative-years")).toHaveAttribute("src", "/stage 01.png");
 
-    it("maintains proper single active panel structure", () => {
-      // Check that exactly one panel is active initially
-      const activePanels = document.querySelectorAll('[data-state="active"][role="tabpanel"]');
-      expect(activePanels).toHaveLength(1);
+      // Test switching to Stage 2
+      const dawnTab = screen.getByRole("tab", { name: "Dawn" });
+      fireEvent.click(dawnTab);
       
-      // Check that inactive panels have hidden attribute
-      const inactivePanels = document.querySelectorAll('[data-state="inactive"][role="tabpanel"]');
-      expect(inactivePanels.length).toBeGreaterThan(0);
-      inactivePanels.forEach(panel => {
-        expect(panel).toHaveAttribute("hidden");
+      expect(screen.getByTestId("image-stage-2:-the-dawn-of-awakening")).toBeInTheDocument();
+      expect(screen.getByTestId("image-stage-2:-the-dawn-of-awakening")).toHaveAttribute("src", "/stage 02.webp");
+    });
+  });
+
+  describe("Content Organization", () => {
+    it("has proper heading hierarchy", () => {
+      // Hero h1
+      expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Mahaguru");
+      
+      // Stage title h2
+      expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("Stage 1: The Formative Years");
+      
+      // Stage subtitle h3
+      expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent("An Era of Truth Seeking");
+    });
+
+    it("includes Navigation and Footer components", () => {
+      expect(screen.getByTestId("navigation")).toBeInTheDocument();
+      expect(screen.getByTestId("footer")).toBeInTheDocument();
+    });
+
+    it("has proper content spacing and layout", () => {
+      // Check for proper spacing classes
+      const contentSection = document.querySelector('.space-y-4');
+      expect(contentSection).toBeInTheDocument();
+    });
+  });
+
+  describe("Poetic Elements", () => {
+    it("displays poetic stanzas with proper styling", () => {
+      const poeticStanza = screen.getByText(/In youth's earnest quest for truth divine/);
+      expect(poeticStanza).toBeInTheDocument();
+      
+      // Check that it's in the styled container
+      const poeticContainer = poeticStanza.closest('.bg-\\[\\#183F37\\]\\/5');
+      expect(poeticContainer).toBeInTheDocument();
+    });
+
+    it("includes poetic content for different stages", () => {
+      // Switch to Dawn stage
+      const dawnTab = screen.getByRole("tab", { name: "Dawn" });
+      fireEvent.click(dawnTab);
+      
+      expect(screen.getByText(/When morning breaks on consciousness wide/)).toBeInTheDocument();
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("has proper semantic structure", () => {
+      expect(screen.getByRole("main")).toBeInTheDocument();
+      expect(screen.getByRole("tablist")).toBeInTheDocument();
+      expect(screen.getAllByRole("tab")).toHaveLength(5);
+      expect(screen.getAllByRole("tabpanel")).toHaveLength(5);
+    });
+
+    it("includes descriptive alt text for images", () => {
+      expect(screen.getByTestId("image-spiritual-journey-background")).toHaveAttribute("alt", "Spiritual journey background");
+      expect(screen.getByTestId("image-stage-1:-the-formative-years")).toHaveAttribute("alt", "Stage 1: The Formative Years");
+    });
+
+    it("supports keyboard navigation with focus rings", () => {
+      const tabs = screen.getAllByRole("tab");
+      tabs.forEach(tab => {
+        expect(tab).toHaveClass("focus:outline-none", "focus:ring-2");
       });
     });
+  });
 
-    it("does not contain linear scrollable separators anymore", () => {
-      // The old separators should not exist in the tabbed interface
-      const separators = document.querySelectorAll(".border-t.border-gray-200.my-12");
-      expect(separators).toHaveLength(0);
+  describe("Animation and Transitions", () => {
+    it("includes smooth transitions for content switching", () => {
+      // Check for animation classes on tab content
+      const tabContent = document.querySelector('[role="tabpanel"]');
+      expect(tabContent).toHaveClass("animate-in", "fade-in-50", "duration-300");
     });
   });
 });

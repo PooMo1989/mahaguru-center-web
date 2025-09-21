@@ -2,13 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { HamburgerMenuIcon, Cross2Icon } from "@radix-ui/react-icons";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
 
 const navigationLinks = [
   { href: "/mahaguru", label: "Mahaguru" },
@@ -54,34 +49,36 @@ export function Navigation() {
 
           {/* Mobile Navigation */}
           <div className="md:hidden">
-            <DropdownMenu open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-              <DropdownMenuTrigger className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500">
+            <DropdownMenu.Root open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+              <DropdownMenu.Trigger className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500">
                 {isMobileMenuOpen ? (
                   <Cross2Icon className="h-6 w-6" aria-hidden="true" />
                 ) : (
                   <HamburgerMenuIcon className="h-6 w-6" aria-hidden="true" />
                 )}
                 <span className="sr-only">Open main menu</span>
-              </DropdownMenuTrigger>
+              </DropdownMenu.Trigger>
 
-              <DropdownMenuContent 
-                className="bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 w-48 mt-2"
-                align="end"
-                sideOffset={5}
-              >
-                {navigationLinks.map((link) => (
-                  <DropdownMenuItem key={link.href} asChild>
-                    <Link
-                      href={link.href}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+              <DropdownMenu.Portal>
+                <DropdownMenu.Content 
+                  className="bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 w-48 mt-2"
+                  align="end"
+                  sideOffset={5}
+                >
+                  {navigationLinks.map((link) => (
+                    <DropdownMenu.Item key={link.href} asChild>
+                      <Link
+                        href={link.href}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    </DropdownMenu.Item>
+                  ))}
+                </DropdownMenu.Content>
+              </DropdownMenu.Portal>
+            </DropdownMenu.Root>
           </div>
         </div>
       </div>
@@ -104,7 +101,7 @@ export function Footer() {
               />
               <h3 className="text-2xl font-bold">Mahaguru Center</h3>
             </div>
-            
+
             <div className="space-y-4">
               <div>
                 <h4 className="text-lg font-semibold mb-2">Contact Details</h4>
@@ -115,13 +112,13 @@ export function Footer() {
                   Hotline: <a href="tel:+94777100490" className="hover:text-white transition-colors">+94 777 100 490</a>
                 </p>
               </div>
-              
+
               <div>
                 <h4 className="text-lg font-semibold mb-2">Follow Us</h4>
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
                     <a 
-                      href="https://www.facebook.com/arahthmaga" 
+                      href="https://www.facebook.com/arahthmaga"
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="text-gray-300 hover:text-white transition-colors"
@@ -133,10 +130,10 @@ export function Footer() {
                     </a>
                     <span className="text-gray-300 text-sm">Join our active community</span>
                   </div>
-                  
+
                   <div className="flex items-center space-x-3">
                     <a 
-                      href="https://www.youtube.com/@maithribuddha" 
+                      href="https://www.youtube.com/@maithribuddha"
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="text-gray-300 hover:text-white transition-colors"
@@ -148,7 +145,7 @@ export function Footer() {
                     </a>
                     <span className="text-gray-300 text-sm">Explore Dhamma Videos</span>
                   </div>
-                  
+
                   <div className="flex items-center space-x-3">
                     <a 
                       href="https://www.maithribodhi.org/" 
@@ -183,7 +180,7 @@ export function Footer() {
                 title="Arahath maga Center Location"
               ></iframe>
               <a 
-                href="https://maps.app.goo.gl/XGJCyoR2QJ1RBdVc7" 
+                href="https://maps.app.goo.gl/XGJCyoR2QJ1RBdVc7"
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="absolute inset-0 bg-transparent group-hover:bg-black group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center z-10"
@@ -199,7 +196,7 @@ export function Footer() {
             </div>
             <p className="text-sm text-gray-400">
               <a 
-                href="https://maps.app.goo.gl/XGJCyoR2QJ1RBdVc7" 
+                href="https://maps.app.goo.gl/XGJCyoR2QJ1RBdVc7"
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="hover:text-white transition-colors"
