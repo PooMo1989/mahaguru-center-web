@@ -155,43 +155,49 @@
 > As an administrator, I want a backend system and API for Projects so that I can manage project and donation data.
 * **Acceptance Criteria:**
     1.  A database table/collection for "Projects" must be created.
-    2.  The Project data model must include fields for `ProjectName`, `Description`, `DonationGoalAmount`, `CurrentDonationAmount`, `ProjectType`, `ProjectNature`, `StartDate`, and `EndDate`.
-    3.  API endpoints for CRUD operations on Projects must be functional.
-    4.  The `Create` and `Read` endpoints must be functional.
-    5.  The `Update` and `Delete` endpoints must be functional.
-    6.  All API endpoints must be verified with automated tests.
+    2.  The Project data model must include all required fields: `ProjectName`, `Description`, `DonationGoalAmount`, `CurrentDonationAmount`, `ProjectType`, `ProjectNature`, `StartDate`, `EndDate`, `donationLinkTarget`, and `photos`.
+    3.  The Project data model must support all four specific projects from the Project Brief: "Our Digital Mission", "Arahathmaga Spiritual Center", "The AI Guru", and "Beyond Words".
+    4.  All CRUD endpoints (Create, Read, Update, Delete) must be functional.
+    5.  All API endpoints must be verified with automated tests.
 
-#### **Story 4.2: Admin Portal (Manage All Project Details) (Final Version)**
-> As an administrator, I want an intuitive web portal where I can create, view, and edit all details of a project through a clear and logical workflow.
+#### **Story 4.2: Unified Admin Portal - Add Project Management Tab (Revised)**
+> As an administrator, I want to manage all project details through the existing admin portal using a new "Projects" tab, so that I can maintain all administrative functions in one unified interface.
 * **Acceptance Criteria:**
-    1.  The admin portal must display a list of projects and an "Add New Project" button.
-    2.  Each project row must show key info and have an "Edit" button.
-    3.  The "Add" and "Edit" buttons must open a form.
-    4.  The form must contain fields for all project data.
-    5.  The `ProjectNature` field must be radio buttons ('Continuous'/'One-time').
+    1.  The existing admin portal at `/admin` must display a new "Projects" tab alongside the "Events" tab.
+    2.  The Projects tab must display a list of all projects with key information and an "Add New Project" button.
+    3.  Each project row must show: Project Name, Type, Nature, Current/Goal amounts, and have "Edit" and "Delete" buttons.
+    4.  The "Add New Project" and "Edit" buttons must open a comprehensive project form.
+    5.  The form must include all project fields with proper validation and the `ProjectNature` field as radio buttons ('Continuous'/'One-time').
     6.  If 'Continuous' is selected, `StartDate` and `EndDate` fields must be **disabled**. If 'One-time' is selected, they must be **enabled**.
-    7.  The "Save" button must handle both create and update logic.
-    8.  After saving, the list must update and a success message must be shown.
+    7.  The "Save" button must handle both create and update logic with proper error handling.
+    8.  After saving, the list must update automatically and display a success message.
+    9.  The Projects tab must use the same authentication and layout as the existing Events tab.
+    10. All project management functionality must be responsive and follow the existing admin portal design patterns.
 
-#### **Story 4.3: Frontend Projects Page & Progress Bars**
-> As a visitor, I want to view a Projects page that displays all the center's initiatives, their goals, and their current donation progress.
+#### **Story 4.3: Frontend Projects Page & Progress Bars (Revised)**
+> As a visitor, I want to view a Projects page that displays all the center's initiatives with their progress and easily donate to them, so that I can understand the center's work and contribute to projects that resonate with me.
 * **Acceptance Criteria:**
-    1.  The public "Projects" page must be created.
-    2.  The page must fetch and display a section for each project.
-    3.  Each section must display the project's Name, Description, and Photos.
-    4.  Each section must display a visual progress bar.
-    5.  The progress bar must accurately represent the `CurrentDonationAmount` vs. the `DonationGoalAmount`.
-    6.  The raw donation numbers must also be displayed.
-    7.  The page must be fully responsive.
+    1.  The public "Projects" page must be created at `/projects` route.
+    2.  The page must fetch and display all active projects from the Projects API (Story 4.1).
+    3.  Each project section must display: Project Name, Description, Photos (if available), Project Type, and Project Nature.
+    4.  Each project must display a visual progress bar showing funding progress.
+    5.  The progress bar must accurately represent `CurrentDonationAmount` vs. `DonationGoalAmount` with percentage calculation.
+    6.  Raw donation numbers must be displayed (e.g., "LKR 250,000 raised of LKR 750,000 goal").
+    7.  Each project must have a prominent "Donate Now" button.
+    8.  The "Donate Now" button must link to `/contact?tab=donate&target=[donationLinkTarget]` where `donationLinkTarget` maps to the appropriate donation tab.
+    9.  The page must be fully responsive across all device sizes.
+    10. Projects must be grouped by `ProjectNature`: "Ongoing Projects" (Continuous) and "Special Initiatives" (One-time).
 
-#### **Story 4.4: Donate Button Redirect Logic**
-> As a supporter, I want to be redirected to the correct donation form when I click a 'Donate' button on the Projects page.
+#### **Story 4.4: Donate Button Redirect Logic (Revised)**
+> As a supporter, I want to be seamlessly redirected to the correct donation form when I click "Donate Now" on any project, so that I can immediately contribute to the specific project that inspired me.
 * **Acceptance Criteria:**
-    1.  Each project on the "Projects" page must have a "Donate" button.
-    2.  Clicking the button must redirect the user to the "Contact Us" page.
-    3.  The "Donate" tab on the "Contact Us" page must be active.
-    4.  The **correct** sub-tab (Daily Dana, Poya Day, or Special Projects) must be active, based on the project's `DonationLinkTarget`.
-    5.  The redirect must be functional on all devices.
+    1.  Each project on the Projects page must have a "Donate Now" button (implemented in Story 4.3).
+    2.  Clicking the button must redirect to `/contact?tab=donate&target=[donationLinkTarget]`.
+    3.  The Contact page must detect URL parameters and automatically: Open the "Donate" section, Select the correct donation tab based on `target` parameter, and Scroll to the donation form for optimal UX.
+    4.  URL parameter mapping must work as follows: `target=daily-dana` → "Daily Dana" tab, `target=poya-day` → "Poya Day Event" tab, `target=special-projects` → "Special Projects" tab.
+    5.  If an invalid `target` parameter is provided, default to "Daily Dana" tab.
+    6.  The redirect and auto-selection must work on all devices and browsers.
+    7.  The donation form must include a subtle indicator showing which project inspired the donation (e.g., "Inspired by: [Project Name]").
 
 ### **Epic 5: Gen Alpha Academy Landing Page**
 

@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { z } from "zod";
-import { api } from "~/trpc/react";
+import { api, type RouterOutputs } from "~/trpc/react";
+
+type Event = RouterOutputs["event"]["getEvents"][number];
 
 const eventSchema = z.object({
   name: z.string().min(1, "Event name is required"),
@@ -13,10 +15,20 @@ const eventSchema = z.object({
 });
 
 interface EventFormProps {
-  onEventCreated: () => void;
+  onEventCreated?: () => void;
+  onEventUpdated?: () => void;
+  onCancel?: () => void;
+  editEvent?: Event;
+  mode?: "create" | "edit";
 }
 
-export function EventForm({ onEventCreated }: EventFormProps) {
+export function EventForm({ 
+  onEventCreated, 
+  onEventUpdated, 
+  onCancel, 
+  editEvent, 
+  mode = "create" 
+}: EventFormProps) {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -26,6 +38,24 @@ export function EventForm({ onEventCreated }: EventFormProps) {
   });
   const [newPhotoUrl, setNewPhotoUrl] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Populate form with edit data when in edit mode
+  useEffect(() => {
+    if (mode === "edit" && editEvent) {
+      const eventDate = new Date(editEvent.eventDate);
+      const localISOTime = new Date(eventDate.getTime() - eventDate.getTimezoneOffset() * 60000)
+        .toISOString()
+        .slice(0, 16);
+      
+      setFormData({
+        name: editEvent.name,
+        description: editEvent.description,
+        category: editEvent.category,
+        eventDate: localISOTime,
+        photos: editEvent.photos,
+      });
+    }
+  }, [mode, editEvent]);
 
   const createEventMutation = api.event.createEvent.useMutation({
     onSuccess: () => {
@@ -38,10 +68,21 @@ export function EventForm({ onEventCreated }: EventFormProps) {
         photos: [],
       });
       setErrors({});
-      onEventCreated();
+      onEventCreated?.();
     },
     onError: (error) => {
       console.error("Error creating event:", error);
+      setErrors({ submit: error.message });
+    },
+  });
+
+  const updateEventMutation = api.event.updateEvent.useMutation({
+    onSuccess: () => {
+      setErrors({});
+      onEventUpdated?.();
+    },
+    onError: (error) => {
+      console.error("Error updating event:", error);
       setErrors({ submit: error.message });
     },
   });
@@ -67,13 +108,24 @@ export function EventForm({ onEventCreated }: EventFormProps) {
       return;
     }
 
-    createEventMutation.mutate({
-      name: formData.name.trim(),
-      description: formData.description.trim(),
-      category: formData.category.trim(),
-      eventDate: new Date(formData.eventDate),
-      photos: formData.photos,
-    });
+    if (mode === "create") {
+      createEventMutation.mutate({
+        name: formData.name.trim(),
+        description: formData.description.trim(),
+        category: formData.category.trim(),
+        eventDate: new Date(formData.eventDate),
+        photos: formData.photos,
+      });
+    } else if (mode === "edit" && editEvent) {
+      updateEventMutation.mutate({
+        id: editEvent.id,
+        name: formData.name.trim(),
+        description: formData.description.trim(),
+        category: formData.category.trim(),
+        eventDate: new Date(formData.eventDate),
+        photos: formData.photos,
+      });
+    }
   };
 
   const handleInputChange = (
@@ -258,12 +310,24 @@ export function EventForm({ onEventCreated }: EventFormProps) {
 
       {/* Submit Button */}
       <div className="flex justify-end space-x-3">
+        {mode === "edit" && onCancel && (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Cancel
+          </button>
+        )}
         <button
           type="submit"
-          disabled={createEventMutation.isPending}
+          disabled={createEventMutation.isPending || updateEventMutation.isPending}
           className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {createEventMutation.isPending ? "Creating..." : "Create Event"}
+          {mode === "create" 
+            ? (createEventMutation.isPending ? "Creating..." : "Create Event")
+            : (updateEventMutation.isPending ? "Updating..." : "Update Event")
+          }
         </button>
       </div>
 

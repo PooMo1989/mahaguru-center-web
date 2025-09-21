@@ -82,3 +82,22 @@ model Event {
 
     @@index([eventDate])
 }
+
+model Project {
+    id                    String    @id @default(cuid())
+    projectName           String
+    description           String
+    photos                String[]
+    donationGoalAmount    Decimal   @db.Decimal(65,30)
+    currentDonationAmount Decimal   @db.Decimal(65,30)
+    projectType           String
+    projectNature         String    // 'Continuous' or 'One-time'
+    startDate             DateTime?
+    endDate               DateTime?
+    donationLinkTarget    String    // 'Daily Dana', 'Poya Day', 'Special Projects'
+    createdAt             DateTime  @default(now())
+    updatedAt             DateTime  @updatedAt
+
+    @@index([projectNature])
+    @@index([donationLinkTarget])
+}

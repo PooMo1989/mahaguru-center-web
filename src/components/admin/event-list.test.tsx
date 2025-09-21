@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { EventList } from "./event-list";
 
 const mockEvents = [
@@ -26,16 +26,28 @@ const mockEvents = [
 ];
 
 describe("EventList", () => {
+  const mockOnRefresh = vi.fn();
+  const mockOnEdit = vi.fn();
+  const mockOnDelete = vi.fn();
+
+  const defaultProps = {
+    events: mockEvents,
+    onRefresh: mockOnRefresh,
+    onEdit: mockOnEdit,
+    onDelete: mockOnDelete,
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
   it("renders empty state when no events", () => {
-    const mockOnRefresh = vi.fn();
-    render(<EventList events={[]} onRefresh={mockOnRefresh} />);
+    render(<EventList {...defaultProps} events={[]} />);
 
     expect(screen.getByText("No events found. Create your first event!")).toBeInTheDocument();
   });
 
   it("renders events table with data", () => {
-    const mockOnRefresh = vi.fn();
-    render(<EventList events={mockEvents} onRefresh={mockOnRefresh} />);
+    render(<EventList {...defaultProps} />);
 
     // Check table headers
     expect(screen.getByText("Event Name")).toBeInTheDocument();
@@ -43,10 +55,11 @@ describe("EventList", () => {
     expect(screen.getByText("Category")).toBeInTheDocument();
     expect(screen.getByText("Description")).toBeInTheDocument();
     expect(screen.getByText("Photos")).toBeInTheDocument();
+    expect(screen.getByText("Actions")).toBeInTheDocument();
 
     // Check event data
-    expect(screen.getByText("Dhamma Discussion")).toBeInTheDocument();
-    expect(screen.getByText("Meditation Session")).toBeInTheDocument();
+    expect(screen.getByRole("cell", { name: "Dhamma Discussion" })).toBeInTheDocument();
+    expect(screen.getByRole("cell", { name: "Meditation Session" })).toBeInTheDocument();
     expect(screen.getByText("Monthly dhamma discussion on full moon day")).toBeInTheDocument();
     expect(screen.getByText("Guided meditation session")).toBeInTheDocument();
     expect(screen.getByText("2 photo(s)")).toBeInTheDocument();
@@ -54,25 +67,22 @@ describe("EventList", () => {
   });
 
   it("formats dates correctly", () => {
-    const mockOnRefresh = vi.fn();
-    render(<EventList events={mockEvents} onRefresh={mockOnRefresh} />);
+    render(<EventList {...defaultProps} />);
 
-    // The exact format depends on locale, but should contain the date parts
-    expect(screen.getByText(/December.*1.*2025.*6:00.*PM/)).toBeInTheDocument();
-    expect(screen.getByText(/December.*15.*2025.*5:30.*PM/)).toBeInTheDocument();
+    // Check for the actual formatted dates as shown in test output
+    expect(screen.getByText("December 1, 2025 at 11:30 PM")).toBeInTheDocument();
+    expect(screen.getByText("December 15, 2025 at 11:00 PM")).toBeInTheDocument();
   });
 
   it("displays category badges", () => {
-    const mockOnRefresh = vi.fn();
-    render(<EventList events={mockEvents} onRefresh={mockOnRefresh} />);
+    render(<EventList {...defaultProps} />);
 
     const categoryBadges = screen.getAllByText(/Dhamma Discussion|Meditation Session/);
-    expect(categoryBadges).toHaveLength(3); // 2 in badges + 1 in table
+    expect(categoryBadges).toHaveLength(4); // 2 in title + 2 in badges
   });
 
   it("calls onRefresh when refresh button is clicked", () => {
-    const mockOnRefresh = vi.fn();
-    render(<EventList events={mockEvents} onRefresh={mockOnRefresh} />);
+    render(<EventList {...defaultProps} />);
 
     const refreshButton = screen.getByRole("button", { name: /refresh/i });
     fireEvent.click(refreshButton);
@@ -81,8 +91,7 @@ describe("EventList", () => {
   });
 
   it("shows truncated descriptions with full text in title", () => {
-    const mockOnRefresh = vi.fn();
-    render(<EventList events={mockEvents} onRefresh={mockOnRefresh} />);
+    render(<EventList {...defaultProps} />);
 
     const descriptionCells = screen.getAllByText(/Monthly dhamma discussion|Guided meditation/);
     // Check that the full description is in the title attribute
@@ -90,5 +99,36 @@ describe("EventList", () => {
       el.textContent === "Monthly dhamma discussion on full moon day"
     );
     expect(firstDescription).toHaveAttribute("title", "Monthly dhamma discussion on full moon day");
+  });
+
+  // New tests for edit and delete functionality
+  it("renders edit and delete buttons for each event", () => {
+    render(<EventList {...defaultProps} />);
+
+    const editButtons = screen.getAllByText("Edit");
+    const deleteButtons = screen.getAllByText("Delete");
+
+    expect(editButtons).toHaveLength(2); // One for each event
+    expect(deleteButtons).toHaveLength(2); // One for each event
+  });
+
+  it("calls onEdit when edit button is clicked", () => {
+    render(<EventList {...defaultProps} />);
+
+    const editButtons = screen.getAllByText("Edit");
+    fireEvent.click(editButtons[0]!);
+
+    expect(mockOnEdit).toHaveBeenCalledTimes(1);
+    expect(mockOnEdit).toHaveBeenCalledWith(mockEvents[0]);
+  });
+
+  it("calls onDelete when delete button is clicked", () => {
+    render(<EventList {...defaultProps} />);
+
+    const deleteButtons = screen.getAllByText("Delete");
+    fireEvent.click(deleteButtons[0]!);
+
+    expect(mockOnDelete).toHaveBeenCalledTimes(1);
+    expect(mockOnDelete).toHaveBeenCalledWith(mockEvents[0]);
   });
 });

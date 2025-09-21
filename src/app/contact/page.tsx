@@ -1,10 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Navigation } from "~/components/navigation";
 import * as Tabs from "@radix-ui/react-tabs";
 
+// Wrap existing ContactPage in Suspense (Next.js requirement)
 export default function ContactPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ContactPageContent />
+    </Suspense>
+  );
+}
+
+// Rename existing component and add URL parameter handling
+function ContactPageContent() {
+  const searchParams = useSearchParams();
+  
+  // Initialize main tab state based on URL parameters (AC#8 requirement)
+  const [activeTab, setActiveTab] = useState(() => {
+    const tab = searchParams.get('tab');
+    return tab === 'donate' ? 'donation' : 'contact';
+  });
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -21,7 +40,39 @@ export default function ContactPage() {
   });
   const [showDonationSuccess, setShowDonationSuccess] = useState(false);
   const [donationErrors, setDonationErrors] = useState<Record<string, string>>({});
-  const [activeDonationFund, setActiveDonationFund] = useState("daily-dana");
+  
+  // Initialize donation fund based on URL parameters (AC#8 requirement)
+  const [activeDonationFund, setActiveDonationFund] = useState(() => {
+    const target = searchParams.get('target');
+    // Map exactly as corrected by QA review
+    if (target === 'daily-dana') return 'daily-dana';
+    if (target === 'poya-day-event') return 'poya-day-event';
+    if (target === 'special-projects') return 'special-projects';
+    return 'daily-dana'; // default fallback
+  });
+
+  // Extract project name from URL parameters for project context indicator (AC#7)
+  const projectName = searchParams.get('project');
+  const contextMessage = projectName 
+    ? `Inspired by: ${decodeURIComponent(projectName)}`
+    : "Inspired by your generosity";
+
+  // Smooth scroll to donation form when redirected from project (AC#3)
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab === 'donate') {
+      // Small delay to ensure DOM is rendered
+      setTimeout(() => {
+        const donationSection = document.querySelector('[data-donation-section]');
+        if (donationSection) {
+          donationSection.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        }
+      }, 100);
+    }
+  }, [searchParams]);
 
   const donationFunds = [
     {
@@ -160,15 +211,37 @@ export default function ContactPage() {
             Contact Us
           </h1>
 
-          {/* Volunteer Section */}
-          <section className="bg-white rounded-lg shadow-lg p-8 md:p-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">Volunteer</h2>
-            <p className="text-lg text-gray-600 leading-relaxed mb-8">
-              Become a vital part of our mission by joining our core volunteer team. 
-              We welcome your support in organizing events, fundraising, and performing 
-              regular maintenance of the Arahathmaga Center. This is a precious opportunity 
-              to contribute to the community and deepen your own spiritual practice.
-            </p>
+          {/* Main Tab System */}
+          <Tabs.Root 
+            value={activeTab} 
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
+            <Tabs.List className="flex flex-wrap gap-2 mb-8 border-b border-gray-200 pb-4 justify-center">
+              <Tabs.Trigger
+                value="contact"
+                className="px-6 py-3 text-sm font-medium rounded-md border-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 hover:bg-gray-50 transition-colors duration-200"
+              >
+                Volunteer
+              </Tabs.Trigger>
+              <Tabs.Trigger
+                value="donation"
+                className="px-6 py-3 text-sm font-medium rounded-md border-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 hover:bg-gray-50 transition-colors duration-200"
+              >
+                Donate
+              </Tabs.Trigger>
+            </Tabs.List>
+
+            {/* Contact/Volunteer Tab Content */}
+            <Tabs.Content value="contact">
+              <section className="bg-white rounded-lg shadow-lg p-8 md:p-12">
+                <h2 className="text-3xl font-bold text-gray-800 mb-6">Volunteer</h2>
+                <p className="text-lg text-gray-600 leading-relaxed mb-8">
+                  Become a vital part of our mission by joining our core volunteer team. 
+                  We welcome your support in organizing events, fundraising, and performing 
+                  regular maintenance of the Arahathmaga Center. This is a precious opportunity 
+                  to contribute to the community and deepen your own spiritual practice.
+                </p>
 
             {/* Success Message */}
             {showSuccess && (
@@ -263,10 +336,19 @@ export default function ContactPage() {
               </div>
             </form>
           </section>
+        </Tabs.Content>
 
-          {/* Donate Section */}
-          <section className="bg-white rounded-lg shadow-lg p-8 md:p-12 mt-8">
+        {/* Donation Tab Content */}
+        <Tabs.Content value="donation">
+          <section className="bg-white rounded-lg shadow-lg p-8 md:p-12" data-donation-section>
             <h2 className="text-3xl font-bold text-gray-800 mb-6">Donate</h2>
+            
+            {/* Project Context Indicator - Always show in donation section */}
+            <div className="mb-6 p-3 bg-blue-50 border-l-4 border-blue-400 rounded-r-md">
+              <p className="text-sm text-blue-700 font-medium">
+                {contextMessage}
+              </p>
+            </div>
             
             <Tabs.Root 
               value={activeDonationFund} 
@@ -399,6 +481,8 @@ export default function ContactPage() {
               ))}
             </Tabs.Root>
           </section>
+        </Tabs.Content>
+      </Tabs.Root>
         </div>
       </main>
     </>

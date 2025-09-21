@@ -5,9 +5,11 @@ type Event = RouterOutputs["event"]["getEvents"][number];
 interface EventListProps {
   events: Event[];
   onRefresh: () => void;
+  onEdit: (event: Event) => void;
+  onDelete: (event: Event) => void;
 }
 
-export function EventList({ events, onRefresh }: EventListProps) {
+export function EventList({ events, onRefresh, onEdit, onDelete }: EventListProps) {
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat("en-US", {
       year: "numeric",
@@ -64,6 +66,12 @@ export function EventList({ events, onRefresh }: EventListProps) {
                   >
                     Photos
                   </th>
+                  <th
+                    scope="col"
+                    className="relative py-3.5 pl-3 pr-4 sm:pr-0"
+                  >
+                    <span className="sr-only">Actions</span>
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -87,6 +95,22 @@ export function EventList({ events, onRefresh }: EventListProps) {
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {event.photos.length} photo(s)
+                    </td>
+                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                      <div className="flex justify-end space-x-2">
+                        <button
+                          onClick={() => onEdit(event)}
+                          className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => onDelete(event)}
+                          className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

@@ -1,20 +1,20 @@
 'use client';
 
 import { signIn, getCsrfToken } from 'next-auth/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
-export default function SignInPage() {
+function SignInForm() {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [csrfToken, setCsrfToken] = useState('');
   const searchParams = useSearchParams();
   const router = useRouter();
-  const callbackUrl = searchParams.get('callbackUrl') || '/admin';
+  const callbackUrl = searchParams.get('callbackUrl') ?? '/admin';
 
   useEffect(() => {
-    getCsrfToken().then(token => setCsrfToken(token || ''));
+    void getCsrfToken().then(token => setCsrfToken(token ?? ''));
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -123,5 +123,13 @@ export default function SignInPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignInForm />
+    </Suspense>
   );
 }

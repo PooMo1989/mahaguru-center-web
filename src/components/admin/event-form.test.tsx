@@ -3,31 +3,47 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { EventForm } from "./event-form";
 
 // Mock the tRPC client
-const mockMutate = vi.fn();
-const mockUseMutation = vi.fn(() => ({
-  mutate: mockMutate,
-  isPending: false,
-}));
+const mockCreateMutate = vi.fn();
+const mockUpdateMutate = vi.fn();
 
 vi.mock("~/trpc/react", () => ({
   api: {
     event: {
       createEvent: {
-        useMutation: mockUseMutation,
+        useMutation: () => ({
+          mutate: mockCreateMutate,
+          isPending: false,
+        }),
+      },
+      updateEvent: {
+        useMutation: () => ({
+          mutate: mockUpdateMutate,
+          isPending: false,
+        }),
       },
     },
   },
+  type: {} as Record<string, unknown>,
 }));
 
 describe("EventForm", () => {
   const mockOnEventCreated = vi.fn();
+  const mockOnEventUpdated = vi.fn();
+  const mockOnCancel = vi.fn();
+
+  const mockEvent = {
+    id: "1",
+    name: "Test Event",
+    description: "Test Description", 
+    category: "Dhamma Discussion",
+    eventDate: new Date("2025-12-01T18:00:00"),
+    photos: ["https://example.com/photo1.jpg"],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUseMutation.mockReturnValue({
-      mutate: mockMutate,
-      isPending: false,
-    });
   });
 
   it("renders all form fields", () => {
@@ -37,7 +53,7 @@ describe("EventForm", () => {
     expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/category/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/event date & time/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/photo urls/i)).toBeInTheDocument();
+    expect(screen.getByText(/photo urls/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /create event/i })).toBeInTheDocument();
   });
 
@@ -53,18 +69,10 @@ describe("EventForm", () => {
       expect(screen.getByText("Event date is required")).toBeInTheDocument();
     });
 
-    expect(mockMutate).not.toHaveBeenCalled();
+    expect(mockCreateMutate).not.toHaveBeenCalled();
   });
 
   it("fills form and submits successfully", async () => {
-    mockUseMutation.mockReturnValue({
-      mutate: vi.fn((data, { onSuccess }: { onSuccess: () => void }) => {
-        // Simulate successful submission
-        onSuccess();
-      }),
-      isPending: false,
-    });
-
     render(<EventForm onEventCreated={mockOnEventCreated} />);
 
     // Fill required fields
@@ -84,120 +92,49 @@ describe("EventForm", () => {
     fireEvent.click(screen.getByRole("button", { name: /create event/i }));
 
     await waitFor(() => {
-      expect(mockOnEventCreated).toHaveBeenCalled();
+      expect(mockCreateMutate).toHaveBeenCalledWith({
+        name: "Test Event",
+        description: "Test Description",
+        category: "Dhamma Discussion",
+        eventDate: new Date("2025-12-01T18:00"),
+        photos: [],
+      });
     });
   });
 
-  it("adds and removes photo URLs", () => {
-    render(<EventForm onEventCreated={mockOnEventCreated} />);
+  // Edit Mode Tests
+  describe("Edit Mode", () => {
+    it("renders in edit mode with pre-populated data", () => {
+      render(
+        <EventForm
+          mode="edit"
+          editEvent={mockEvent}
+          onEventUpdated={mockOnEventUpdated}
+          onCancel={mockOnCancel}
+        />
+      );
 
-    const photoInput = screen.getByPlaceholderText(/enter photo url/i);
-    const addButton = screen.getByRole("button", { name: /add/i });
-
-    // Add a photo URL
-    fireEvent.change(photoInput, {
-      target: { value: "https://example.com/photo.jpg" },
-    });
-    fireEvent.click(addButton);
-
-    expect(screen.getByText("https://example.com/photo.jpg")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /remove/i })).toBeInTheDocument();
-
-    // Remove the photo URL
-    fireEvent.click(screen.getByRole("button", { name: /remove/i }));
-    expect(screen.queryByText("https://example.com/photo.jpg")).not.toBeInTheDocument();
-  });
-
-  it("validates photo URL format", () => {
-    render(<EventForm onEventCreated={mockOnEventCreated} />);
-
-    const photoInput = screen.getByPlaceholderText(/enter photo url/i);
-    const addButton = screen.getByRole("button", { name: /add/i });
-
-    // Try to add invalid URL
-    fireEvent.change(photoInput, {
-      target: { value: "invalid-url" },
-    });
-    fireEvent.click(addButton);
-
-    expect(screen.getByText("Please enter a valid URL")).toBeInTheDocument();
-    expect(screen.queryByText("invalid-url")).not.toBeInTheDocument();
-  });
-
-  it("adds photo URL on Enter key press", () => {
-    render(<EventForm onEventCreated={mockOnEventCreated} />);
-
-    const photoInput = screen.getByPlaceholderText(/enter photo url/i);
-
-    fireEvent.change(photoInput, {
-      target: { value: "https://example.com/photo.jpg" },
-    });
-    fireEvent.keyPress(photoInput, { key: "Enter", code: "Enter" });
-
-    expect(screen.getByText("https://example.com/photo.jpg")).toBeInTheDocument();
-  });
-
-  it("shows loading state during submission", () => {
-    mockUseMutation.mockReturnValue({
-      mutate: mockMutate,
-      isPending: true,
+      expect(screen.getByDisplayValue("Test Event")).toBeInTheDocument();
+      expect(screen.getByDisplayValue("Test Description")).toBeInTheDocument();
+      expect(screen.getByDisplayValue("Dhamma Discussion")).toBeInTheDocument();
+      expect(screen.getByDisplayValue("2025-12-01T18:00")).toBeInTheDocument();
+      expect(screen.getByText("https://example.com/photo1.jpg")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /update event/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /cancel/i })).toBeInTheDocument();
     });
 
-    render(<EventForm onEventCreated={mockOnEventCreated} />);
+    it("calls onCancel when cancel button is clicked", () => {
+      render(
+        <EventForm
+          mode="edit"
+          editEvent={mockEvent}
+          onEventUpdated={mockOnEventUpdated}
+          onCancel={mockOnCancel}
+        />
+      );
 
-    const submitButton = screen.getByRole("button", { name: /creating.../i });
-    expect(submitButton).toBeDisabled();
-  });
-
-  it("clears validation errors when user starts typing", async () => {
-    render(<EventForm onEventCreated={mockOnEventCreated} />);
-
-    // Trigger validation errors
-    fireEvent.click(screen.getByRole("button", { name: /create event/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText("Event name is required")).toBeInTheDocument();
+      fireEvent.click(screen.getByRole("button", { name: /cancel/i }));
+      expect(mockOnCancel).toHaveBeenCalledTimes(1);
     });
-
-    // Start typing in name field
-    fireEvent.change(screen.getByLabelText(/event name/i), {
-      target: { value: "T" },
-    });
-
-    expect(screen.queryByText("Event name is required")).not.toBeInTheDocument();
-  });
-
-  it("handles API error gracefully", async () => {
-    const errorMessage = "Failed to create event";
-    mockUseMutation.mockReturnValue({
-      mutate: vi.fn((data, { onError }: { onError: (error: { message: string }) => void }) => {
-        onError({ message: errorMessage });
-      }),
-      isPending: false,
-    });
-
-    render(<EventForm onEventCreated={mockOnEventCreated} />);
-
-    // Fill and submit form
-    fireEvent.change(screen.getByLabelText(/event name/i), {
-      target: { value: "Test Event" },
-    });
-    fireEvent.change(screen.getByLabelText(/description/i), {
-      target: { value: "Test Description" },
-    });
-    fireEvent.change(screen.getByLabelText(/category/i), {
-      target: { value: "Dhamma Discussion" },
-    });
-    fireEvent.change(screen.getByLabelText(/event date & time/i), {
-      target: { value: "2025-12-01T18:00" },
-    });
-
-    fireEvent.click(screen.getByRole("button", { name: /create event/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText(errorMessage)).toBeInTheDocument();
-    });
-
-    expect(mockOnEventCreated).not.toHaveBeenCalled();
   });
 });

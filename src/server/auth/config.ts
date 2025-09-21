@@ -1,9 +1,6 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import DiscordProvider from "next-auth/providers/discord";
-
-import { db } from "~/server/db";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -86,7 +83,7 @@ export const authConfig = {
       // Persist user data in JWT token
       if (user) {
         token.id = user.id;
-        token.role = (user as any).role;
+        token.role = (user as { role?: string }).role;
       }
       return token;
     },
@@ -94,7 +91,7 @@ export const authConfig = {
       // Send properties to client
       if (token) {
         session.user.id = token.id as string;
-        (session.user as any).role = token.role as string;
+        (session.user as { role?: string }).role = token.role as string;
       }
       return session;
     },
