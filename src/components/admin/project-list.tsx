@@ -9,7 +9,12 @@ interface ProjectListProps {
   onDelete: (project: Project) => void;
 }
 
-export function ProjectList({ projects, onRefresh, onEdit, onDelete }: ProjectListProps) {
+export function ProjectList({
+  projects,
+  onRefresh,
+  onEdit,
+  onDelete,
+}: ProjectListProps) {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -24,8 +29,10 @@ export function ProjectList({ projects, onRefresh, onEdit, onDelete }: ProjectLi
 
   if (projects.length === 0) {
     return (
-      <div className="text-center py-8">
-        <p className="text-gray-500">No projects found. Create your first project!</p>
+      <div className="py-8 text-center">
+        <p className="text-gray-500">
+          No projects found. Create your first project!
+        </p>
       </div>
     );
   }
@@ -40,7 +47,7 @@ export function ProjectList({ projects, onRefresh, onEdit, onDelete }: ProjectLi
                 <tr>
                   <th
                     scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                    className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                   >
                     Project Name
                   </th>
@@ -74,10 +81,7 @@ export function ProjectList({ projects, onRefresh, onEdit, onDelete }: ProjectLi
                   >
                     Progress
                   </th>
-                  <th
-                    scope="col"
-                    className="relative py-3.5 pl-3 pr-4 sm:pr-0"
-                  >
+                  <th scope="col" className="relative py-3.5 pr-4 pl-3 sm:pr-0">
                     <span className="sr-only">Actions</span>
                   </th>
                 </tr>
@@ -85,66 +89,81 @@ export function ProjectList({ projects, onRefresh, onEdit, onDelete }: ProjectLi
               <tbody className="divide-y divide-gray-200">
                 {projects.map((project) => {
                   // Safely handle Decimal fields
-                  const goalAmount = typeof project.donationGoalAmount?.toNumber === 'function' 
-                    ? project.donationGoalAmount.toNumber() 
-                    : Number(project.donationGoalAmount) || 0;
-                  const currentAmount = typeof project.currentDonationAmount?.toNumber === 'function'
-                    ? project.currentDonationAmount.toNumber()
-                    : Number(project.currentDonationAmount) || 0;
-                  const progressPercent = getProgressPercentage(currentAmount, goalAmount);
-                  
+                  const goalAmount =
+                    typeof project.donationGoalAmount?.toNumber === "function"
+                      ? project.donationGoalAmount.toNumber()
+                      : Number(project.donationGoalAmount) || 0;
+                  const currentAmount =
+                    typeof project.currentDonationAmount?.toNumber ===
+                    "function"
+                      ? project.currentDonationAmount.toNumber()
+                      : Number(project.currentDonationAmount) || 0;
+                  const progressPercent = getProgressPercentage(
+                    currentAmount,
+                    goalAmount,
+                  );
+
                   return (
                     <tr key={project.id} className="hover:bg-gray-50">
-                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                      <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
                         <div>
-                          <div className="font-medium">{project.projectName}</div>
-                          <div className="text-gray-500 text-xs truncate max-w-xs" title={project.description}>
+                          <div className="font-medium">
+                            {project.projectName}
+                          </div>
+                          <div
+                            className="max-w-xs truncate text-xs text-gray-500"
+                            title={project.description}
+                          >
                             {project.description}
                           </div>
                         </div>
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                         <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
                           {project.projectType}
                         </span>
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                          project.projectNature === "Continuous" 
-                            ? "bg-green-100 text-green-800" 
-                            : "bg-purple-100 text-purple-800"
-                        }`}>
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                        <span
+                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                            project.projectNature === "Continuous"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-purple-100 text-purple-800"
+                          }`}
+                        >
                           {project.projectNature}
                         </span>
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                         {formatCurrency(goalAmount)}
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                         {formatCurrency(currentAmount)}
                       </td>
                       <td className="px-3 py-4 text-sm text-gray-500">
                         <div className="flex items-center">
-                          <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                          <div className="mr-2 h-2 w-16 rounded-full bg-gray-200">
                             <div
-                              className="bg-blue-600 h-2 rounded-full"
+                              className="h-2 rounded-full bg-blue-600"
                               style={{ width: `${progressPercent}%` }}
                             ></div>
                           </div>
-                          <span className="text-xs">{progressPercent.toFixed(0)}%</span>
+                          <span className="text-xs">
+                            {progressPercent.toFixed(0)}%
+                          </span>
                         </div>
                       </td>
-                      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                      <td className="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                         <div className="flex justify-end space-x-2">
                           <button
                             onClick={() => onEdit(project)}
-                            className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            className="inline-flex items-center rounded border border-transparent bg-blue-100 px-2.5 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
                           >
                             Edit
                           </button>
                           <button
                             onClick={() => onDelete(project)}
-                            className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                            className="inline-flex items-center rounded border border-transparent bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
                           >
                             Delete
                           </button>
@@ -158,12 +177,12 @@ export function ProjectList({ projects, onRefresh, onEdit, onDelete }: ProjectLi
           </div>
         </div>
       </div>
-      
+
       {/* Refresh button */}
       <div className="mt-4 flex justify-end">
         <button
           onClick={onRefresh}
-          className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm leading-4 font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
         >
           Refresh
         </button>

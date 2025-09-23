@@ -10,8 +10,12 @@ const mockProjects: RouterOutputs["project"]["getProjects"] = [
     projectName: "Our Digital Mission",
     description: "Multi-pillar digital preservation project",
     photos: ["https://example.com/photo1.jpg"],
-    donationGoalAmount: { toNumber: () => 50000 } as any,
-    currentDonationAmount: { toNumber: () => 25000 } as any,
+    donationGoalAmount: {
+      toNumber: () => 50000,
+    } as unknown as RouterOutputs["project"]["getProjects"][number]["donationGoalAmount"],
+    currentDonationAmount: {
+      toNumber: () => 25000,
+    } as unknown as RouterOutputs["project"]["getProjects"][number]["currentDonationAmount"],
     projectType: "Digital Infrastructure",
     projectNature: "Continuous",
     startDate: null,
@@ -21,12 +25,16 @@ const mockProjects: RouterOutputs["project"]["getProjects"] = [
     updatedAt: new Date(),
   },
   {
-    id: "2", 
+    id: "2",
     projectName: "The AI Guru",
     description: "AI-powered spiritual guidance system",
     photos: [],
-    donationGoalAmount: { toNumber: () => 100000 } as any,
-    currentDonationAmount: { toNumber: () => 75000 } as any,
+    donationGoalAmount: {
+      toNumber: () => 100000,
+    } as unknown as RouterOutputs["project"]["getProjects"][number]["donationGoalAmount"],
+    currentDonationAmount: {
+      toNumber: () => 75000,
+    } as unknown as RouterOutputs["project"]["getProjects"][number]["currentDonationAmount"],
     projectType: "Technology Development",
     projectNature: "One-time",
     startDate: new Date("2024-01-01"),
@@ -53,10 +61,12 @@ describe("ProjectList", () => {
         onRefresh={mockOnRefresh}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
-      />
+      />,
     );
 
-    expect(screen.getByText("No projects found. Create your first project!")).toBeInTheDocument();
+    expect(
+      screen.getByText("No projects found. Create your first project!"),
+    ).toBeInTheDocument();
   });
 
   it("renders project list with data", () => {
@@ -66,7 +76,7 @@ describe("ProjectList", () => {
         onRefresh={mockOnRefresh}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
-      />
+      />,
     );
 
     // Check if project names are displayed
@@ -89,7 +99,7 @@ describe("ProjectList", () => {
         onRefresh={mockOnRefresh}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
-      />
+      />,
     );
 
     // Check formatted currency amounts
@@ -110,7 +120,7 @@ describe("ProjectList", () => {
         onRefresh={mockOnRefresh}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
-      />
+      />,
     );
 
     const editButtons = screen.getAllByText("Edit");
@@ -126,7 +136,7 @@ describe("ProjectList", () => {
         onRefresh={mockOnRefresh}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
-      />
+      />,
     );
 
     const deleteButtons = screen.getAllByText("Delete");
@@ -142,7 +152,7 @@ describe("ProjectList", () => {
         onRefresh={mockOnRefresh}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
-      />
+      />,
     );
 
     const refreshButton = screen.getByText("Refresh");
@@ -154,7 +164,8 @@ describe("ProjectList", () => {
   it("truncates long descriptions", () => {
     const projectWithLongDescription = {
       ...mockProjects[0]!,
-      description: "This is a very long description that should be truncated when displayed in the table to maintain a clean layout",
+      description:
+        "This is a very long description that should be truncated when displayed in the table to maintain a clean layout",
     };
 
     render(
@@ -163,11 +174,13 @@ describe("ProjectList", () => {
         onRefresh={mockOnRefresh}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
-      />
+      />,
     );
 
     // The full description should be in the title attribute
-    const descriptionElement = screen.getByTitle(projectWithLongDescription.description);
+    const descriptionElement = screen.getByTitle(
+      projectWithLongDescription.description,
+    );
     expect(descriptionElement).toBeInTheDocument();
   });
 });

@@ -12,20 +12,22 @@ interface SafeImageProps {
   fallbackIcon?: string;
 }
 
-export function SafeImage({ 
-  src, 
-  alt, 
-  className, 
-  width, 
-  height, 
-  fallbackIcon = "No image" 
+export function SafeImage({
+  src,
+  alt,
+  className,
+  width,
+  height,
+  fallbackIcon = "No image",
 }: SafeImageProps) {
   const [imageError, setImageError] = useState(false);
-  
+
   if (imageError) {
     return (
-      <div className={`${className} bg-gray-200 flex items-center justify-center`}>
-        <span className="text-gray-500 text-xs">{fallbackIcon}</span>
+      <div
+        className={`${className} flex items-center justify-center bg-gray-200`}
+      >
+        <span className="text-xs text-gray-500">{fallbackIcon}</span>
       </div>
     );
   }

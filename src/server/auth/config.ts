@@ -34,34 +34,44 @@ export const authConfig = {
       name: "Admin Login",
       credentials: {
         username: { label: "Username", type: "text", placeholder: "admin" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log('Authorize called with:', credentials);
-        
+        console.log("Authorize called with:", credentials);
+
         // Simple admin credentials for development
         if (
-          (credentials?.username === "admin" && credentials?.password === "admin123") ||
-          (credentials?.username === "severus" && credentials?.password === "severus")
+          (credentials?.username === "admin" &&
+            credentials?.password === "admin123") ||
+          (credentials?.username === "severus" &&
+            credentials?.password === "severus")
         ) {
           const user = {
-            id: credentials.username === "severus" ? "severus-admin" : "admin-user",
-            name: credentials.username === "severus" ? "Severus Admin" : "Admin User",
-            email: credentials.username === "severus" ? "severus@mahaguru.com" : "admin@mahaguru.com",
+            id:
+              credentials.username === "severus"
+                ? "severus-admin"
+                : "admin-user",
+            name:
+              credentials.username === "severus"
+                ? "Severus Admin"
+                : "Admin User",
+            email:
+              credentials.username === "severus"
+                ? "severus@mahaguru.com"
+                : "admin@mahaguru.com",
             role: "admin",
           };
-          console.log('Returning user:', user);
+          console.log("Returning user:", user);
           return user;
         }
-        console.log('Authorization failed - invalid credentials');
+        console.log("Authorization failed - invalid credentials");
         return null;
       },
     }),
     // Keep Discord provider for when it's properly configured
-    ...(process.env.AUTH_DISCORD_ID && process.env.AUTH_DISCORD_SECRET 
-      ? [DiscordProvider] 
-      : []
-    ),
+    ...(process.env.AUTH_DISCORD_ID && process.env.AUTH_DISCORD_SECRET
+      ? [DiscordProvider]
+      : []),
   ],
   // Use JWT strategy for credentials provider (no database needed)
   session: {
@@ -69,7 +79,7 @@ export const authConfig = {
     maxAge: 24 * 60 * 60, // 24 hours
   },
   pages: {
-    signIn: '/auth/signin',
+    signIn: "/auth/signin",
   },
   callbacks: {
     async redirect({ url, baseUrl }) {

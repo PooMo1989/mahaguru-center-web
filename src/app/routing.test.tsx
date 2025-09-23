@@ -49,10 +49,16 @@ describe("Page Routing and Components", () => {
   describe("Mahaguru Page", () => {
     it("renders the mahaguru page correctly", () => {
       renderWithProviders(<MahaguruPage />);
-      
+
       expect(screen.getByText("Mahaguru")).toBeInTheDocument();
-      expect(screen.getAllByText("The Formative Years: An Era of Seeking")[0]).toBeInTheDocument();
-      expect(screen.getByText(/This section would chronicle the Mahaguru's early life/)).toBeInTheDocument();
+      expect(
+        screen.getAllByText("The Formative Years: An Era of Seeking")[0],
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          /This section would chronicle the Mahaguru's early life/,
+        ),
+      ).toBeInTheDocument();
       expect(screen.getByTestId("navigation")).toBeInTheDocument();
     });
   });
@@ -60,9 +66,11 @@ describe("Page Routing and Components", () => {
   describe("Services Page", () => {
     it("renders the services page correctly", () => {
       renderWithProviders(<ServicesPage />);
-      
+
       expect(screen.getByText("Our Services")).toBeInTheDocument();
-      expect(screen.getByText(/programs and services we offer/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/programs and services we offer/),
+      ).toBeInTheDocument();
       expect(screen.getByTestId("navigation")).toBeInTheDocument();
     });
   });
@@ -70,7 +78,7 @@ describe("Page Routing and Components", () => {
   describe("Projects Page", () => {
     it("renders the projects page correctly", () => {
       renderWithProviders(<ProjectsPage />, { withTRPC: true });
-      
+
       expect(screen.getByText("Our Projects")).toBeInTheDocument();
       expect(screen.getByText(/meaningful initiatives/)).toBeInTheDocument();
       expect(screen.getByTestId("navigation")).toBeInTheDocument();
@@ -80,8 +88,10 @@ describe("Page Routing and Components", () => {
   describe("Events Page", () => {
     it("renders the events page correctly", () => {
       renderWithProviders(<EventsPage />, { withTRPC: true });
-      
-      expect(screen.getByText("Events & Monthly Dhamma Discussion")).toBeInTheDocument();
+
+      expect(
+        screen.getByText("Events & Monthly Dhamma Discussion"),
+      ).toBeInTheDocument();
       expect(screen.getByText(/spiritual growth/)).toBeInTheDocument();
       expect(screen.getByTestId("navigation")).toBeInTheDocument();
     });
@@ -90,9 +100,11 @@ describe("Page Routing and Components", () => {
   describe("Contact Page", () => {
     it("renders the contact page correctly", () => {
       renderWithProviders(<ContactPage />);
-      
+
       expect(screen.getByText("Contact Us")).toBeInTheDocument();
-      expect(screen.getByText(/Become a vital part of our mission/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Become a vital part of our mission/),
+      ).toBeInTheDocument();
       expect(screen.getByTestId("navigation")).toBeInTheDocument();
     });
   });
@@ -106,17 +118,24 @@ describe("Page Routing and Components", () => {
         { Component: EventsPage, needsTRPC: true },
         { Component: ContactPage, needsTRPC: false },
       ];
-      
+
       pages.forEach(({ Component, needsTRPC }) => {
-        const { unmount } = renderWithProviders(<Component />, { withTRPC: needsTRPC });
-        
+        const { unmount } = renderWithProviders(<Component />, {
+          withTRPC: needsTRPC,
+        });
+
         // Check for main element with proper classes
         const main = screen.getByRole("main");
-        expect(main).toHaveClass("min-h-screen", "bg-gradient-to-b", "from-slate-50", "to-slate-100");
-        
+        expect(main).toHaveClass(
+          "min-h-screen",
+          "bg-gradient-to-b",
+          "from-slate-50",
+          "to-slate-100",
+        );
+
         // Check for navigation
         expect(screen.getByTestId("navigation")).toBeInTheDocument();
-        
+
         unmount();
       });
     });

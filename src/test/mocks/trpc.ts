@@ -1,19 +1,19 @@
-import { vi } from 'vitest';
-import type { MockedFunction } from 'vitest';
+import { vi } from "vitest";
+import type { MockedFunction } from "vitest";
 
 // Type definitions for better type safety
 interface MockTRPCQuery<TData = unknown> {
   data: TData | null;
   isLoading: boolean;
   error: Error | null;
-  refetch: MockedFunction<any>;
+  refetch: MockedFunction<() => void>;
   isError: boolean;
   isSuccess: boolean;
   isFetching: boolean;
   isPending: boolean;
   isRefetching: boolean;
-  fetchStatus: 'fetching' | 'idle' | 'paused';
-  status: 'error' | 'pending' | 'success';
+  fetchStatus: "fetching" | "idle" | "paused";
+  status: "error" | "pending" | "success";
 }
 
 interface MockTRPCMutation<TData = unknown, TVariables = unknown> {
@@ -31,9 +31,9 @@ interface MockTRPCMutation<TData = unknown, TVariables = unknown> {
  * Creates a mock tRPC query with consistent structure and strict typing
  */
 export const createMockTRPCQuery = <TData = unknown>(
-  data: TData | null = null, 
-  isLoading = false, 
-  error: Error | null = null
+  data: TData | null = null,
+  isLoading = false,
+  error: Error | null = null,
 ): MockTRPCQuery<TData> => ({
   data,
   isLoading,
@@ -44,17 +44,17 @@ export const createMockTRPCQuery = <TData = unknown>(
   isFetching: isLoading,
   isPending: isLoading,
   isRefetching: false,
-  fetchStatus: isLoading ? 'fetching' : 'idle',
-  status: error ? 'error' : isLoading ? 'pending' : 'success',
+  fetchStatus: isLoading ? "fetching" : "idle",
+  status: error ? "error" : isLoading ? "pending" : "success",
 });
 
 /**
  * Creates a mock tRPC mutation with consistent structure and strict typing
  */
 export const createMockTRPCMutation = <TData = unknown, TVariables = unknown>(
-  mutate: MockedFunction<(variables: TVariables) => void> = vi.fn(), 
+  mutate: MockedFunction<(variables: TVariables) => void> = vi.fn(),
   isPending = false,
-  error: Error | null = null
+  error: Error | null = null,
 ): MockTRPCMutation<TData, TVariables> => ({
   mutate,
   mutateAsync: vi.fn(),
@@ -76,12 +76,12 @@ export const createMockTRPCMutation = <TData = unknown, TVariables = unknown>(
  * Best Practice: Use this for components that make multiple tRPC calls
  * For single endpoints, use createMockTRPCQuery/createMockTRPCMutation directly
  */
-export const createMockTRPCApi = (overrides: Record<string, any> = {}) => {
+export const createMockTRPCApi = (overrides: Record<string, unknown> = {}) => {
   // Validate overrides structure
-  if (overrides && typeof overrides !== 'object') {
-    console.warn('createMockTRPCApi: overrides should be an object');
+  if (overrides && typeof overrides !== "object") {
+    console.warn("createMockTRPCApi: overrides should be an object");
   }
-  
+
   return {
     event: {
       getEvents: {
@@ -130,7 +130,7 @@ export const mockEventsData = [
     updatedAt: new Date(),
   },
   {
-    id: "2", 
+    id: "2",
     name: "Test Event 2",
     description: "Test description 2",
     category: "Meditation",
@@ -150,8 +150,8 @@ export const mockProjectsData = [
     projectName: "Test Project 1",
     description: "Test project description 1",
     photos: ["https://example.com/project1.jpg"],
-    donationGoalAmount: { toNumber: () => 50000 } as any,
-    amountCollected: { toNumber: () => 25000 } as any,
+    donationGoalAmount: { toNumber: () => 50000 },
+    amountCollected: { toNumber: () => 25000 },
     projectNature: "Continuous" as const,
     donationTargetType: "Daily Dana" as const,
     isActive: true,

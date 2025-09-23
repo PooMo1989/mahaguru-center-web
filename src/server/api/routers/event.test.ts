@@ -157,8 +157,8 @@ describe("Event Router Input Validation", () => {
   describe("eventFilterInput validation", () => {
     it("should validate filter options", () => {
       const validFilters = ["all", "upcoming", "past"];
-      
-      validFilters.forEach(filter => {
+
+      validFilters.forEach((filter) => {
         const result = eventFilterInput.safeParse({ filter });
         expect(result.success).toBe(true);
         if (result.success) {
@@ -191,7 +191,7 @@ describe("Event Date Filtering Logic", () => {
 
     // Test that past date is before now
     expect(pastDate < now).toBe(true);
-    
+
     // Test that future date is after now
     expect(futureDate > now).toBe(true);
 

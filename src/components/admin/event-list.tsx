@@ -9,7 +9,12 @@ interface EventListProps {
   onDelete: (event: Event) => void;
 }
 
-export function EventList({ events, onRefresh, onEdit, onDelete }: EventListProps) {
+export function EventList({
+  events,
+  onRefresh,
+  onEdit,
+  onDelete,
+}: EventListProps) {
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat("en-US", {
       year: "numeric",
@@ -22,8 +27,10 @@ export function EventList({ events, onRefresh, onEdit, onDelete }: EventListProp
 
   if (events.length === 0) {
     return (
-      <div className="text-center py-8">
-        <p className="text-gray-500">No events found. Create your first event!</p>
+      <div className="py-8 text-center">
+        <p className="text-gray-500">
+          No events found. Create your first event!
+        </p>
       </div>
     );
   }
@@ -38,7 +45,7 @@ export function EventList({ events, onRefresh, onEdit, onDelete }: EventListProp
                 <tr>
                   <th
                     scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                    className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                   >
                     Event Name
                   </th>
@@ -66,10 +73,7 @@ export function EventList({ events, onRefresh, onEdit, onDelete }: EventListProp
                   >
                     Photos
                   </th>
-                  <th
-                    scope="col"
-                    className="relative py-3.5 pl-3 pr-4 sm:pr-0"
-                  >
+                  <th scope="col" className="relative py-3.5 pr-4 pl-3 sm:pr-0">
                     <span className="sr-only">Actions</span>
                   </th>
                 </tr>
@@ -77,36 +81,36 @@ export function EventList({ events, onRefresh, onEdit, onDelete }: EventListProp
               <tbody className="divide-y divide-gray-200">
                 {events.map((event) => (
                   <tr key={event.id} className="hover:bg-gray-50">
-                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                    <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
                       {event.name}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                       {formatDate(event.eventDate)}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                       <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
                         {event.category}
                       </span>
                     </td>
-                    <td className="px-3 py-4 text-sm text-gray-500 max-w-xs">
+                    <td className="max-w-xs px-3 py-4 text-sm text-gray-500">
                       <div className="truncate" title={event.description}>
                         {event.description}
                       </div>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                       {event.photos.length} photo(s)
                     </td>
-                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                    <td className="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                       <div className="flex justify-end space-x-2">
                         <button
                           onClick={() => onEdit(event)}
-                          className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                          className="inline-flex items-center rounded border border-transparent bg-blue-100 px-2.5 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => onDelete(event)}
-                          className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                          className="inline-flex items-center rounded border border-transparent bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
                         >
                           Delete
                         </button>
@@ -119,12 +123,12 @@ export function EventList({ events, onRefresh, onEdit, onDelete }: EventListProp
           </div>
         </div>
       </div>
-      
+
       {/* Refresh button */}
       <div className="mt-4 flex justify-end">
         <button
           onClick={onRefresh}
-          className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm leading-4 font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
         >
           Refresh
         </button>

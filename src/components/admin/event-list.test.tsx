@@ -9,12 +9,15 @@ const mockEvents = [
     description: "Monthly dhamma discussion on full moon day",
     category: "Dhamma Discussion",
     eventDate: new Date("2025-12-01T18:00:00Z"),
-    photos: ["https://example.com/photo1.jpg", "https://example.com/photo2.jpg"],
+    photos: [
+      "https://example.com/photo1.jpg",
+      "https://example.com/photo2.jpg",
+    ],
     createdAt: new Date("2025-11-01"),
     updatedAt: new Date("2025-11-01"),
   },
   {
-    id: "2", 
+    id: "2",
     name: "Meditation Session",
     description: "Guided meditation session",
     category: "Meditation Session",
@@ -43,7 +46,9 @@ describe("EventList", () => {
   it("renders empty state when no events", () => {
     render(<EventList {...defaultProps} events={[]} />);
 
-    expect(screen.getByText("No events found. Create your first event!")).toBeInTheDocument();
+    expect(
+      screen.getByText("No events found. Create your first event!"),
+    ).toBeInTheDocument();
   });
 
   it("renders events table with data", () => {
@@ -58,9 +63,15 @@ describe("EventList", () => {
     expect(screen.getByText("Actions")).toBeInTheDocument();
 
     // Check event data
-    expect(screen.getByRole("cell", { name: "Dhamma Discussion" })).toBeInTheDocument();
-    expect(screen.getByRole("cell", { name: "Meditation Session" })).toBeInTheDocument();
-    expect(screen.getByText("Monthly dhamma discussion on full moon day")).toBeInTheDocument();
+    expect(
+      screen.getByRole("cell", { name: "Dhamma Discussion" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("cell", { name: "Meditation Session" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Monthly dhamma discussion on full moon day"),
+    ).toBeInTheDocument();
     expect(screen.getByText("Guided meditation session")).toBeInTheDocument();
     expect(screen.getByText("2 photo(s)")).toBeInTheDocument();
     expect(screen.getByText("0 photo(s)")).toBeInTheDocument();
@@ -70,14 +81,20 @@ describe("EventList", () => {
     render(<EventList {...defaultProps} />);
 
     // Check for the actual formatted dates as shown in test output
-    expect(screen.getByText("December 1, 2025 at 11:30 PM")).toBeInTheDocument();
-    expect(screen.getByText("December 15, 2025 at 11:00 PM")).toBeInTheDocument();
+    expect(
+      screen.getByText("December 1, 2025 at 11:30 PM"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("December 15, 2025 at 11:00 PM"),
+    ).toBeInTheDocument();
   });
 
   it("displays category badges", () => {
     render(<EventList {...defaultProps} />);
 
-    const categoryBadges = screen.getAllByText(/Dhamma Discussion|Meditation Session/);
+    const categoryBadges = screen.getAllByText(
+      /Dhamma Discussion|Meditation Session/,
+    );
     expect(categoryBadges).toHaveLength(4); // 2 in title + 2 in badges
   });
 
@@ -93,12 +110,17 @@ describe("EventList", () => {
   it("shows truncated descriptions with full text in title", () => {
     render(<EventList {...defaultProps} />);
 
-    const descriptionCells = screen.getAllByText(/Monthly dhamma discussion|Guided meditation/);
-    // Check that the full description is in the title attribute
-    const firstDescription = descriptionCells.find(el => 
-      el.textContent === "Monthly dhamma discussion on full moon day"
+    const descriptionCells = screen.getAllByText(
+      /Monthly dhamma discussion|Guided meditation/,
     );
-    expect(firstDescription).toHaveAttribute("title", "Monthly dhamma discussion on full moon day");
+    // Check that the full description is in the title attribute
+    const firstDescription = descriptionCells.find(
+      (el) => el.textContent === "Monthly dhamma discussion on full moon day",
+    );
+    expect(firstDescription).toHaveAttribute(
+      "title",
+      "Monthly dhamma discussion on full moon day",
+    );
   });
 
   // New tests for edit and delete functionality

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 // Type definitions for better type safety
 interface NavigationMock {
@@ -11,7 +11,7 @@ interface MockLinkProps {
   href: string;
   className?: string;
   onClick?: () => void;
-  'data-testid'?: string;
+  "data-testid"?: string;
   [key: string]: unknown;
 }
 
@@ -21,7 +21,7 @@ interface MockImageProps {
   width?: number | string;
   height?: number | string;
   className?: string;
-  'data-testid'?: string;
+  "data-testid"?: string;
   [key: string]: unknown;
 }
 
@@ -30,24 +30,27 @@ interface MockImageProps {
  * This prevents the common "No Footer export defined" error in tests
  */
 export const mockNavigation = (): NavigationMock => ({
-  Navigation: () => React.createElement('nav', { 'data-testid': 'navigation' }, 'Mock Navigation'),
-  Footer: () => React.createElement('footer', { 'data-testid': 'footer' }, 'Mock Footer'),
+  Navigation: () =>
+    React.createElement(
+      "nav",
+      { "data-testid": "navigation" },
+      "Mock Navigation",
+    ),
+  Footer: () =>
+    React.createElement("footer", { "data-testid": "footer" }, "Mock Footer"),
 });
 
 /**
  * Mock for Next.js Link component with proper type safety
  */
-export const MockLink: React.FC<MockLinkProps> = ({ 
-  children, 
-  href, 
-  ...props 
-}) => React.createElement('a', { href, ...props }, children);
+export const MockLink: React.FC<MockLinkProps> = ({
+  children,
+  href,
+  ...props
+}) => React.createElement("a", { href, ...props }, children);
 
 /**
  * Mock for Next.js Image component with proper type safety
  */
-export const MockImage: React.FC<MockImageProps> = ({ 
-  src, 
-  alt, 
-  ...props 
-}) => React.createElement('img', { src, alt, ...props });
+export const MockImage: React.FC<MockImageProps> = ({ src, alt, ...props }) =>
+  React.createElement("img", { src, alt, ...props });

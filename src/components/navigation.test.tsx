@@ -5,7 +5,13 @@ import { Navigation, Footer } from "./navigation";
 // Mock Next.js Link component
 vi.mock("next/link", () => {
   return {
-    default: function MockLink({ children, href }: { children: React.ReactNode; href: string }) {
+    default: function MockLink({
+      children,
+      href,
+    }: {
+      children: React.ReactNode;
+      href: string;
+    }) {
       return <a href={href}>{children}</a>;
     },
   };
@@ -21,7 +27,7 @@ describe("Navigation Component", () => {
 
   it("renders all navigation links on desktop", () => {
     render(<Navigation />);
-    
+
     const expectedLinks = [
       { text: "Mahaguru", href: "/mahaguru" },
       { text: "Services", href: "/services" },
@@ -46,13 +52,13 @@ describe("Navigation Component", () => {
   it("toggles mobile menu when clicking the hamburger icon", () => {
     render(<Navigation />);
     const mobileMenuTrigger = screen.getByRole("button");
-    
+
     // Initially, the menu should not be open
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
-    
+
     // Click to open the menu
     fireEvent.click(mobileMenuTrigger);
-    
+
     // Menu should now be open (we can check for the navigation links in the dropdown)
     expect(mobileMenuTrigger).toBeInTheDocument();
   });
@@ -60,7 +66,7 @@ describe("Navigation Component", () => {
   it("has proper accessibility attributes", () => {
     render(<Navigation />);
     const mobileMenuTrigger = screen.getByRole("button");
-    
+
     expect(mobileMenuTrigger).toHaveAttribute("aria-expanded");
     expect(screen.getByText("Open main menu")).toBeInTheDocument();
   });
@@ -68,15 +74,23 @@ describe("Navigation Component", () => {
   it("applies correct CSS classes for styling", () => {
     render(<Navigation />);
     const nav = screen.getByRole("navigation");
-    
-    expect(nav).toHaveClass("bg-white/95", "backdrop-blur-sm", "border-b", "border-gray-200", "sticky", "top-0", "z-50");
+
+    expect(nav).toHaveClass(
+      "bg-white/95",
+      "backdrop-blur-sm",
+      "border-b",
+      "border-gray-200",
+      "sticky",
+      "top-0",
+      "z-50",
+    );
   });
 });
 
 describe("Footer Component", () => {
   it("renders the footer with correct content", () => {
     render(<Footer />);
-    
+
     expect(screen.getByText("Mahaguru Center")).toBeInTheDocument();
     expect(screen.getByText("Contact Details")).toBeInTheDocument();
     expect(screen.getByText("secretary@mahaguru.lk")).toBeInTheDocument();
@@ -85,7 +99,7 @@ describe("Footer Component", () => {
 
   it("renders social media links", () => {
     render(<Footer />);
-    
+
     expect(screen.getByLabelText("Facebook")).toBeInTheDocument();
     expect(screen.getByLabelText("YouTube")).toBeInTheDocument();
     expect(screen.getByLabelText("Dhamma Archive")).toBeInTheDocument();
@@ -93,9 +107,11 @@ describe("Footer Component", () => {
 
   it("renders the map section", () => {
     render(<Footer />);
-    
+
     expect(screen.getByText("Visit Us")).toBeInTheDocument();
-    expect(screen.getByTitle("Arahath maga Center Location")).toBeInTheDocument();
+    expect(
+      screen.getByTitle("Arahath maga Center Location"),
+    ).toBeInTheDocument();
     expect(screen.getByText("Open in Google Maps")).toBeInTheDocument();
   });
 });

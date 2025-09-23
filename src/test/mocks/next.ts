@@ -1,5 +1,5 @@
-import { vi } from 'vitest';
-import type { MockedFunction } from 'vitest';
+import { vi } from "vitest";
+import type { MockedFunction } from "vitest";
 
 // Type definitions for better type safety
 interface MockSearchParams {
@@ -29,7 +29,9 @@ interface MockRouter {
 /**
  * Mock for Next.js useSearchParams hook with strict typing
  */
-export const createMockSearchParams = (params: Record<string, string> = {}): MockSearchParams => {
+export const createMockSearchParams = (
+  params: Record<string, string> = {},
+): MockSearchParams => {
   const searchParams = new URLSearchParams(params);
   return {
     get: (key: string) => searchParams.get(key),
@@ -48,29 +50,31 @@ export const createMockSearchParams = (params: Record<string, string> = {}): Moc
 /**
  * Mock for Next.js useRouter hook with strict typing
  */
-export const createMockRouter = (overrides: Partial<MockRouter> = {}): MockRouter => ({
+export const createMockRouter = (
+  overrides: Partial<MockRouter> = {},
+): MockRouter => ({
   push: vi.fn(),
   replace: vi.fn(),
   back: vi.fn(),
   forward: vi.fn(),
   refresh: vi.fn(),
   prefetch: vi.fn(),
-  route: '/',
-  pathname: '/',
+  route: "/",
+  pathname: "/",
   query: {},
-  asPath: '/',
+  asPath: "/",
   ...overrides,
 });
 
 /**
  * Mock for Next.js usePathname hook
  */
-export const createMockPathname = (pathname = '/') => pathname;
+export const createMockPathname = (pathname = "/") => pathname;
 
 /**
  * Standard mock implementations for common Next.js hooks
  */
-export const mockNextNavigation = (searchParams = {}, pathname = '/') => ({
+export const mockNextNavigation = (searchParams = {}, pathname = "/") => ({
   useSearchParams: () => createMockSearchParams(searchParams),
   useRouter: () => createMockRouter(),
   usePathname: () => createMockPathname(pathname),

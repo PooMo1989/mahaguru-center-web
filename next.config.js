@@ -20,25 +20,25 @@ const config = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'www.pexels.com',
+        protocol: "https",
+        hostname: "www.pexels.com",
       },
       {
-        protocol: 'https',
-        hostname: 'images.pexels.com',
+        protocol: "https",
+        hostname: "images.pexels.com",
       },
       {
-        protocol: 'https',
-        hostname: 'example.com',
+        protocol: "https",
+        hostname: "example.com",
       },
       {
-        protocol: 'https',
-        hostname: '*.amazonaws.com',
+        protocol: "https",
+        hostname: "*.amazonaws.com",
       },
       {
-        protocol: 'https',
-        hostname: 'cdn.mahaguru-center.com',
-      }
+        protocol: "https",
+        hostname: "cdn.mahaguru-center.com",
+      },
     ],
   },
 };

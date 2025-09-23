@@ -1,6 +1,6 @@
 "use client";
 
-import Image from 'next/image';
+import Image from "next/image";
 import { Navigation, Footer } from "~/components/navigation";
 import { api } from "~/trpc/react";
 import { useState, useEffect } from "react";
@@ -29,14 +29,14 @@ interface Project {
 /**
  * Progress bar component for showing funding progress
  */
-function ProjectProgressBar({ 
-  current, 
-  goal, 
-  className = "" 
-}: { 
-  current: Decimal | number; 
-  goal: Decimal | number; 
-  className?: string; 
+function ProjectProgressBar({
+  current,
+  goal,
+  className = "",
+}: {
+  current: Decimal | number;
+  goal: Decimal | number;
+  className?: string;
 }) {
   const [mounted, setMounted] = useState(false);
 
@@ -45,22 +45,25 @@ function ProjectProgressBar({
   }, []);
 
   if (!mounted) {
-    return <div className="h-4 bg-gray-200 rounded-full animate-pulse" />;
+    return <div className="h-4 animate-pulse rounded-full bg-gray-200" />;
   }
 
   // Safely convert Decimal to number - handle both Prisma Decimal objects and plain numbers
-  const currentNum = typeof current === 'object' && current !== null && 'toNumber' in current 
-    ? current.toNumber() 
-    : Number(current);
-  const goalNum = typeof goal === 'object' && goal !== null && 'toNumber' in goal 
-    ? goal.toNumber() 
-    : Number(goal);
-  const percentage = goalNum > 0 ? Math.min((currentNum / goalNum) * 100, 100) : 0;
+  const currentNum =
+    typeof current === "object" && current !== null && "toNumber" in current
+      ? current.toNumber()
+      : Number(current);
+  const goalNum =
+    typeof goal === "object" && goal !== null && "toNumber" in goal
+      ? goal.toNumber()
+      : Number(goal);
+  const percentage =
+    goalNum > 0 ? Math.min((currentNum / goalNum) * 100, 100) : 0;
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-LK', {
-      style: 'currency',
-      currency: 'LKR',
+    return new Intl.NumberFormat("en-LK", {
+      style: "currency",
+      currency: "LKR",
       minimumFractionDigits: 0,
     }).format(amount);
   };
@@ -71,9 +74,9 @@ function ProjectProgressBar({
         <span>{formatCurrency(currentNum)} raised</span>
         <span>{percentage.toFixed(1)}%</span>
       </div>
-      <div className="w-full bg-gray-200 rounded-full h-4">
-        <div 
-          className="bg-gradient-to-r from-blue-500 to-blue-600 h-4 rounded-full transition-all duration-300 ease-in-out"
+      <div className="h-4 w-full rounded-full bg-gray-200">
+        <div
+          className="h-4 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-300 ease-in-out"
           style={{ width: `${percentage}%` }}
           role="progressbar"
           aria-valuenow={percentage}
@@ -96,51 +99,51 @@ function ProjectCard({ project }: { project: Project }) {
   const donationTargetMap: Record<string, string> = {
     "Daily Dana": "daily-dana",
     "Poya Day": "poya-day-event", // Fixed to match contact page tab ID
-    "Special Projects": "special-projects"
+    "Special Projects": "special-projects",
   };
 
   const donationUrl = `/contact?tab=donate&target=${donationTargetMap[project.donationLinkTarget] ?? "special-projects"}&project=${encodeURIComponent(project.projectName)}`;
 
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+    <div className="overflow-hidden rounded-lg bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl">
       {/* Project Photos */}
       {project.photos.length > 0 && (
         <div className="relative h-48 sm:h-56">
           <Image
-            src={project.photos[0] ?? ''}
+            src={project.photos[0] ?? ""}
             alt={`${project.projectName} photo`}
             fill
             className="object-cover"
             onError={(e) => {
-              e.currentTarget.style.display = 'none';
+              e.currentTarget.style.display = "none";
             }}
           />
         </div>
       )}
-      
+
       <div className="p-6">
         {/* Project Header */}
         <div className="mb-4">
-          <h3 className="text-xl font-bold text-gray-800 mb-2">
+          <h3 className="mb-2 text-xl font-bold text-gray-800">
             {project.projectName}
           </h3>
-          <div className="flex flex-wrap gap-2 mb-3">
-            <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">
+          <div className="mb-3 flex flex-wrap gap-2">
+            <span className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800">
               {project.projectType}
             </span>
-            <span className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">
+            <span className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-800">
               {project.projectNature}
             </span>
           </div>
         </div>
 
         {/* Project Description */}
-        <p className="text-gray-600 mb-6 leading-relaxed">
+        <p className="mb-6 leading-relaxed text-gray-600">
           {project.description}
         </p>
 
         {/* Progress Bar */}
-        <ProjectProgressBar 
+        <ProjectProgressBar
           current={project.currentDonationAmount}
           goal={project.donationGoalAmount}
           className="mb-6"
@@ -149,7 +152,7 @@ function ProjectCard({ project }: { project: Project }) {
         {/* Donate Button */}
         <a
           href={donationUrl}
-          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 text-center block"
+          className="block w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-center font-semibold text-white transition-all duration-300 hover:from-blue-700 hover:to-blue-800"
         >
           Donate Now
         </a>
@@ -161,29 +164,27 @@ function ProjectCard({ project }: { project: Project }) {
 /**
  * Projects section component for grouping projects by nature
  */
-function ProjectsSection({ 
-  title, 
-  projects, 
-  description 
-}: { 
-  title: string; 
-  projects: Project[]; 
-  description: string; 
+function ProjectsSection({
+  title,
+  projects,
+  description,
+}: {
+  title: string;
+  projects: Project[];
+  description: string;
 }) {
   if (projects.length === 0) return null;
 
   return (
     <section className="mb-16">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+      <div className="mb-12 text-center">
+        <h2 className="mb-4 text-3xl font-bold text-gray-800 md:text-4xl">
           {title}
         </h2>
-        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-          {description}
-        </p>
+        <p className="mx-auto max-w-3xl text-lg text-gray-600">{description}</p>
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}
@@ -193,9 +194,13 @@ function ProjectsSection({
 }
 
 export default function ProjectsPage() {
-  const { data: projects, isLoading, error } = api.project.getProjects.useQuery({
+  const {
+    data: projects,
+    isLoading,
+    error,
+  } = api.project.getProjects.useQuery({
     projectNature: "all",
-    donationLinkTarget: "all"
+    donationLinkTarget: "all",
   });
 
   if (isLoading) {
@@ -203,26 +208,29 @@ export default function ProjectsPage() {
       <>
         <Navigation />
         <main className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
-          <div className="max-w-7xl mx-auto px-4 py-16">
-            <div className="text-center mb-16">
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-8">
+          <div className="mx-auto max-w-7xl px-4 py-16">
+            <div className="mb-16 text-center">
+              <h1 className="mb-8 text-4xl font-bold text-gray-800 md:text-5xl">
                 Our Projects
               </h1>
               <div className="flex items-center justify-center space-x-2 text-gray-600">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
                 <span className="text-lg">Loading projects...</span>
               </div>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-white rounded-lg shadow-lg p-6 animate-pulse">
-                  <div className="h-6 bg-gray-300 rounded mb-4"></div>
-                  <div className="h-4 bg-gray-300 rounded mb-2"></div>
-                  <div className="h-4 bg-gray-300 rounded mb-6 w-3/4"></div>
-                  <div className="h-4 bg-gray-300 rounded mb-2"></div>
-                  <div className="h-4 bg-gray-300 rounded mb-6"></div>
-                  <div className="h-10 bg-gray-300 rounded"></div>
+                <div
+                  key={i}
+                  className="animate-pulse rounded-lg bg-white p-6 shadow-lg"
+                >
+                  <div className="mb-4 h-6 rounded bg-gray-300"></div>
+                  <div className="mb-2 h-4 rounded bg-gray-300"></div>
+                  <div className="mb-6 h-4 w-3/4 rounded bg-gray-300"></div>
+                  <div className="mb-2 h-4 rounded bg-gray-300"></div>
+                  <div className="mb-6 h-4 rounded bg-gray-300"></div>
+                  <div className="h-10 rounded bg-gray-300"></div>
                 </div>
               ))}
             </div>
@@ -238,12 +246,12 @@ export default function ProjectsPage() {
       <>
         <Navigation />
         <main className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
-          <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-8">
+          <div className="mx-auto max-w-4xl px-4 py-16 text-center">
+            <h1 className="mb-8 text-4xl font-bold text-gray-800 md:text-5xl">
               Our Projects
             </h1>
-            <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-              <p className="text-red-600 font-medium">
+            <div className="rounded-lg border border-red-200 bg-red-50 p-6">
+              <p className="font-medium text-red-600">
                 Unable to load projects at this time. Please try again later.
               </p>
             </div>
@@ -254,35 +262,40 @@ export default function ProjectsPage() {
   }
 
   // Group projects by nature with proper type casting
-  const ongoingProjects = projects?.filter((p: Project) => p.projectNature === "Continuous") ?? [];
-  const specialInitiatives = projects?.filter((p: Project) => p.projectNature === "One-time") ?? [];
+  const ongoingProjects =
+    projects?.filter((p: Project) => p.projectNature === "Continuous") ?? [];
+  const specialInitiatives =
+    projects?.filter((p: Project) => p.projectNature === "One-time") ?? [];
 
   return (
     <>
       <Navigation />
       <main className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
-        <div className="max-w-7xl mx-auto px-4 py-16">
+        <div className="mx-auto max-w-7xl px-4 py-16">
           {/* Page Header */}
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-8">
+          <div className="mb-16 text-center">
+            <h1 className="mb-8 text-4xl font-bold text-gray-800 md:text-5xl">
               Our Projects
             </h1>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Explore our meaningful initiatives that serve our community and preserve the Dhamma. 
-              Your generosity helps us maintain these vital projects and expand our reach to help more seekers on their spiritual journey.
+            <p className="mx-auto max-w-3xl text-lg leading-relaxed text-gray-600">
+              Explore our meaningful initiatives that serve our community and
+              preserve the Dhamma. Your generosity helps us maintain these vital
+              projects and expand our reach to help more seekers on their
+              spiritual journey.
             </p>
           </div>
 
           {/* Show message if no projects */}
           {(!projects || projects.length === 0) && (
-            <div className="text-center py-16">
-              <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            <div className="py-16 text-center">
+              <div className="mx-auto max-w-2xl rounded-lg bg-white p-8 shadow-lg">
+                <h2 className="mb-4 text-2xl font-bold text-gray-800">
                   No Projects Available
                 </h2>
                 <p className="text-gray-600">
-                  We&apos;re currently preparing new projects to serve our community. 
-                  Please check back soon or contact us to learn more about upcoming initiatives.
+                  We&apos;re currently preparing new projects to serve our
+                  community. Please check back soon or contact us to learn more
+                  about upcoming initiatives.
                 </p>
               </div>
             </div>

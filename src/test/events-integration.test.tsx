@@ -8,27 +8,37 @@ interface TestEvent {
 }
 
 // Mock the date filtering logic that would be used in the tRPC router
-function filterEventsByDate(events: TestEvent[], filter: "upcoming" | "past" | "all") {
+function filterEventsByDate(
+  events: TestEvent[],
+  filter: "upcoming" | "past" | "all",
+) {
   const now = new Date();
-  
+
   if (filter === "upcoming") {
-    return events.filter(event => event.eventDate >= now);
+    return events.filter((event) => event.eventDate >= now);
   } else if (filter === "past") {
-    return events.filter(event => event.eventDate < now);
+    return events.filter((event) => event.eventDate < now);
   }
-  
+
   return events;
 }
 
-function sortEventsByDate(events: TestEvent[], filter: "upcoming" | "past" | "all") {
+function sortEventsByDate(
+  events: TestEvent[],
+  filter: "upcoming" | "past" | "all",
+) {
   const sortedEvents = [...events];
-  
+
   if (filter === "past") {
     // Most recent first for past events
-    return sortedEvents.sort((a, b) => b.eventDate.getTime() - a.eventDate.getTime());
+    return sortedEvents.sort(
+      (a, b) => b.eventDate.getTime() - a.eventDate.getTime(),
+    );
   } else {
     // Earliest first for upcoming events and default
-    return sortedEvents.sort((a, b) => a.eventDate.getTime() - b.eventDate.getTime());
+    return sortedEvents.sort(
+      (a, b) => a.eventDate.getTime() - b.eventDate.getTime(),
+    );
   }
 }
 
@@ -40,13 +50,13 @@ describe("Events Date Filtering Logic", () => {
       eventDate: new Date("2026-06-15T18:00:00Z"),
     },
     {
-      id: "2", 
+      id: "2",
       name: "Near Future Event",
       eventDate: new Date("2025-12-25T18:00:00Z"),
     },
     {
       id: "3",
-      name: "Recent Past Event", 
+      name: "Recent Past Event",
       eventDate: new Date("2025-08-15T18:00:00Z"),
     },
     {
@@ -68,47 +78,47 @@ describe("Events Date Filtering Logic", () => {
 
   it("filters upcoming events correctly", () => {
     const upcomingEvents = filterEventsByDate(mockEvents, "upcoming");
-    
+
     expect(upcomingEvents).toHaveLength(2);
-    expect(upcomingEvents.map(e => e.name)).toEqual([
+    expect(upcomingEvents.map((e) => e.name)).toEqual([
       "Far Future Event",
-      "Near Future Event"
+      "Near Future Event",
     ]);
   });
 
   it("filters past events correctly", () => {
     const pastEvents = filterEventsByDate(mockEvents, "past");
-    
+
     expect(pastEvents).toHaveLength(2);
-    expect(pastEvents.map(e => e.name)).toEqual([
+    expect(pastEvents.map((e) => e.name)).toEqual([
       "Recent Past Event",
-      "Old Past Event"
+      "Old Past Event",
     ]);
   });
 
   it("returns all events when filter is 'all'", () => {
     const allEvents = filterEventsByDate(mockEvents, "all");
-    
+
     expect(allEvents).toHaveLength(4);
   });
 
   it("sorts upcoming events chronologically (earliest first)", () => {
     const upcomingEvents = filterEventsByDate(mockEvents, "upcoming");
     const sortedEvents = sortEventsByDate(upcomingEvents, "upcoming");
-    
-    expect(sortedEvents.map(e => e.name)).toEqual([
-      "Near Future Event",  // Dec 25, 2025
-      "Far Future Event"    // Jun 15, 2026
+
+    expect(sortedEvents.map((e) => e.name)).toEqual([
+      "Near Future Event", // Dec 25, 2025
+      "Far Future Event", // Jun 15, 2026
     ]);
   });
 
   it("sorts past events reverse chronologically (most recent first)", () => {
     const pastEvents = filterEventsByDate(mockEvents, "past");
     const sortedEvents = sortEventsByDate(pastEvents, "past");
-    
-    expect(sortedEvents.map(e => e.name)).toEqual([
-      "Recent Past Event",  // Aug 15, 2025 (more recent)
-      "Old Past Event"      // Jan 15, 2025 (older)
+
+    expect(sortedEvents.map((e) => e.name)).toEqual([
+      "Recent Past Event", // Aug 15, 2025 (more recent)
+      "Old Past Event", // Jan 15, 2025 (older)
     ]);
   });
 
@@ -121,7 +131,7 @@ describe("Events Date Filtering Logic", () => {
         eventDate: now,
       },
       {
-        id: "2", 
+        id: "2",
         name: "Event 1 Second Future",
         eventDate: new Date(now.getTime() + 1000),
       },
@@ -137,13 +147,13 @@ describe("Events Date Filtering Logic", () => {
 
     // Event at current time should be considered upcoming (>=)
     expect(upcomingEvents).toHaveLength(2);
-    expect(upcomingEvents.map(e => e.name)).toEqual([
+    expect(upcomingEvents.map((e) => e.name)).toEqual([
       "Event at Current Time",
-      "Event 1 Second Future"
+      "Event 1 Second Future",
     ]);
 
     expect(pastEvents).toHaveLength(1);
-    expect(pastEvents.map(e => e.name)).toEqual(["Event 1 Second Past"]);
+    expect(pastEvents.map((e) => e.name)).toEqual(["Event 1 Second Past"]);
   });
 });
 
@@ -152,9 +162,12 @@ describe("Event Display Requirements", () => {
     id: "test-event",
     name: "Test Event Name",
     description: "Test event description with details",
-    category: "Workshop", 
+    category: "Workshop",
     eventDate: new Date("2025-12-25T18:00:00Z"),
-    photos: ["https://example.com/photo1.jpg", "https://example.com/photo2.jpg"],
+    photos: [
+      "https://example.com/photo1.jpg",
+      "https://example.com/photo2.jpg",
+    ],
     createdAt: new Date(),
     updatedAt: new Date(),
   };
@@ -166,7 +179,7 @@ describe("Event Display Requirements", () => {
     expect(sampleEvent).toHaveProperty("category");
     expect(sampleEvent).toHaveProperty("eventDate");
     expect(sampleEvent).toHaveProperty("photos");
-    
+
     expect(typeof sampleEvent.name).toBe("string");
     expect(typeof sampleEvent.description).toBe("string");
     expect(typeof sampleEvent.category).toBe("string");
@@ -182,19 +195,21 @@ describe("Event Display Requirements", () => {
 
   it("date formatting works correctly", () => {
     const date = new Date("2025-12-25T18:00:00Z");
-    
+
     // Test the date formatting using our utility
     const formattedDate = formatEventDate(date);
-    
-    expect(formattedDate).toMatch(/Thursday.*December.*25.*2025.*at.*\d{1,2}:\d{2} [AP]M/);
+
+    expect(formattedDate).toMatch(
+      /Thursday.*December.*25.*2025.*at.*\d{1,2}:\d{2} [AP]M/,
+    );
   });
 
   it("compact date formatting works for sidebar", () => {
     const date = new Date("2025-12-25T14:30:00Z");
-    
+
     // Test the compact date formatting using our utility
     const compactDate = formatEventDate(date, true);
-    
+
     expect(compactDate).toMatch(/Dec 25, \d{1,2}:\d{2} [AP]M/);
   });
 });

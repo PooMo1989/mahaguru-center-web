@@ -34,7 +34,7 @@ describe("EventForm", () => {
   const mockEvent = {
     id: "1",
     name: "Test Event",
-    description: "Test Description", 
+    description: "Test Description",
     category: "Dhamma Discussion",
     eventDate: new Date("2025-12-01T18:00:00"),
     photos: ["https://example.com/photo1.jpg"],
@@ -54,7 +54,9 @@ describe("EventForm", () => {
     expect(screen.getByLabelText(/category/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/event date & time/i)).toBeInTheDocument();
     expect(screen.getByText(/photo urls/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /create event/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /create event/i }),
+    ).toBeInTheDocument();
   });
 
   it("shows validation errors for empty required fields", async () => {
@@ -111,16 +113,22 @@ describe("EventForm", () => {
           editEvent={mockEvent}
           onEventUpdated={mockOnEventUpdated}
           onCancel={mockOnCancel}
-        />
+        />,
       );
 
       expect(screen.getByDisplayValue("Test Event")).toBeInTheDocument();
       expect(screen.getByDisplayValue("Test Description")).toBeInTheDocument();
       expect(screen.getByDisplayValue("Dhamma Discussion")).toBeInTheDocument();
       expect(screen.getByDisplayValue("2025-12-01T18:00")).toBeInTheDocument();
-      expect(screen.getByText("https://example.com/photo1.jpg")).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /update event/i })).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /cancel/i })).toBeInTheDocument();
+      expect(
+        screen.getByText("https://example.com/photo1.jpg"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /update event/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /cancel/i }),
+      ).toBeInTheDocument();
     });
 
     it("calls onCancel when cancel button is clicked", () => {
@@ -130,7 +138,7 @@ describe("EventForm", () => {
           editEvent={mockEvent}
           onEventUpdated={mockOnEventUpdated}
           onCancel={mockOnCancel}
-        />
+        />,
       );
 
       fireEvent.click(screen.getByRole("button", { name: /cancel/i }));

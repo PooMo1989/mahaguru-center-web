@@ -22,12 +22,12 @@ interface EventFormProps {
   mode?: "create" | "edit";
 }
 
-export function EventForm({ 
-  onEventCreated, 
-  onEventUpdated, 
-  onCancel, 
-  editEvent, 
-  mode = "create" 
+export function EventForm({
+  onEventCreated,
+  onEventUpdated,
+  onCancel,
+  editEvent,
+  mode = "create",
 }: EventFormProps) {
   const [formData, setFormData] = useState({
     name: "",
@@ -43,10 +43,12 @@ export function EventForm({
   useEffect(() => {
     if (mode === "edit" && editEvent) {
       const eventDate = new Date(editEvent.eventDate);
-      const localISOTime = new Date(eventDate.getTime() - eventDate.getTimezoneOffset() * 60000)
+      const localISOTime = new Date(
+        eventDate.getTime() - eventDate.getTimezoneOffset() * 60000,
+      )
         .toISOString()
         .slice(0, 16);
-      
+
       setFormData({
         name: editEvent.name,
         description: editEvent.description,
@@ -103,7 +105,7 @@ export function EventForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -129,11 +131,13 @@ export function EventForm({
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -142,7 +146,7 @@ export function EventForm({
 
   const addPhotoUrl = () => {
     if (!newPhotoUrl.trim()) return;
-    
+
     try {
       new URL(newPhotoUrl); // Validate URL
       setFormData((prev) => ({
@@ -166,7 +170,10 @@ export function EventForm({
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Event Name */}
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="name"
+          className="block text-sm font-medium text-gray-700"
+        >
           Event Name *
         </label>
         <input
@@ -187,7 +194,10 @@ export function EventForm({
 
       {/* Description */}
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="description"
+          className="block text-sm font-medium text-gray-700"
+        >
           Description *
         </label>
         <textarea
@@ -208,7 +218,10 @@ export function EventForm({
 
       {/* Category */}
       <div>
-        <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="category"
+          className="block text-sm font-medium text-gray-700"
+        >
           Category *
         </label>
         <select
@@ -235,7 +248,10 @@ export function EventForm({
 
       {/* Event Date */}
       <div>
-        <label htmlFor="eventDate" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="eventDate"
+          className="block text-sm font-medium text-gray-700"
+        >
           Event Date & Time *
         </label>
         <input
@@ -276,24 +292,27 @@ export function EventForm({
             <button
               type="button"
               onClick={addPhotoUrl}
-              className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm leading-4 font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
             >
               Add
             </button>
           </div>
-          
+
           {/* Display added photos */}
           {formData.photos.length > 0 && (
             <div className="space-y-2">
               {formData.photos.map((url, index) => (
-                <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
-                  <span className="text-sm text-gray-600 truncate flex-1 mr-2">
+                <div
+                  key={index}
+                  className="flex items-center justify-between rounded bg-gray-50 p-2"
+                >
+                  <span className="mr-2 flex-1 truncate text-sm text-gray-600">
                     {url}
                   </span>
                   <button
                     type="button"
                     onClick={() => removePhotoUrl(index)}
-                    className="text-red-600 hover:text-red-800 text-sm"
+                    className="text-sm text-red-600 hover:text-red-800"
                   >
                     Remove
                   </button>
@@ -301,7 +320,7 @@ export function EventForm({
               ))}
             </div>
           )}
-          
+
           {errors.photos && (
             <p className="text-sm text-red-600">{errors.photos}</p>
           )}
@@ -314,26 +333,31 @@ export function EventForm({
           <button
             type="button"
             onClick={onCancel}
-            className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
           >
             Cancel
           </button>
         )}
         <button
           type="submit"
-          disabled={createEventMutation.isPending || updateEventMutation.isPending}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {mode === "create" 
-            ? (createEventMutation.isPending ? "Creating..." : "Create Event")
-            : (updateEventMutation.isPending ? "Updating..." : "Update Event")
+          disabled={
+            createEventMutation.isPending || updateEventMutation.isPending
           }
+          className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {mode === "create"
+            ? createEventMutation.isPending
+              ? "Creating..."
+              : "Create Event"
+            : updateEventMutation.isPending
+              ? "Updating..."
+              : "Update Event"}
         </button>
       </div>
 
       {/* Global Error */}
       {errors.submit && (
-        <div className="mt-4 bg-red-50 border border-red-200 rounded-md p-4">
+        <div className="mt-4 rounded-md border border-red-200 bg-red-50 p-4">
           <p className="text-sm text-red-800">{errors.submit}</p>
         </div>
       )}

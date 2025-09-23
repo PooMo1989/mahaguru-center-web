@@ -15,7 +15,7 @@ vi.mock("~/trpc/react", () => ({
   api: {
     event: {
       getEvents: {
-        useQuery: (...args: any[]) => mockUseQuery(...args),
+        useQuery: (input: { filter: string }): unknown => mockUseQuery(input),
       },
     },
   },
@@ -52,7 +52,10 @@ const mockPastEvents = [
     description: "Description for past event 1",
     category: "Meditation",
     eventDate: new Date("2025-01-15T18:00:00Z"),
-    photos: ["https://example.com/photo3.jpg", "https://example.com/photo4.jpg"],
+    photos: [
+      "https://example.com/photo3.jpg",
+      "https://example.com/photo4.jpg",
+    ],
     createdAt: new Date(),
     updatedAt: new Date(),
   },
@@ -71,10 +74,20 @@ describe("EventsPage", () => {
 
     render(<EventsPage />);
 
-    expect(screen.getByRole("heading", { name: /events & monthly dhamma discussion/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /recurring events/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /upcoming events/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /past events archive/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        name: /events & monthly dhamma discussion/i,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /recurring events/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /upcoming events/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /past events archive/i }),
+    ).toBeInTheDocument();
   });
 
   it("displays static recurring events content", () => {
@@ -86,8 +99,12 @@ describe("EventsPage", () => {
 
     expect(screen.getByText("Monthly Dhamma Discussion")).toBeInTheDocument();
     expect(screen.getByText("Weekly Clarity Q&A")).toBeInTheDocument();
-    expect(screen.getByText(/signature monthly dhamma discussion/i)).toBeInTheDocument();
-    expect(screen.getByText(/interactive weekly clarity q&a session/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/signature monthly dhamma discussion/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/interactive weekly clarity q&a session/i),
+    ).toBeInTheDocument();
   });
 
   it("displays upcoming events when available", async () => {
@@ -125,8 +142,12 @@ describe("EventsPage", () => {
 
     render(<EventsPage />);
 
-    expect(screen.getByText("No upcoming events scheduled at this time.")).toBeInTheDocument();
-    expect(screen.getByText("Please check back soon for new events!")).toBeInTheDocument();
+    expect(
+      screen.getByText("No upcoming events scheduled at this time."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Please check back soon for new events!"),
+    ).toBeInTheDocument();
   });
 
   it("shows empty state for no past events", () => {
@@ -136,8 +157,12 @@ describe("EventsPage", () => {
 
     render(<EventsPage />);
 
-    expect(screen.getByText("No past events in our archive yet.")).toBeInTheDocument();
-    expect(screen.getByText("Check back after our first events!")).toBeInTheDocument();
+    expect(
+      screen.getByText("No past events in our archive yet."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Check back after our first events!"),
+    ).toBeInTheDocument();
   });
 
   it("shows loading state", () => {
@@ -162,11 +187,15 @@ describe("EventsPage", () => {
       // Check event names
       expect(screen.getByText("Future Event 1")).toBeInTheDocument();
       expect(screen.getByText("Past Event 1")).toBeInTheDocument();
-      
+
       // Check descriptions
-      expect(screen.getByText("Description for future event 1")).toBeInTheDocument();
-      expect(screen.getByText("Description for past event 1")).toBeInTheDocument();
-      
+      expect(
+        screen.getByText("Description for future event 1"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText("Description for past event 1"),
+      ).toBeInTheDocument();
+
       // Check categories
       expect(screen.getByText("Workshop")).toBeInTheDocument();
       expect(screen.getByText("Meditation")).toBeInTheDocument();
@@ -184,7 +213,7 @@ describe("EventsPage", () => {
       // Should show photos for events that have them
       const images = screen.getAllByRole("img");
       expect(images.length).toBeGreaterThan(0);
-      
+
       // Check alt text
       expect(screen.getByAltText("Future Event 1 photo 1")).toBeInTheDocument();
       expect(screen.getByAltText("Past Event 1 photo 1")).toBeInTheDocument();

@@ -49,10 +49,10 @@ export const eventRouter = createTRPCRouter({
     .input(eventUpdateInput)
     .mutation(async ({ ctx, input }) => {
       const { id, ...updateData } = input;
-      
+
       // Remove undefined values from updateData
       const cleanUpdateData = Object.fromEntries(
-        Object.entries(updateData).filter(([_, value]) => value !== undefined)
+        Object.entries(updateData).filter(([_, value]) => value !== undefined),
       );
 
       return ctx.db.event.update({
@@ -75,9 +75,9 @@ export const eventRouter = createTRPCRouter({
     .input(eventFilterInput)
     .query(async ({ ctx, input }) => {
       const now = new Date();
-      
+
       let whereClause = {};
-      
+
       if (input.filter === "upcoming") {
         whereClause = {
           eventDate: {
