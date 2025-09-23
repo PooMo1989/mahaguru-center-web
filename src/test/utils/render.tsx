@@ -2,7 +2,7 @@ import React from 'react';
 import type { ReactElement, ReactNode } from 'react';
 import { render as rtlRender } from '@testing-library/react';
 import type { RenderOptions, RenderResult } from '@testing-library/react';
-import { QueryClient } from '@tanstack/react-query';
+import { type QueryClient } from '@tanstack/react-query';
 import { TRPCTestProvider } from '../providers/trpc-test-provider';
 
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
