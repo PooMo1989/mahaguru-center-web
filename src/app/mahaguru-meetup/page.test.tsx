@@ -9,10 +9,10 @@ vi.mock("~/components/navigation", () => ({
 }));
 
 describe("MahaguruMeetupPage", () => {
-  it("renders the page title correctly", () => {
+  it("renders the hero section with main heading", () => {
     render(<MahaguruMeetupPage />);
     expect(
-      screen.getByRole("heading", { name: /book a mahaguru meetup/i }),
+      screen.getByRole("heading", { name: /the nudge you've been waiting for/i }),
     ).toBeInTheDocument();
   });
 

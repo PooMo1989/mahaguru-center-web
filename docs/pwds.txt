@@ -1,0 +1,8 @@
+Mgcenter321
+Mgcenter321
+
+DIRECT_URL="postgresql://postgres:Mgcenter321@db.awzkehbihbqvzbmwxaib.supabase.co:5432/postgres"
+
+Superbase Password
+
+Mgcenter321Q1
