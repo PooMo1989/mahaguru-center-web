@@ -153,7 +153,7 @@ export default function MahaguruMeetupPage() {
                   Contribution: LKR 5,000 ~ 18 USD
                 </p>
                 <Link 
-                  href="./book-in-person.html" 
+                  href="/meetup-in-person" 
                   className="mt-auto w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
                   Book In-Person Session
                 </Link>
@@ -170,7 +170,7 @@ export default function MahaguruMeetupPage() {
                   Contribution: 35 USD
                 </p>
                 <Link 
-                  href="./book-online.html" 
+                  href="/meetup-online" 
                   className="mt-auto w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
                   Book Online Session
                 </Link>
