@@ -5,7 +5,7 @@ import BookingWidgetOnline from '~/components/booking/BookingWidgetOnline';
 import { Suspense } from 'react';
 import { Navigation, Footer } from '~/components/navigation';
 
-const serviceIdMap: { [key: string]: string } = {
+const serviceIdMap: Record<string, string> = {
   '10,000': '4',
   '25,000': '16',
   '50,000': '17',

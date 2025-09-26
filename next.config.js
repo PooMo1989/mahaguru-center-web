@@ -39,6 +39,10 @@ const config = {
         protocol: "https",
         hostname: "cdn.mahaguru-center.com",
       },
+      {
+        protocol: "https",
+        hostname: "i.ibb.co",
+      },
     ],
   },
 };

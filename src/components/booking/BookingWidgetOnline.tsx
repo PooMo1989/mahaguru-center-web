@@ -8,7 +8,7 @@ interface BookingWidgetOnlineProps {
 
 declare global {
   interface Window {
-    SimplybookWidget: any;
+    SimplybookWidget: new (config: Record<string, unknown>) => void;
   }
 }
 

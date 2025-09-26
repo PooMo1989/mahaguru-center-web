@@ -85,7 +85,7 @@ export default function MeetupInPersonPage() {
             {/* Wisdom Content */}
             <div className={`mb-12 transition-all duration-1500 delay-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <p className="text-xl md:text-2xl text-gray-300 mb-6 leading-relaxed font-light">
-                We don't price wisdom. We can't.
+                We don&apos;t price wisdom. We can&apos;t.
               </p>
               <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
                 Your time is valuable—you know this. In the right moment, with the right guide, 
