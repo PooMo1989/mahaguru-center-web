@@ -163,7 +163,9 @@ function ProjectCard({ project }: { project: Project }) {
 
 /**
  * Projects section component for grouping projects by nature
+ * Currently unused but kept for future implementation
  */
+/*
 function ProjectsSection({
   title,
   projects,
@@ -192,6 +194,7 @@ function ProjectsSection({
     </section>
   );
 }
+*/
 
 export default function ProjectsPage() {
   const {
@@ -238,11 +241,11 @@ export default function ProjectsPage() {
     );
   }
 
-  // Group projects by nature with proper type casting
-  const ongoingProjects =
-    projects?.filter((p: Project) => p.projectNature === "Continuous") ?? [];
-  const specialInitiatives =
-    projects?.filter((p: Project) => p.projectNature === "One-time") ?? [];
+  // Group projects by nature with proper type casting (kept for future use)
+  // const ongoingProjects =
+  //   projects?.filter((p: Project) => p.projectNature === "Continuous") ?? [];
+  // const specialInitiatives =
+  //   projects?.filter((p: Project) => p.projectNature === "One-time") ?? [];
 
   return (
     <>
