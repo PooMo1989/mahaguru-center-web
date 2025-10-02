@@ -1,6 +1,13 @@
 ﻿import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
-import { afterEach, vi } from "vitest";
+import { afterEach, vi, beforeAll } from "vitest";
+
+// Polyfill for webidl-conversions that expects a global WeakMap
+beforeAll(() => {
+  if (typeof globalThis.WeakMap === "undefined") {
+    globalThis.WeakMap = WeakMap;
+  }
+});
 
 // Clean up after each test
 afterEach(() => {
