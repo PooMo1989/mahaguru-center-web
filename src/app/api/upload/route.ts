@@ -13,17 +13,24 @@ const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 export async function POST(request: NextRequest) {
   try {
+    console.log("Upload API called");
+    
     // Check authentication
     const session = await auth();
+    console.log("Session:", session ? "authenticated" : "not authenticated");
     if (!session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Parse form data
+    console.log("Parsing form data...");
     const formData = await request.formData();
     const file = formData.get("file") as File;
     const entityType = formData.get("entityType") as string;
     const entityId = formData.get("entityId") as string;
+    
+    console.log("File:", file?.name, "Size:", file?.size, "Type:", file?.type);
+    console.log("Entity:", entityType, "ID:", entityId);
 
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
@@ -55,9 +62,13 @@ export async function POST(request: NextRequest) {
     // Generate unique filename
     const filename = generateUniqueFilename(file.name);
     const storagePath = `${entityType}s/${entityId}/${filename}`;
+    
+    console.log("Uploading to path:", storagePath);
 
     // Upload to Supabase Storage
     const { url, path } = await uploadFileToSupabase(file, storagePath);
+    
+    console.log("Upload successful, URL:", url);
 
     return NextResponse.json({
       success: true,
@@ -71,7 +82,9 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Upload error:", error);
+    console.error("Upload error FULL DETAILS:", error);
+    console.error("Error message:", error instanceof Error ? error.message : String(error));
+    console.error("Error stack:", error instanceof Error ? error.stack : "No stack");
     return NextResponse.json(
       {
         error:
