@@ -37,9 +37,14 @@ export async function uploadFileToSupabase(
   file: File,
   path: string,
 ): Promise<{ url: string; path: string }> {
+  // Convert File to ArrayBuffer for server-side upload
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+
   const { data, error} = await supabaseAdmin.storage
     .from(STORAGE_BUCKET)
-    .upload(path, file, {
+    .upload(path, buffer, {
+      contentType: file.type,
       cacheControl: "3600",
       upsert: false,
     });
