@@ -15,8 +15,8 @@ interface Project {
   projectName: string;
   description: string;
   photos: string[];
-  donationGoalAmount: Decimal | number; // Handle both Decimal objects and serialized numbers
-  currentDonationAmount: Decimal | number; // Handle both Decimal objects and serialized numbers
+  donationGoalAmount: Decimal | number | null; // Handle both Decimal objects, serialized numbers, and null
+  currentDonationAmount: Decimal | number | null; // Handle both Decimal objects, serialized numbers, and null
   projectType: string;
   projectNature: string; // API returns string, will be filtered properly
   startDate?: Date | null;
@@ -34,8 +34,8 @@ function ProjectProgressBar({
   goal,
   className = "",
 }: {
-  current: Decimal | number;
-  goal: Decimal | number;
+  current: Decimal | number | null;
+  goal: Decimal | number | null;
   className?: string;
 }) {
   const [mounted, setMounted] = useState(false);
@@ -48,15 +48,19 @@ function ProjectProgressBar({
     return <div className="h-4 animate-pulse rounded-full bg-gray-200" />;
   }
 
-  // Safely convert Decimal to number - handle both Prisma Decimal objects and plain numbers
+  // Safely convert Decimal to number - handle both Prisma Decimal objects, plain numbers, and null
   const currentNum =
-    typeof current === "object" && current !== null && "toNumber" in current
-      ? current.toNumber()
-      : Number(current);
+    current === null
+      ? 0
+      : typeof current === "object" && current !== null && "toNumber" in current
+        ? current.toNumber()
+        : Number(current);
   const goalNum =
-    typeof goal === "object" && goal !== null && "toNumber" in goal
-      ? goal.toNumber()
-      : Number(goal);
+    goal === null
+      ? 0
+      : typeof goal === "object" && goal !== null && "toNumber" in goal
+        ? goal.toNumber()
+        : Number(goal);
   const percentage =
     goalNum > 0 ? Math.min((currentNum / goalNum) * 100, 100) : 0;
 
