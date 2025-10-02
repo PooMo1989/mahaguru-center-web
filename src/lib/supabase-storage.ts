@@ -7,6 +7,15 @@ const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL ?? "https://placeholder.supabas
 const supabaseAnonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "placeholder-anon-key";
 const supabaseServiceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY ?? "placeholder-service-key";
 
+// Log environment variable status on initialization
+console.log("Supabase storage initialization:", {
+  urlFromEnv: !!env.NEXT_PUBLIC_SUPABASE_URL,
+  anonKeyFromEnv: !!env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  serviceKeyFromEnv: !!env.SUPABASE_SERVICE_ROLE_KEY,
+  usingPlaceholderUrl: supabaseUrl === "https://placeholder.supabase.co",
+  usingPlaceholderServiceKey: supabaseServiceRoleKey === "placeholder-service-key",
+});
+
 // Client-side Supabase client (for public operations)
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -37,9 +46,24 @@ export async function uploadFileToSupabase(
   file: File,
   path: string,
 ): Promise<{ url: string; path: string }> {
+  // Log configuration (mask sensitive data)
+  console.log("Supabase config:", {
+    url: supabaseUrl,
+    serviceKeyExists: !!supabaseServiceRoleKey,
+    serviceKeyIsPlaceholder: supabaseServiceRoleKey === "placeholder-service-key",
+    serviceKeyLength: supabaseServiceRoleKey?.length,
+    bucket: STORAGE_BUCKET,
+  });
+
   // Convert File to ArrayBuffer for server-side upload
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
+
+  console.log("About to upload to Supabase:", {
+    path,
+    bufferSize: buffer.length,
+    contentType: file.type,
+  });
 
   const { data, error} = await supabaseAdmin.storage
     .from(STORAGE_BUCKET)
@@ -50,6 +74,11 @@ export async function uploadFileToSupabase(
     });
 
   if (error) {
+    console.error("Supabase upload error details:", {
+      message: error.message,
+      name: error.name,
+      stack: error.stack,
+    });
     throw new Error(`Upload failed: ${error.message}`);
   }
 
