@@ -92,10 +92,22 @@ export async function POST(request: NextRequest) {
     console.error("Upload error FULL DETAILS:", error);
     console.error("Error message:", error instanceof Error ? error.message : String(error));
     console.error("Error stack:", error instanceof Error ? error.stack : "No stack");
+    
+    // Return detailed error for debugging
     return NextResponse.json(
       {
-        error:
-          error instanceof Error ? error.message : "Internal server error",
+        error: error instanceof Error ? error.message : "Internal server error",
+        debug: {
+          errorName: error instanceof Error ? error.name : "Unknown",
+          errorMessage: error instanceof Error ? error.message : String(error),
+          errorStack: error instanceof Error ? error.stack : "No stack",
+          errorCause: error instanceof Error ? error.cause : undefined,
+          envCheck: {
+            supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ? "SET" : "MISSING",
+            serviceKey: process.env.SUPABASE_SERVICE_ROLE_KEY ? "SET" : "MISSING",
+            nodeEnv: process.env.NODE_ENV,
+          }
+        }
       },
       { status: 500 },
     );
