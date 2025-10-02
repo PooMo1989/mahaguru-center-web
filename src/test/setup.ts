@@ -31,5 +31,34 @@ vi.mock("~/env", () => ({
     NEXTAUTH_URL: "http://localhost:3000",
     GOOGLE_CLIENT_ID: "test-id",
     GOOGLE_CLIENT_SECRET: "test-secret",
+    NEXT_PUBLIC_SUPABASE_URL: "https://test.supabase.co",
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: "test-anon-key",
+    SUPABASE_SERVICE_ROLE_KEY: "test-service-role-key",
   },
+}));
+
+// Mock Supabase client to prevent initialization errors in tests
+vi.mock("~/lib/supabase-storage", () => ({
+  supabase: {
+    storage: {
+      from: vi.fn(() => ({
+        upload: vi.fn(),
+        remove: vi.fn(),
+        getPublicUrl: vi.fn(() => ({ data: { publicUrl: "https://test.supabase.co/storage/test.jpg" } })),
+      })),
+    },
+  },
+  supabaseAdmin: {
+    storage: {
+      from: vi.fn(() => ({
+        upload: vi.fn(),
+        remove: vi.fn(),
+        getPublicUrl: vi.fn(() => ({ data: { publicUrl: "https://test.supabase.co/storage/test.jpg" } })),
+      })),
+    },
+  },
+  STORAGE_BUCKET: "test-bucket",
+  uploadFileToSupabase: vi.fn(),
+  deleteFileFromSupabase: vi.fn(),
+  generateUniqueFilename: vi.fn(() => "test-file.jpg"),
 }));
