@@ -37,6 +37,21 @@ vi.mock("~/env", () => ({
   },
 }));
 
+// Mock the Supabase JS library itself to prevent browser API dependencies
+vi.mock("@supabase/supabase-js", () => ({
+  createClient: vi.fn(() => ({
+    storage: {
+      from: vi.fn(() => ({
+        upload: vi.fn(),
+        remove: vi.fn(),
+        getPublicUrl: vi.fn(() => ({ 
+          data: { publicUrl: "https://test.supabase.co/storage/test.jpg" } 
+        })),
+      })),
+    },
+  })),
+}));
+
 // Mock Supabase client to prevent initialization errors in tests
 vi.mock("~/lib/supabase-storage", () => ({
   supabase: {
