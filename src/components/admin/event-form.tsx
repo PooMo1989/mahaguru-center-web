@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { z } from "zod";
 import { api, type RouterOutputs } from "~/trpc/react";
+import { ImageUpload } from "./image-upload";
 
 type Event = RouterOutputs["event"]["getEvents"][number];
 
@@ -269,12 +270,33 @@ export function EventForm({
         )}
       </div>
 
-      {/* Photos */}
+      {/* Image Upload Section */}
       <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Photo URLs
+        <label className="mb-2 block text-sm font-medium text-gray-700">
+          Event Images
         </label>
-        <div className="mt-1 space-y-2">
+        <ImageUpload
+          entityType="event"
+          entityId={editEvent?.id}
+          onImagesChange={(images) => {
+            // Optional: sync with photos field if needed for backward compatibility
+            setFormData((prev) => ({
+              ...prev,
+              photos: images.map((img) => img.url),
+            }));
+          }}
+        />
+        {errors.photos && (
+          <p className="mt-1 text-sm text-red-600">{errors.photos}</p>
+        )}
+      </div>
+
+      {/* Legacy Photo URLs (Optional - for backward compatibility) */}
+      <details className="rounded-lg border border-gray-200 p-4">
+        <summary className="cursor-pointer text-sm font-medium text-gray-700">
+          Or add photo URLs manually (legacy method)
+        </summary>
+        <div className="mt-4 space-y-2">
           <div className="flex space-x-2">
             <input
               type="url"
@@ -292,13 +314,13 @@ export function EventForm({
             <button
               type="button"
               onClick={addPhotoUrl}
-              className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm leading-4 font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+              className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Add
             </button>
           </div>
 
-          {/* Display added photos */}
+          {/* Display added photo URLs */}
           {formData.photos.length > 0 && (
             <div className="space-y-2">
               {formData.photos.map((url, index) => (
@@ -320,12 +342,8 @@ export function EventForm({
               ))}
             </div>
           )}
-
-          {errors.photos && (
-            <p className="text-sm text-red-600">{errors.photos}</p>
-          )}
         </div>
-      </div>
+      </details>
 
       {/* Submit Button */}
       <div className="flex justify-end space-x-3">
