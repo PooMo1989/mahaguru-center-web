@@ -13,7 +13,10 @@ export const env = createEnv({
         : z.string().optional(),
 
     DATABASE_URL: z.string().url(),
-    SUPABASE_SERVICE_ROLE_KEY: z.string(),
+    SUPABASE_SERVICE_ROLE_KEY:
+      process.env.NODE_ENV === "production"
+        ? z.string()
+        : z.string().optional(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -25,8 +28,14 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(),
+    NEXT_PUBLIC_SUPABASE_URL:
+      process.env.NODE_ENV === "production"
+        ? z.string().url()
+        : z.string().url().optional(),
+    NEXT_PUBLIC_SUPABASE_ANON_KEY:
+      process.env.NODE_ENV === "production"
+        ? z.string()
+        : z.string().optional(),
   },
 
   /**
