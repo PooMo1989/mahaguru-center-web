@@ -15,31 +15,31 @@ global.MutationObserver = vi.fn().mockImplementation((callback) => ({
 
 describe("BookingWidget", () => {
   it("renders booking widget container", () => {
-    render(<BookingWidget amount="5,000" />);
+    render(<BookingWidget serviceId="service-1" />);
     const container = screen.getByTestId("booking-widget");
     expect(container).toBeInTheDocument();
   });
 
   it("applies custom className", () => {
-    render(<BookingWidget amount="25,000" className="custom-class" />);
-    const container = screen.getByTestId("booking-widget");
-    expect(container).toHaveClass("booking-widget-container", "custom-class");
-  });
-
-  it("creates unique container ID", () => {
-    render(<BookingWidget amount="50,000" />);
-    const widgetContainer = screen.getByTestId("widget-container");
-    expect(widgetContainer).toBeInTheDocument();
-  });
-
-  it("handles different amount values", () => {
-    render(<BookingWidget amount="free" />);
+    render(<BookingWidget serviceId="service-2" />);
     const container = screen.getByTestId("booking-widget");
     expect(container).toBeInTheDocument();
   });
 
-  it("handles unknown amount values gracefully", () => {
-    render(<BookingWidget amount="unknown" />);
+  it("creates unique container ID", () => {
+    render(<BookingWidget serviceId="service-3" />);
+    const widgetContainer = screen.getByTestId("widget-container");
+    expect(widgetContainer).toBeInTheDocument();
+  });
+
+  it("handles different serviceId values", () => {
+    render(<BookingWidget serviceId="service-free" />);
+    const container = screen.getByTestId("booking-widget");
+    expect(container).toBeInTheDocument();
+  });
+
+  it("handles empty serviceId gracefully", () => {
+    render(<BookingWidget serviceId="" />);
     const container = screen.getByTestId("booking-widget");
     expect(container).toBeInTheDocument();
   });

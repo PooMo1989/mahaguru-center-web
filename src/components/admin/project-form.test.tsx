@@ -24,25 +24,22 @@ vi.mock("~/trpc/react", () => ({
 }));
 
 // Mock project data for edit mode
-const mockProject: RouterOutputs["project"]["getProjects"][number] = {
-  id: "1",
-  projectName: "Test Project",
-  description: "Test description",
-  photos: ["https://example.com/photo1.jpg"],
-  donationGoalAmount: {
-    toNumber: () => 50000,
-  } as unknown as RouterOutputs["project"]["getProjects"][number]["donationGoalAmount"],
-  currentDonationAmount: {
-    toNumber: () => 25000,
-  } as unknown as RouterOutputs["project"]["getProjects"][number]["currentDonationAmount"],
-  projectType: "Digital Infrastructure",
-  projectNature: "Continuous",
-  startDate: null,
-  endDate: null,
-  donationLinkTarget: "Special Projects",
-  createdAt: new Date(),
-  updatedAt: new Date(),
-};
+  const mockProject: RouterOutputs["project"]["getProjects"][number] = {
+    id: "1",
+    projectName: "Test Project",
+    description: "Test Description",
+    photos: ["https://example.com/photo1.jpg"],
+    images: [],
+    donationGoalAmount: null,
+    currentDonationAmount: null,
+    projectType: "Building",
+    projectNature: "Ongoing",
+    startDate: new Date("2025-01-01"),
+    endDate: null,
+    donationLinkTarget: "Self",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 
 describe("ProjectForm", () => {
   const mockOnProjectCreated = vi.fn();

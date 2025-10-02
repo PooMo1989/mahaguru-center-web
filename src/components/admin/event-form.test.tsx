@@ -38,6 +38,7 @@ describe("EventForm", () => {
     category: "Dhamma Discussion",
     eventDate: new Date("2025-12-01T18:00:00"),
     photos: ["https://example.com/photo1.jpg"],
+    images: [],
     createdAt: new Date(),
     updatedAt: new Date(),
   };
