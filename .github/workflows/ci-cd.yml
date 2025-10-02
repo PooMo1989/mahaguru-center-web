@@ -51,20 +51,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Debug git workspace
-      run: |
-        pwd
-        ls -a
-        git status
+    - name: Install Vercel CLI
+      run: npm install -g vercel
 
     - name: Deploy to Vercel Staging
-      uses: amondnet/vercel-action@v25
-      with:
-        vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        scope: ${{ secrets.VERCEL_ORG_ID }}
-        working-directory: .
+      run: vercel deploy --token ${{ secrets.VERCEL_TOKEN }} --yes
+      env:
+        VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
   deploy-production:
     if: github.ref == 'refs/heads/main'
@@ -74,12 +68,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Install Vercel CLI
+      run: npm install -g vercel
+      
     - name: Deploy to Vercel Production
-      uses: amondnet/vercel-action@v25
-      with:
-        vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        vercel-args: '--prod'
-        scope: ${{ secrets.VERCEL_ORG_ID }}
-        working-directory: .
+      run: vercel deploy --prod --token ${{ secrets.VERCEL_TOKEN }} --yes
+      env:
+        VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
