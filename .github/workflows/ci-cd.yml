@@ -51,6 +51,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Debug git workspace
+      run: |
+        pwd
+        ls -a
+        git status
+
     - name: Deploy to Vercel Staging
       uses: amondnet/vercel-action@v25
       with:
