@@ -278,13 +278,6 @@ export function EventForm({
         <ImageUpload
           entityType="event"
           entityId={editEvent?.id}
-          onImagesChange={(images) => {
-            // Optional: sync with photos field if needed for backward compatibility
-            setFormData((prev) => ({
-              ...prev,
-              photos: images.map((img) => img.url),
-            }));
-          }}
         />
         {errors.photos && (
           <p className="mt-1 text-sm text-red-600">{errors.photos}</p>

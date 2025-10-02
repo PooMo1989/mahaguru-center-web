@@ -57,6 +57,13 @@ export function ImageUpload({
   const setFeaturedMutation = api.image.setFeaturedImage.useMutation({
     onSuccess: () => {
       void refetch();
+      if (onImagesChange) {
+        void refetch().then((result) => {
+          if (result.data) {
+            onImagesChange(result.data as UploadedImage[]);
+          }
+        });
+      }
     },
     onError: (error) => {
       setUploadError(error.message);
@@ -105,22 +112,44 @@ export function ImageUpload({
           );
         }
 
-        // TODO: Implement actual file upload to storage
-        // For now, create a temporary URL
-        const tempUrl = URL.createObjectURL(file);
-        const timestamp = Date.now();
-        const filename = `${timestamp}-${file.name}`;
+        // Upload file to Supabase Storage via API route
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("entityType", entityType);
+        formData.append("entityId", entityId);
 
-        // Create database record
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const errorData = (await response.json()) as { error: string };
+          throw new Error(errorData.error || "Upload failed");
+        }
+
+        const result = (await response.json()) as {
+          success: boolean;
+          data: {
+            filename: string;
+            originalName: string;
+            mimeType: string;
+            size: number;
+            path: string;
+            url: string;
+          };
+        };
+
+        // Create database record with actual Supabase URL
         await uploadImageMutation.mutateAsync({
           entityType,
           entityId,
-          filename,
-          originalName: file.name,
-          mimeType: file.type,
-          size: file.size,
-          path: `/uploads/${filename}`,
-          url: tempUrl, // In production, this would be the actual storage URL
+          filename: result.data.filename,
+          originalName: result.data.originalName,
+          mimeType: result.data.mimeType,
+          size: result.data.size,
+          path: result.data.path,
+          url: result.data.url,
         });
       } catch (error) {
         setUploadError(
@@ -269,6 +298,7 @@ export function ImageUpload({
                 <div className="flex space-x-2">
                   {!image.isFeatured && (
                     <button
+                      type="button"
                       onClick={() => handleSetFeatured(image.id)}
                       disabled={setFeaturedMutation.isPending}
                       className="rounded bg-blue-600 px-2 py-1 text-xs font-medium text-white hover:bg-blue-700 disabled:opacity-50"
@@ -277,6 +307,7 @@ export function ImageUpload({
                     </button>
                   )}
                   <button
+                    type="button"
                     onClick={() => handleDeleteImage(image.id)}
                     disabled={deleteImageMutation.isPending}
                     className="rounded bg-red-600 px-2 py-1 text-xs font-medium text-white hover:bg-red-700 disabled:opacity-50"

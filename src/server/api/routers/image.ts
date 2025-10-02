@@ -113,9 +113,27 @@ export const imageRouter = createTRPCRouter({
   deleteImage: protectedProcedure
     .input(deleteImageInput)
     .mutation(async ({ ctx, input }) => {
-      // TODO: Add file storage cleanup logic here
-      // This would delete the actual file from storage (Vercel Blob, S3, etc.)
-      
+      // Get image details first
+      const image = await ctx.db.image.findUnique({
+        where: { id: input.imageId },
+      });
+
+      if (!image) {
+        throw new Error("Image not found");
+      }
+
+      // Delete from Supabase Storage
+      try {
+        const { deleteFileFromSupabase } = await import(
+          "~/lib/supabase-storage"
+        );
+        await deleteFileFromSupabase(image.path);
+      } catch (error) {
+        console.error("Failed to delete file from storage:", error);
+        // Continue with database deletion even if storage deletion fails
+      }
+
+      // Delete from database
       return ctx.db.image.delete({
         where: { id: input.imageId },
       });
