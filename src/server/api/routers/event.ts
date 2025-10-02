@@ -97,6 +97,9 @@ export const eventRouter = createTRPCRouter({
         orderBy: {
           eventDate: input.filter === "past" ? "desc" : "asc",
         },
+        include: {
+          images: true,
+        },
       });
     }),
 

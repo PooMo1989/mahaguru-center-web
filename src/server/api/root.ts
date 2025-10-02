@@ -1,4 +1,5 @@
 import { eventRouter } from "~/server/api/routers/event";
+import { imageRouter } from "~/server/api/routers/image";
 import { postRouter } from "~/server/api/routers/post";
 import { projectRouter } from "~/server/api/routers/project";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
@@ -12,6 +13,7 @@ export const appRouter = createTRPCRouter({
   post: postRouter,
   event: eventRouter,
   project: projectRouter,
+  image: imageRouter,
 });
 
 // export type definition of API

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { z } from "zod";
 import { api, type RouterOutputs } from "~/trpc/react";
+import { ImageUpload } from "./image-upload";
 
 type Project = RouterOutputs["project"]["getProjects"][number];
 
@@ -527,55 +528,65 @@ export function ProjectForm({
         )}
       </div>
 
-      {/* Photos */}
+      {/* Image Upload Section */}
       <div>
         <label className="mb-2 block text-sm font-medium text-gray-700">
-          Photos
+          Project Images
         </label>
-
-        {/* Add Photo URL */}
-        <div className="mb-3 flex gap-2">
-          <input
-            type="url"
-            value={newPhotoUrl}
-            onChange={(e) => setNewPhotoUrl(e.target.value)}
-            placeholder="Enter photo URL"
-            className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-          />
-          <button
-            type="button"
-            onClick={addPhotoUrl}
-            className="rounded-md bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          >
-            Add
-          </button>
-        </div>
-
-        {/* Display Photos */}
-        {formData.photos.length > 0 && (
-          <div className="space-y-2">
-            {formData.photos.map((url, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-2 rounded bg-gray-50 p-2"
-              >
-                <span className="flex-1 truncate text-sm">{url}</span>
-                <button
-                  type="button"
-                  onClick={() => removePhotoUrl(index)}
-                  className="text-sm text-red-600 hover:text-red-800"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-
+        <ImageUpload
+          entityType="project"
+          entityId={editProject?.id}
+        />
         {errors.photos && (
           <p className="mt-1 text-sm text-red-600">{errors.photos}</p>
         )}
       </div>
+
+      {/* Legacy Photo URLs (Optional - for backward compatibility) */}
+      <details className="rounded-lg border border-gray-200 p-4">
+        <summary className="cursor-pointer text-sm font-medium text-gray-700">
+          Or add photo URLs manually (legacy method)
+        </summary>
+        <div className="mt-4 space-y-2">
+          <div className="flex gap-2">
+            <input
+              type="url"
+              value={newPhotoUrl}
+              onChange={(e) => setNewPhotoUrl(e.target.value)}
+              placeholder="Enter photo URL"
+              className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            />
+            <button
+              type="button"
+              onClick={addPhotoUrl}
+              className="rounded-md bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Add
+            </button>
+          </div>
+
+          {/* Display Photo URLs */}
+          {formData.photos.length > 0 && (
+            <div className="space-y-2">
+              {formData.photos.map((url, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-2 rounded bg-gray-50 p-2"
+                >
+                  <span className="flex-1 truncate text-sm">{url}</span>
+                  <button
+                    type="button"
+                    onClick={() => removePhotoUrl(index)}
+                    className="text-sm text-red-600 hover:text-red-800"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </details>
 
       {/* Submit Error */}
       {errors.submit && (

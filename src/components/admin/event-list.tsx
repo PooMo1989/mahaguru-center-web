@@ -98,7 +98,7 @@ export function EventList({
                       </div>
                     </td>
                     <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                      {event.photos.length} photo(s)
+                      {(event.photos.length + (event.images?.length ?? 0))} photo(s)
                     </td>
                     <td className="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                       <div className="flex justify-end space-x-2">

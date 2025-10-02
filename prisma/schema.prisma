@@ -77,6 +77,7 @@ model Event {
     category    String
     eventDate   DateTime
     photos      String[]
+    images      Image[]  // New relationship to Image model
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 
@@ -88,6 +89,7 @@ model Project {
     projectName           String
     description           String
     photos                String[]
+    images                Image[]   // New relationship to Image model
     donationGoalAmount    Decimal   @db.Decimal(65,30)
     currentDonationAmount Decimal   @db.Decimal(65,30)
     projectType           String
@@ -100,4 +102,37 @@ model Project {
 
     @@index([projectNature])
     @@index([donationLinkTarget])
+}
+
+// Image model for storing uploaded images with proper relationships
+model Image {
+    id           String   @id @default(cuid())
+    filename     String   // Generated filename for storage
+    originalName String   // Original filename from user
+    mimeType     String   // image/jpeg, image/png, etc.
+    size         Int      // File size in bytes
+    path         String   // Storage path
+    url          String   // Public URL for access
+    alt          String?  // Alt text for accessibility
+    
+    // Foreign key relationships (one of these will be set)
+    eventId      String?
+    projectId    String?
+    
+    // Relationships with cascade delete
+    event        Event?   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+    project      Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    
+    // Featured image flag
+    isFeatured   Boolean  @default(false)
+    
+    // Audit fields
+    uploadedBy   String   // User ID who uploaded
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+
+    // Indexes for query performance
+    @@index([eventId])
+    @@index([projectId])
+    @@index([isFeatured])
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { api, type RouterOutputs } from "~/trpc/react";
 import { EventList } from "~/components/admin/event-list";
 import { EventForm } from "~/components/admin/event-form";
@@ -50,6 +50,27 @@ export default function AdminPage() {
   if (projectsError) {
     console.error("Error loading projects:", projectsError);
   }
+
+  // Sync editingEvent with fresh data when events refetch
+  // This prevents the form from closing when image operations trigger a refetch
+  useEffect(() => {
+    if (editingEvent && events) {
+      const updatedEvent = events.find((e) => e.id === editingEvent.id);
+      if (updatedEvent) {
+        setEditingEvent(updatedEvent);
+      }
+    }
+  }, [events]);
+
+  // Sync editingProject with fresh data when projects refetch
+  useEffect(() => {
+    if (editingProject && projects) {
+      const updatedProject = projects.find((p) => p.id === editingProject.id);
+      if (updatedProject) {
+        setEditingProject(updatedProject);
+      }
+    }
+  }, [projects]);
 
   // Delete event mutation
   const deleteEventMutation = api.event.deleteEvent.useMutation({

@@ -163,6 +163,9 @@ export const projectRouter = createTRPCRouter({
         orderBy: {
           createdAt: "desc",
         },
+        include: {
+          images: true,
+        },
       });
     }),
 
