@@ -90,8 +90,8 @@ model Project {
     description           String
     photos                String[]
     images                Image[]   // New relationship to Image model
-    donationGoalAmount    Decimal   @db.Decimal(65,30)
-    currentDonationAmount Decimal   @db.Decimal(65,30)
+    donationGoalAmount    Decimal?  @db.Decimal(65,30)
+    currentDonationAmount Decimal?  @db.Decimal(65,30)
     projectType           String
     projectNature         String    // 'Continuous' or 'One-time'
     startDate             DateTime?
