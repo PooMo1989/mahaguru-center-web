@@ -50,7 +50,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Deploy to Vercel Staging
       uses: amondnet/vercel-action@v25
       with:
@@ -58,6 +58,7 @@ jobs:
         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
         scope: ${{ secrets.VERCEL_ORG_ID }}
+        working-directory: .
 
   deploy-production:
     if: github.ref == 'refs/heads/main'
@@ -66,7 +67,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Deploy to Vercel Production
       uses: amondnet/vercel-action@v25
       with:
@@ -75,3 +76,4 @@ jobs:
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
         vercel-args: '--prod'
         scope: ${{ secrets.VERCEL_ORG_ID }}
+        working-directory: .
