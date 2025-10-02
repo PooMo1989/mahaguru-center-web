@@ -2,8 +2,10 @@ import { createClient } from "@supabase/supabase-js";
 import { env } from "~/env";
 
 // Supabase client for storage operations
-const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+// Use fallback values for build-time (will be replaced at runtime in production)
+const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL ?? "https://placeholder.supabase.co";
+const supabaseAnonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "placeholder-anon-key";
+const supabaseServiceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY ?? "placeholder-service-key";
 
 // Client-side Supabase client (for public operations)
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
@@ -12,7 +14,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 // This bypasses RLS, which is OK because we're doing auth checks in NextAuth
 export const supabaseAdmin = createClient(
   supabaseUrl,
-  env.SUPABASE_SERVICE_ROLE_KEY,
+  supabaseServiceRoleKey,
   {
     auth: {
       autoRefreshToken: false,
