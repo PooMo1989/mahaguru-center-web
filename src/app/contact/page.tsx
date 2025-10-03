@@ -21,7 +21,9 @@ function ContactPageContent() {
   // Initialize main tab state based on URL parameters (AC#8 requirement)
   const [activeTab, setActiveTab] = useState(() => {
     const tab = searchParams.get("tab");
-    return tab === "donate" ? "donation" : "contact";
+    if (tab === "donate") return "donation";
+    if (tab === "participate") return "participate";
+    return "contact";
   });
 
   const [formData, setFormData] = useState({
@@ -43,6 +45,18 @@ function ContactPageContent() {
     {},
   );
 
+  // Participation form state
+  const [participationData, setParticipationData] = useState({
+    fullName: "",
+    email: "",
+    event: "",
+    message: "",
+  });
+  const [showParticipationSuccess, setShowParticipationSuccess] = useState(false);
+  const [participationErrors, setParticipationErrors] = useState<Record<string, string>>(
+    {},
+  );
+
   // Initialize donation fund based on URL parameters (AC#8 requirement)
   const [activeDonationFund, setActiveDonationFund] = useState(() => {
     const target = searchParams.get("target");
@@ -58,6 +72,19 @@ function ContactPageContent() {
   const contextMessage = projectName
     ? `Inspired by: ${decodeURIComponent(projectName)}`
     : "Inspired by your generosity";
+
+  // Extract event name from URL parameters for participation form
+  const eventName = searchParams.get("event");
+  
+  // Set event name when redirected from event page
+  useEffect(() => {
+    if (eventName) {
+      setParticipationData(prev => ({
+        ...prev,
+        event: decodeURIComponent(eventName),
+      }));
+    }
+  }, [eventName]);
 
   // Smooth scroll to donation form when redirected from project (AC#3)
   useEffect(() => {
@@ -212,6 +239,64 @@ function ContactPageContent() {
     }
   };
 
+  const validateParticipationForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!participationData.fullName.trim()) {
+      newErrors.fullName = "Full name is required";
+    }
+
+    if (!participationData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(participationData.email.trim())) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (!participationData.event.trim()) {
+      newErrors.event = "Event name is required";
+    }
+
+    if (!participationData.message.trim()) {
+      newErrors.message = "Message is required";
+    }
+
+    setParticipationErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleParticipationSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (validateParticipationForm()) {
+      setShowParticipationSuccess(true);
+      setParticipationData({ fullName: "", email: "", event: "", message: "" });
+      setParticipationErrors({});
+
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        setShowParticipationSuccess(false);
+      }, 5000);
+    }
+  };
+
+  const handleParticipationInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setParticipationData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Clear error when user starts typing
+    if (participationErrors[name]) {
+      setParticipationErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
+  };
+
   return (
     <>
       <Navigation />
@@ -233,6 +318,12 @@ function ContactPageContent() {
                 className="rounded-md border-2 border-transparent px-6 py-3 text-sm font-medium transition-colors duration-200 hover:bg-gray-50 data-[state=active]:border-blue-500 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
               >
                 Volunteer
+              </Tabs.Trigger>
+              <Tabs.Trigger
+                value="participate"
+                className="rounded-md border-2 border-transparent px-6 py-3 text-sm font-medium transition-colors duration-200 hover:bg-gray-50 data-[state=active]:border-blue-500 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
+              >
+                Participate
               </Tabs.Trigger>
               <Tabs.Trigger
                 value="donation"
@@ -352,6 +443,158 @@ function ContactPageContent() {
                       className="w-full rounded-md bg-blue-600 px-6 py-3 font-medium text-white transition-colors duration-200 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
                     >
                       Submit
+                    </button>
+                  </div>
+                </form>
+              </section>
+            </Tabs.Content>
+
+            {/* Participate Tab Content */}
+            <Tabs.Content value="participate">
+              <section className="rounded-lg bg-white p-8 shadow-lg md:p-12">
+                <h2 className="mb-6 text-3xl font-bold text-gray-800">
+                  Participate in Events
+                </h2>
+                <p className="mb-8 text-lg leading-relaxed text-gray-600">
+                  Join us for our upcoming events and become part of our community.
+                  Let us know which event you&apos;d like to participate in, and we&apos;ll
+                  get in touch with you with all the details.
+                </p>
+
+                {/* Success Message */}
+                {showParticipationSuccess && (
+                  <div className="mb-6 rounded-md border border-green-400 bg-green-100 p-4 text-green-700">
+                    Thank you for your interest! We have received your
+                    participation request and will contact you soon with event
+                    details.
+                  </div>
+                )}
+
+                {/* Participation Form */}
+                <form
+                  onSubmit={handleParticipationSubmit}
+                  className="space-y-6"
+                  noValidate
+                >
+                  {/* Full Name Field */}
+                  <div>
+                    <label
+                      htmlFor="participateFullName"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="participateFullName"
+                      name="fullName"
+                      value={participationData.fullName}
+                      onChange={handleParticipationInputChange}
+                      className={`w-full rounded-md border px-4 py-3 shadow-sm focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                        participationErrors.fullName
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      }`}
+                      placeholder="Enter your full name"
+                    />
+                    {participationErrors.fullName && (
+                      <p role="alert" className="mt-1 text-sm text-red-600">
+                        {participationErrors.fullName}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Email Field */}
+                  <div>
+                    <label
+                      htmlFor="participateEmail"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      id="participateEmail"
+                      name="email"
+                      value={participationData.email}
+                      onChange={handleParticipationInputChange}
+                      className={`w-full rounded-md border px-4 py-3 shadow-sm focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                        participationErrors.email
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      }`}
+                      placeholder="Enter your email address"
+                    />
+                    {participationErrors.email && (
+                      <p role="alert" className="mt-1 text-sm text-red-600">
+                        {participationErrors.email}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Event Field */}
+                  <div>
+                    <label
+                      htmlFor="participateEvent"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      Event You Want to Participate *
+                    </label>
+                    <input
+                      type="text"
+                      id="participateEvent"
+                      name="event"
+                      value={participationData.event}
+                      onChange={handleParticipationInputChange}
+                      className={`w-full rounded-md border px-4 py-3 shadow-sm focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                        participationErrors.event
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      }`}
+                      placeholder="Enter the event name"
+                    />
+                    {participationErrors.event && (
+                      <p role="alert" className="mt-1 text-sm text-red-600">
+                        {participationErrors.event}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Message Field */}
+                  <div>
+                    <label
+                      htmlFor="participateMessage"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      Message *
+                    </label>
+                    <textarea
+                      id="participateMessage"
+                      name="message"
+                      rows={5}
+                      value={participationData.message}
+                      onChange={handleParticipationInputChange}
+                      className={`resize-vertical w-full rounded-md border px-4 py-3 shadow-sm focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                        participationErrors.message
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      }`}
+                      placeholder="Tell us about your interest in this event and any questions you have"
+                    />
+                    {participationErrors.message && (
+                      <p role="alert" className="mt-1 text-sm text-red-600">
+                        {participationErrors.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Submit Button */}
+                  <div>
+                    <button
+                      type="submit"
+                      className="w-full rounded-md bg-blue-600 px-6 py-3 font-medium text-white transition-colors duration-200 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+                    >
+                      Submit Participation Request
                     </button>
                   </div>
                 </form>

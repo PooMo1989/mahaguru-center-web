@@ -43,6 +43,10 @@ const config = {
         protocol: "https",
         hostname: "i.ibb.co",
       },
+      {
+        protocol: "https",
+        hostname: "awzkehbihbqvzbmwxaib.supabase.co",
+      },
     ],
   },
 };

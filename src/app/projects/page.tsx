@@ -5,6 +5,23 @@ import { Navigation, Footer } from "~/components/navigation";
 import { api } from "~/trpc/react";
 import { useState, useEffect } from "react";
 import type { Decimal } from "@prisma/client/runtime/library";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "~/components/ui/carousel";
+
+/**
+ * Image data structure from the database
+ */
+interface ImageData {
+  id: string;
+  url: string;
+  alt: string | null;
+  isFeatured: boolean;
+}
 
 /**
  * Project data structure as returned from the tRPC API
@@ -15,6 +32,7 @@ interface Project {
   projectName: string;
   description: string;
   photos: string[];
+  images: ImageData[]; // New image structure
   donationGoalAmount: Decimal | number | null; // Handle both Decimal objects, serialized numbers, and null
   currentDonationAmount: Decimal | number | null; // Handle both Decimal objects, serialized numbers, and null
   projectType: string;
@@ -108,25 +126,66 @@ function ProjectCard({ project }: { project: Project }) {
 
   const donationUrl = `/contact?tab=donate&target=${donationTargetMap[project.donationLinkTarget] ?? "special-projects"}&project=${encodeURIComponent(project.projectName)}`;
 
+  // Get images - prioritize new image structure, fallback to legacy photos
+  const projectImages = project.images.length > 0
+    ? project.images
+    : project.photos.map((photo, index) => ({
+        id: `legacy-${index}`,
+        url: photo,
+        alt: `${project.projectName} photo ${index + 1}`,
+        isFeatured: index === 0,
+      }));
+
+  // Sort images to show featured first
+  const sortedImages = [...projectImages].sort((a, b) =>
+    a.isFeatured === b.isFeatured ? 0 : a.isFeatured ? -1 : 1,
+  );
+
+  const hasMultipleImages = sortedImages.length > 1;
+
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl">
-      {/* Project Photos */}
-      {project.photos.length > 0 && (
+      {/* Featured Image / Image Carousel */}
+      {sortedImages.length > 0 && (
         <div className="relative h-48 sm:h-56">
-          <Image
-            src={project.photos[0] ?? ""}
-            alt={`${project.projectName} photo`}
-            fill
-            className="object-cover"
-            onError={(e) => {
-              e.currentTarget.style.display = "none";
-            }}
-          />
+          {hasMultipleImages ? (
+            <Carousel className="h-full w-full">
+              <CarouselContent>
+                {sortedImages.map((image) => (
+                  <CarouselItem key={image.id}>
+                    <div className="relative h-48 sm:h-56">
+                      <Image
+                        src={image.url}
+                        alt={image.alt ?? `${project.projectName} image`}
+                        fill
+                        className="object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                        }}
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-2" />
+              <CarouselNext className="right-2" />
+            </Carousel>
+          ) : (
+            <Image
+              src={sortedImages[0]!.url}
+              alt={sortedImages[0]!.alt ?? `${project.projectName} image`}
+              fill
+              className="object-cover"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+            />
+          )}
         </div>
       )}
 
       <div className="p-6">
-        {/* Project Header */}
+        {/* Project Name and Tags */}
         <div className="mb-4">
           <h3 className="mb-2 text-xl font-bold text-gray-800">
             {project.projectName}
@@ -153,7 +212,7 @@ function ProjectCard({ project }: { project: Project }) {
           className="mb-6"
         />
 
-        {/* Donate Button */}
+        {/* CTA - Donate Button */}
         <a
           href={donationUrl}
           className="block w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-center font-semibold text-white transition-all duration-300 hover:from-blue-700 hover:to-blue-800"
@@ -504,43 +563,27 @@ export default function ProjectsPage() {
         </section>
 
         {/* Section 04: Special Projects (Dynamic Projects) */}
-        <section className="py-16 md:py-24 bg-white">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="mb-16 text-center">
-              <h2 className="mb-8 text-3xl font-bold text-gray-800 md:text-4xl">
-                Special Projects
-              </h2>
-              <p className="mx-auto max-w-3xl text-lg leading-relaxed text-gray-600">
-                One-time projects with specific goals that help us expand our mission and reach new communities.
-              </p>
-            </div>
-
-            {/* Show message if no projects */}
-            {(!projects || projects.length === 0) && (
-              <div className="py-16 text-center">
-                <div className="mx-auto max-w-2xl rounded-lg bg-gray-50 p-8 shadow-lg">
-                  <h3 className="mb-4 text-2xl font-bold text-gray-800">
-                    No Projects Available
-                  </h3>
-                  <p className="text-gray-600">
-                    We&apos;re currently preparing new projects to serve our
-                    community. Please check back soon or contact us to learn more
-                    about upcoming initiatives.
-                  </p>
-                </div>
+        {projects && projects.length > 0 && (
+          <section className="py-16 md:py-24 bg-white">
+            <div className="mx-auto max-w-7xl px-4">
+              <div className="mb-16 text-center">
+                <h2 className="mb-8 text-3xl font-bold text-gray-800 md:text-4xl">
+                  Special Projects
+                </h2>
+                <p className="mx-auto max-w-3xl text-lg leading-relaxed text-gray-600">
+                  One-time projects with specific goals that help us expand our mission and reach new communities.
+                </p>
               </div>
-            )}
 
-            {/* Display all projects together */}
-            {projects && projects.length > 0 && (
+              {/* Display all projects */}
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {projects.map((project) => (
                   <ProjectCard key={project.id} project={project} />
                 ))}
               </div>
-            )}
-          </div>
-        </section>
+            </div>
+          </section>
+        )}
       </main>
       <Footer />
     </>
