@@ -1,36 +1,72 @@
+"use client";
+
 import { Navigation, Footer } from "~/components/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { useRef, useEffect } from "react";
 
 export default function Home() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleTimeUpdate = () => {
+      const duration = video.duration;
+      const currentTime = video.currentTime;
+      
+      // Slow down in the last 3 seconds for smooth ending
+      const slowDownStartTime = duration - 3;
+      
+      if (currentTime >= slowDownStartTime && currentTime < duration) {
+        const timeRemaining = duration - currentTime;
+        // Gradually reduce playback speed from 1.0 to 0.5
+        const playbackRate = Math.max(0.5, timeRemaining / 3);
+        video.playbackRate = playbackRate;
+      }
+    };
+
+    video.addEventListener('timeupdate', handleTimeUpdate);
+
+    return () => {
+      video.removeEventListener('timeupdate', handleTimeUpdate);
+    };
+  }, []);
+
   return (
     <>
       <Navigation />
-      <main className="min-h-screen">
-        {/* Hero Section with Background Image */}
-        <section className="relative flex h-screen items-center justify-center">
+      <main>
+        {/* Hero Section with Background Video */}
+        <section className="relative flex h-screen items-center overflow-hidden">
           <div className="absolute inset-0">
-              <Image
-                src="/hero-home-hands.webp"
-                alt="Mahaguru Center Hero"
-                fill
-                className="object-cover"
-                priority
-              />
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              playsInline
+              className="h-full w-full object-cover"
+            >
+              <source src="/Hand_and_Growing_Tree_Animation (1).mp4" type="video/mp4" />
+            </video>
             <div className="absolute inset-0 bg-black/40"></div>
           </div>
-          <div className="relative z-10 mx-auto max-w-4xl px-4 text-center">
-            <h1 className="mb-6 text-5xl leading-tight font-bold text-white md:text-6xl">
-              Welcome to Mahaguru Center
-            </h1>
-            <p className="mb-8 text-xl text-white/90 italic md:text-2xl">
-              &ldquo;The mind is everything. What you think you become.&rdquo;
-            </p>
-            <Link href="/services">
-              <button className="rounded-full bg-[#E85D5D] px-8 py-4 text-lg font-semibold text-white shadow-lg transition-colors hover:bg-[#D64C4C] hover:shadow-xl">
-                Explore Our Offerings
-              </button>
-            </Link>
+          <div className="relative z-10 w-full max-w-7xl mx-auto px-8 lg:px-16">
+            <div className="max-w-2xl">
+              <h1 className="mb-16 font-bold text-white animate-fade-in-up">
+                <div className="text-3xl md:text-4xl mb-2">Welcome to</div>
+                <div className="text-6xl md:text-7xl lg:text-8xl leading-none">Mahaguru Center</div>
+              </h1>
+              <p className="mb-10 text-xl text-white/90 italic md:text-2xl animate-fade-in-up animation-delay-300">
+                &ldquo;The mind is everything. What you think you become.&rdquo;
+              </p>
+              <Link href="/services" className="inline-block animate-fade-in-up animation-delay-600">
+                <button className="rounded-full bg-[#E85D5D] px-8 py-4 text-lg font-semibold text-white shadow-lg transition-colors hover:bg-[#D64C4C] hover:shadow-xl">
+                  Explore Our Offerings
+                </button>
+              </Link>
+            </div>
           </div>
         </section>
 
