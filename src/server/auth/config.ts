@@ -84,21 +84,25 @@ export const authConfig = {
   },
   callbacks: {
     async redirect({ url, baseUrl }) {
-      // The redirect callback MUST return an absolute URL
-      // baseUrl is the current deployment URL (changes per deployment)
+      // CRITICAL: baseUrl comes from NEXTAUTH_URL which may be set to production
+      // We MUST ignore baseUrl and only work with relative paths
+      // This ensures we stay on whatever domain the user is currently on
       
-      // If url is already absolute and starts with our baseUrl, use it
-      if (url.startsWith(baseUrl)) {
+      // If url is a relative path, return it as-is
+      // Next.js will resolve it to the current domain automatically
+      if (url.startsWith("/")) {
         return url;
       }
       
-      // If url is a relative path, make it absolute using baseUrl
-      if (url.startsWith("/")) {
-        return `${baseUrl}${url}`;
+      // If url is an absolute URL, extract just the pathname
+      // This prevents cross-domain redirects
+      try {
+        const urlObj = new URL(url);
+        return urlObj.pathname;
+      } catch {
+        // If URL parsing fails, default to /admin
+        return "/admin";
       }
-      
-      // For any other case, redirect to admin on current domain
-      return `${baseUrl}/admin`;
     },
     async jwt({ token, user }) {
       // Persist user data in JWT token

@@ -34,8 +34,7 @@ function SignInForm() {
         username: credentials.username,
         password: credentials.password,
         csrfToken,
-        callbackUrl,
-        redirect: false,
+        redirect: false, // Don't let NextAuth handle redirect
       });
 
       console.log("Sign-in result:", result);
@@ -43,9 +42,8 @@ function SignInForm() {
       if (result?.error) {
         setError("Invalid username or password");
       } else if (result?.ok) {
-        // NextAuth handles the redirect via the redirect callback
-        // Just use window.location for a full page navigation
-        window.location.href = result.url ?? callbackUrl;
+        // Manually redirect using router.push (stays on current domain)
+        router.push(callbackUrl);
       }
     } catch (error) {
       setError("An error occurred during sign-in");
