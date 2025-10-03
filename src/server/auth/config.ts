@@ -29,6 +29,12 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig = {
+  /**
+   * Allow NextAuth to trust the incoming request host header. This ensures that
+   * preview/staging deployments with dynamic Vercel URLs generate correct
+   * callback URLs without relying on a statically configured NEXTAUTH_URL.
+   */
+  trustHost: true,
   providers: [
     CredentialsProvider({
       name: "Admin Login",
@@ -83,26 +89,11 @@ export const authConfig = {
     signOut: "/", // Redirect to home page after sign out
   },
   callbacks: {
-    async redirect({ url, baseUrl }) {
-      // CRITICAL: baseUrl comes from NEXTAUTH_URL which may be set to production
-      // We MUST ignore baseUrl and only work with relative paths
-      // This ensures we stay on whatever domain the user is currently on
-      
-      // If url is a relative path, return it as-is
-      // Next.js will resolve it to the current domain automatically
-      if (url.startsWith("/")) {
-        return url;
-      }
-      
-      // If url is an absolute URL, extract just the pathname
-      // This prevents cross-domain redirects
-      try {
-        const urlObj = new URL(url);
-        return urlObj.pathname;
-      } catch {
-        // If URL parsing fails, default to /admin
-        return "/admin";
-      }
+    async redirect({ url }) {
+      // Simply return the url - don't try to parse or validate it
+      // If it's relative (/admin), that's fine
+      // If it's absolute with the wrong domain, NextAuth will handle it
+      return url;
     },
     async jwt({ token, user }) {
       // Persist user data in JWT token
