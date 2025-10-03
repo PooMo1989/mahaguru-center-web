@@ -97,7 +97,7 @@ export default function MahaguruPage() {
                   <div key={stage.id} className="flex items-center">
                     <Tabs.Trigger
                       value={stage.id}
-                      className="rounded-full px-6 py-3 text-sm font-medium text-[#183F37] transition-all duration-300 hover:bg-[#183F37]/10 focus:ring-2 focus:ring-[#236661] focus:ring-offset-2 focus:outline-none data-[state=active]:bg-[#183F37] data-[state=active]:text-white data-[state=active]:shadow-md"
+                      className="rounded-full px-6 py-3 text-sm font-medium text-[#301020] transition-all duration-300 hover:bg-[#FCE8D9] focus:ring-2 focus:ring-[#E85D5D] focus:ring-offset-2 focus:outline-none data-[state=active]:bg-[#E85D5D] data-[state=active]:text-white data-[state=active]:shadow-md"
                     >
                       {stage.shortTitle}
                     </Tabs.Trigger>
@@ -134,7 +134,7 @@ export default function MahaguruPage() {
                             .map((paragraph, index) => (
                               <p
                                 key={index}
-                                className="text-lg leading-relaxed text-gray-700"
+                                className="text-lg leading-relaxed text-[#301020]"
                               >
                                 {paragraph}
                               </p>
@@ -142,7 +142,7 @@ export default function MahaguruPage() {
                         </div>
 
                         {/* Poetic Stanza */}
-                        <div className="rounded-r-lg border-l-4 border-[#236661] bg-[#183F37]/5 p-6">
+                        <div className="rounded-r-lg border-l-4 border-[#E85D5D] bg-[#FCE8D9] p-6">
                           <div className="leading-relaxed font-medium whitespace-pre-line text-[#183F37] italic">
                             {stage.poeticStanza}
                           </div>

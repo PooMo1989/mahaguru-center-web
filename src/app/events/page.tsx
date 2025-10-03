@@ -153,14 +153,14 @@ function EventCard({ event, showParticipateButton = false }: EventDisplayProps) 
       <div className="p-6">
         {/* Event Name and Category */}
         <div className="mb-4">
-          <h3 className="mb-2 text-xl font-bold text-gray-800">
+          <h3 className="mb-2 text-xl font-bold text-[#301020]">
             {event.name}
           </h3>
           <div className="mb-3 flex flex-wrap gap-2">
-            <span className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800">
+            <span className="rounded-full bg-[#FCE8D9] px-3 py-1 text-sm text-[#301020]">
               {event.category}
             </span>
-            <span className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-800">
+            <span className="rounded-full bg-[#F3D1C4] px-3 py-1 text-sm text-[#301020]">
               <time dateTime={event.eventDate.toISOString()}>
                 <SafeDateDisplay date={event.eventDate} />
               </time>
@@ -177,7 +177,7 @@ function EventCard({ event, showParticipateButton = false }: EventDisplayProps) 
         {showParticipateButton && (
           <a
             href={participateUrl}
-            className="block w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-center font-semibold text-white transition-all duration-300 hover:from-blue-700 hover:to-blue-800"
+            className="block w-full rounded-full bg-[#E85D5D] px-6 py-3 text-center font-semibold text-white transition-all duration-300 hover:bg-[#D64C4C]"
           >
             Participate
           </a>
@@ -259,7 +259,7 @@ export default function EventsPage() {
                 href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block rounded-lg bg-blue-600 px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:bg-blue-700 hover:shadow-lg"
+                className="inline-block rounded-full bg-[#E85D5D] px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:bg-[#D64C4C] hover:shadow-lg"
               >
                 Inquire
               </a>
@@ -277,8 +277,8 @@ export default function EventsPage() {
               <div className="grid gap-8 md:grid-cols-2 md:gap-12">
                 {/* Left Column: Monthly Dhamma Discussion */}
                 <div className="flex flex-col items-center text-center">
-                  <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-blue-100">
-                    <Calendar className="h-10 w-10 text-blue-600" />
+                  <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#E85D5D]/10">
+                    <Calendar className="h-10 w-10 text-[#E85D5D]" />
                   </div>
                   <h3 className="mb-4 text-2xl font-semibold text-gray-900">
                     Monthly Dhamma Discussion
@@ -300,8 +300,8 @@ export default function EventsPage() {
 
                 {/* Right Column: Weekly Clarity Q&A */}
                 <div className="flex flex-col items-center text-center">
-                  <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
-                    <MessageCircle className="h-10 w-10 text-green-600" />
+                  <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#D64C4C]/10">
+                    <MessageCircle className="h-10 w-10 text-[#D64C4C]" />
                   </div>
                   <h3 className="mb-4 text-2xl font-semibold text-gray-900">
                     Weekly Clarity Q&A

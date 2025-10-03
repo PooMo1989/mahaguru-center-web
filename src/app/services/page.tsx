@@ -28,23 +28,20 @@ export default function ServicesPage() {
               growth and community connection.
             </p>
             <Link href="/mahaguru-meetup">
-              <button className="rounded-lg bg-[#183F37] px-8 py-4 text-lg font-semibold text-white shadow-lg transition-colors hover:bg-[#152F2E] hover:shadow-xl">
+              <button className="rounded-full bg-[#E85D5D] px-8 py-4 text-lg font-semibold text-white shadow-lg transition-colors hover:bg-[#D64C4C] hover:shadow-xl">
                 Book a Meetup
               </button>
             </Link>
           </div>
         </section>
         {/* Service 1: Dhamma Discussion - Hero Style with Carousel */}
-        <section className="relative py-20">
-          <div className="absolute inset-0">
-            <div className="h-full bg-gradient-to-r from-[#183F37]/20 to-[#236661]/10"></div>
-          </div>
-          <div className="relative z-10 mx-auto max-w-7xl px-4 lg:px-8">
+        <section className="bg-[#FCE8D9] py-20">
+          <div className="mx-auto max-w-7xl px-4 lg:px-8">
             <div className="mb-12 text-center">
-              <h2 className="mb-6 text-4xl font-bold text-gray-800 md:text-5xl">
+              <h2 className="mb-6 text-4xl font-bold text-[#301020] md:text-5xl">
                 Dhamma Discussion
               </h2>
-              <p className="mx-auto mb-8 max-w-4xl text-lg leading-relaxed text-gray-600">
+              <p className="mx-auto mb-8 max-w-4xl text-lg leading-relaxed text-[#301020]">
                 Our signature monthly <strong>Dhamma Discussion</strong> is a cornerstone event held on the full moon Poya day,
                 drawing over a hundred curious seekers of truth. The session begins with a profound talk by Mahaguru, followed
                 by co-facilitated breakout discussions with Rev. Bhaddiya and Nevil Guru to explore the teachings more deeply.
@@ -53,7 +50,7 @@ export default function ServicesPage() {
               </p>
               <Link
                 href="/events"
-                className="inline-block rounded-lg bg-[#183F37] px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-[#152F2E] hover:shadow-xl mb-8"
+                className="inline-block rounded-full bg-[#E85D5D] px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-[#D64C4C] hover:shadow-xl mb-8"
                 data-testid="cta-dhamma-discussion"
               >
                 Learn More
@@ -101,15 +98,15 @@ export default function ServicesPage() {
         </section>
 
         {/* Service 2: Dhamma Explanation - Split Layout Content Left, Image Right */}
-        <section className="bg-gradient-to-b from-gray-50 to-slate-100 py-20">
+        <section className="bg-[#FFF9F5] py-20">
           <div className="mx-auto max-w-7xl px-4 lg:px-8">
             <div className="grid items-center gap-12 lg:grid-cols-2">
               <div className="space-y-6" data-testid="service-dhamma-explanation">
                 <div className="space-y-4">
-                  <h2 className="text-4xl font-bold text-gray-800 md:text-5xl">
+                  <h2 className="text-4xl font-bold text-[#301020] md:text-5xl">
                     Dhamma Explanation
                   </h2>
-                  <p className="text-lg leading-relaxed text-gray-600">
+                  <p className="text-lg leading-relaxed text-[#301020]">
                     For those seeking deeper clarity, our <strong>Dhamma Explanation</strong> sessions are led by
                     the venerable Dodangoda Bhaddiya Thero. In these sessions, the profound Dhamma delivered by Mahaguru
                     is carefully broken down into smaller, more digestible segments. Ven. Bhaddiya Thero provides extended
@@ -118,7 +115,7 @@ export default function ServicesPage() {
                 </div>
                 <Link
                   href="#"
-                  className="inline-block rounded-lg bg-[#183F37] px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-[#152F2E]"
+                  className="inline-block rounded-full bg-[#E85D5D] px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-[#D64C4C]"
                   data-testid="cta-dhamma-explanation"
                 >
                   Learn More
@@ -137,15 +134,15 @@ export default function ServicesPage() {
         </section>
 
         {/* Service 3: Meditation Guidance - Asymmetric Layout with Diagonal Split */}
-        <section className="bg-white py-20">
+        <section className="bg-[#FCE8D9] py-20">
           <div className="mx-auto max-w-7xl px-4 lg:px-8">
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-50 to-slate-100 p-8 lg:p-16" data-testid="service-meditation-guidance">
+            <div className="relative overflow-hidden rounded-3xl bg-[#FFF9F5] p-8 lg:p-16" data-testid="service-meditation-guidance">
               <div className="grid gap-12 lg:grid-cols-3">
                 <div className="lg:col-span-2 space-y-6">
-                  <h2 className="text-4xl font-bold text-gray-800 md:text-5xl">
+                  <h2 className="text-4xl font-bold text-[#301020] md:text-5xl">
                     Meditation Guidance
                   </h2>
-                  <p className="text-lg leading-relaxed text-gray-600">
+                  <p className="text-lg leading-relaxed text-[#301020]">
                     Advance your spiritual journey with personalized <strong>Meditation Guidance</strong> from Nevil Guru.
                     These on-demand sessions are tailored to provide individualized support for practitioners at all levels.
                     Whether you are a beginner taking your first steps or an advanced practitioner seeking to overcome a specific
@@ -153,7 +150,7 @@ export default function ServicesPage() {
                   </p>
                   <Link
                     href="#"
-                    className="inline-block rounded-lg bg-[#183F37] px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-[#152F2E]"
+                    className="inline-block rounded-full bg-[#E85D5D] px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-[#D64C4C]"
                     data-testid="cta-meditation-guidance"
                   >
                     Book Session
@@ -173,7 +170,7 @@ export default function ServicesPage() {
         </section>
 
         {/* Service 4: Mahaguru Meetup - Content Right, Image Left */}
-        <section className="bg-gradient-to-b from-gray-50 to-slate-100 py-20">
+        <section className="bg-[#FFF9F5] py-20">
           <div className="mx-auto max-w-7xl px-4 lg:px-8">
             <div className="grid items-center gap-12 lg:grid-cols-3">
               <div className="relative h-80 overflow-hidden rounded-2xl lg:order-1 lg:h-[400px] lg:col-span-2">
@@ -186,10 +183,10 @@ export default function ServicesPage() {
               </div>
               <div className="space-y-6 lg:order-2 lg:col-span-1" data-testid="service-mahaguru-meetup">
                 <div className="space-y-4">
-                  <h2 className="text-3xl font-bold text-gray-800 md:text-4xl">
+                  <h2 className="text-3xl font-bold text-[#301020] md:text-4xl">
                     Mahaguru Meetup
                   </h2>
-                  <p className="text-base leading-relaxed text-gray-600">
+                  <p className="text-base leading-relaxed text-[#301020]">
                     The <strong>Mahaguru Meetup</strong> offers a rare and unique opportunity to connect directly with Mahaguru,
                     either in person or online. These dedicated sessions are designed for individuals seeking profound clarity on
                     pressing personal matters, career decisions, or pivotal life choices. This offering also extends to corporate
@@ -199,7 +196,7 @@ export default function ServicesPage() {
                 </div>
                 <Link
                   href="/mahaguru-meetup"
-                  className="inline-block rounded-lg bg-[#183F37] px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-[#152F2E]"
+                  className="inline-block rounded-full bg-[#E85D5D] px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-[#D64C4C]"
                   data-testid="cta-mahaguru-meetup"
                 >
                   Explore Meetup
@@ -210,15 +207,15 @@ export default function ServicesPage() {
         </section>
 
         {/* Service 5: Weekly Clarity Q&A - Card Style with Overlapping Elements */}
-        <section className="bg-white py-20">
+        <section className="bg-[#FCE8D9] py-20">
           <div className="mx-auto max-w-6xl px-4 lg:px-8">
             <div className="relative" data-testid="service-weekly-qa">
               <div className="grid gap-8 lg:grid-cols-12">
-                <div className="relative z-10 lg:col-span-7 space-y-6 rounded-3xl bg-white p-8 shadow-2xl lg:p-12">
-                  <h2 className="text-4xl font-bold text-gray-800 md:text-5xl">
+                <div className="relative z-10 lg:col-span-7 space-y-6 rounded-3xl bg-[#FFF9F5] p-8 shadow-2xl lg:p-12">
+                  <h2 className="text-4xl font-bold text-[#301020] md:text-5xl">
                     Weekly Clarity Q&A
                   </h2>
-                  <p className="text-lg leading-relaxed text-gray-600">
+                  <p className="text-lg leading-relaxed text-[#301020]">
                     Join our interactive <strong>Weekly Clarity Q&A</strong> session, a supportive space for both new and experienced
                     followers to find answers. Whether you have questions about your personal practice or seek to clarify concepts
                     from our Dhamma discussions, this is your opportunity to engage directly with our facilitators. The session is
@@ -227,7 +224,7 @@ export default function ServicesPage() {
                   </p>
                   <Link
                     href="#"
-                    className="inline-block rounded-lg bg-[#183F37] px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-[#152F2E]"
+                    className="inline-block rounded-full bg-[#E85D5D] px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-[#D64C4C]"
                     data-testid="cta-weekly-qa"
                   >
                     Join Session
@@ -247,10 +244,10 @@ export default function ServicesPage() {
         </section>
 
         {/* Service 6: Gen Alpha Academy - Multi-column Layout */}
-        <section className="bg-gradient-to-b from-gray-50 to-slate-100 py-20">
+        <section className="bg-[#FFF9F5] py-20">
           <div className="mx-auto max-w-7xl px-4 lg:px-8">
             <div className="mb-16 text-center">
-              <h2 className="mb-6 text-4xl font-bold text-gray-800 md:text-5xl">
+              <h2 className="mb-6 text-4xl font-bold text-[#301020] md:text-5xl">
                 Gen Alpha Academy
               </h2>
             </div>
@@ -265,7 +262,7 @@ export default function ServicesPage() {
                 />
               </div>
               <div className="flex flex-col justify-center space-y-6">
-                <p className="text-lg leading-relaxed text-gray-600">
+                <p className="text-lg leading-relaxed text-[#301020]">
                   The <strong>Gen Alpha Academy</strong> is a visionary non-profit initiative by the Mahaguru Center,
                   dedicated to shaping a better tomorrow by empowering today's youth. This academy focuses on nurturing
                   a new generation of conscious, capable, and compassionate leaders through specialized programs that
@@ -273,7 +270,7 @@ export default function ServicesPage() {
                 </p>
                 <Link
                   href="/gen-alpha-academy"
-                  className="inline-block rounded-lg bg-[#183F37] px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-[#152F2E] self-start"
+                  className="inline-block rounded-full bg-[#E85D5D] px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-[#D64C4C] self-start"
                   data-testid="cta-gen-alpha-academy"
                 >
                   Discover Academy
@@ -284,9 +281,9 @@ export default function ServicesPage() {
         </section>
 
         {/* Service 7: Outreach - Full-width Feature with Side Content */}
-        <section className="bg-white py-20">
+        <section className="bg-[#FCE8D9] py-20">
           <div className="mx-auto max-w-7xl px-4 lg:px-8">
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#183F37] to-[#236661] p-8 lg:p-16" data-testid="service-outreach">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#47203B] to-[#7A344E] p-8 lg:p-16" data-testid="service-outreach">
               <div className="grid gap-12 lg:grid-cols-5">
                 <div className="lg:col-span-3 space-y-6">
                   <h2 className="text-4xl font-bold text-white md:text-5xl">
@@ -299,7 +296,7 @@ export default function ServicesPage() {
                   </p>
                   <Link
                     href="#"
-                    className="inline-block rounded-lg bg-white px-8 py-4 text-lg font-semibold text-[#183F37] transition-colors hover:bg-gray-100"
+                    className="inline-block rounded-full bg-white px-8 py-4 text-lg font-semibold text-[#4A1232] transition-colors hover:bg-[#FCE8D9]"
                     data-testid="cta-outreach"
                   >
                     Get Involved

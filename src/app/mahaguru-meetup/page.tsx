@@ -18,7 +18,7 @@ export default function MahaguruMeetupPage() {
               that awakens your inner guide. It&apos;s the single step that allows you to see beyond the horizon.
             </p>
             <a href="#clarity-paths" 
-               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-transform transform hover:scale-105">
+               className="bg-[#E85D5D] hover:bg-[#D64C4C] text-white font-bold py-3 px-8 rounded-full text-lg transition-transform transform hover:scale-105">
               Book Your Session
             </a>
           </div>
@@ -70,33 +70,33 @@ export default function MahaguruMeetupPage() {
               {/* Flip Cards */}
               <div className="flip-card aspect-square">
                 <div className="flip-card-inner">
-                  <div className="flip-card-front bg-green-600 text-white">
+                  <div className="flip-card-front bg-[#E85D5D] text-white">
                     <svg className="w-8 h-8 md:w-12 md:h-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                     </svg>
                     <h4 className="font-semibold text-sm md:text-lg">Meetup Online</h4>
                   </div>
-                  <div className="flip-card-back bg-green-600 text-white">
+                  <div className="flip-card-back bg-[#E85D5D] text-white">
                     <p className="font-semibold text-sm md:text-lg">For people living abroad</p>
                   </div>
                 </div>
               </div>
               <div className="flip-card aspect-square">
                 <div className="flip-card-inner">
-                  <div className="flip-card-front bg-green-700 text-white">
+                  <div className="flip-card-front bg-[#D64C4C] text-white">
                     <svg className="w-8 h-8 md:w-12 md:h-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 515.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 919.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
                     <h4 className="font-semibold text-sm md:text-lg">Meetup in person</h4>
                   </div>
-                  <div className="flip-card-back bg-green-700 text-white">
+                  <div className="flip-card-back bg-[#D64C4C] text-white">
                     <p className="font-semibold text-sm md:text-lg">For people residing in Sri Lanka</p>
                   </div>
                 </div>
               </div>
               <div className="flip-card aspect-square">
                 <div className="flip-card-inner">
-                  <div className="flip-card-front bg-blue-600 text-white">
+                  <div className="flip-card-front bg-[#E85D5D] text-white">
                     <svg className="w-8 h-8 md:w-12 md:h-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
                       <circle cx="9" cy="7" r="4"></circle>
@@ -105,20 +105,20 @@ export default function MahaguruMeetupPage() {
                     </svg>
                     <h4 className="font-semibold text-sm md:text-lg">Corporate</h4>
                   </div>
-                  <div className="flip-card-back bg-blue-600 text-white">
+                  <div className="flip-card-back bg-[#E85D5D] text-white">
                     <p className="font-semibold text-sm md:text-lg">For Corporate teams</p>
                   </div>
                 </div>
               </div>
               <div className="flip-card aspect-square">
                 <div className="flip-card-inner">
-                  <div className="flip-card-front bg-blue-700 text-white">
+                  <div className="flip-card-front bg-[#D64C4C] text-white">
                     <svg className="w-8 h-8 md:w-12 md:h-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"></path>
                     </svg>
                     <h4 className="font-semibold text-sm md:text-lg">Education</h4>
                   </div>
-                  <div className="flip-card-back bg-blue-700 text-white">
+                  <div className="flip-card-back bg-[#D64C4C] text-white">
                     <p className="font-semibold text-sm md:text-lg">For the student groups</p>
                   </div>
                 </div>
@@ -154,7 +154,7 @@ export default function MahaguruMeetupPage() {
                 </p>
                 <Link 
                   href="/meetup-in-person" 
-                  className="mt-auto w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
+                  className="mt-auto w-full text-center bg-[#E85D5D] hover:bg-[#D64C4C] text-white font-bold py-3 px-6 rounded-full">
                   Book In-Person Session
                 </Link>
               </div>
@@ -171,14 +171,14 @@ export default function MahaguruMeetupPage() {
                 </p>
                 <Link 
                   href="/meetup-online" 
-                  className="mt-auto w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
+                  className="mt-auto w-full text-center bg-[#E85D5D] hover:bg-[#D64C4C] text-white font-bold py-3 px-6 rounded-full">
                   Book Online Session
                 </Link>
               </div>
             </div>
 
             {/* What happens to your contribution */}
-            <div className="max-w-3xl mx-auto mt-12 p-6 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg text-center">
+            <div className="max-w-3xl mx-auto mt-12 p-6 bg-[#FCE8D9] border-l-4 border-[#E85D5D] rounded-r-lg text-center">
               <h4 className="font-bold text-lg text-gray-900 mb-2">
                 What happens to your contribution
               </h4>
@@ -189,7 +189,7 @@ export default function MahaguruMeetupPage() {
               </p>
               <Link 
                 href="./what-we-do.html" 
-                className="inline-block mt-4 text-blue-600 font-semibold border border-blue-600 rounded-full px-6 py-2 text-sm hover:bg-blue-600 hover:text-white transition-colors">
+                className="inline-block mt-4 text-[#E85D5D] font-semibold border border-[#E85D5D] rounded-full px-6 py-2 text-sm hover:bg-[#E85D5D] hover:text-white transition-colors">
                 Learn More About Our Mission →
               </Link>
             </div>
@@ -208,7 +208,7 @@ export default function MahaguruMeetupPage() {
                   href="https://wa.me/94777100490?text=Hello,%20I%27m%20interested%20in%20booking%20a%20Corporate%20session%20for%20my%20team." 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="mt-auto w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
+                  className="mt-auto w-full text-center bg-[#E85D5D] hover:bg-[#D64C4C] text-white font-bold py-3 px-6 rounded-full">
                   Inquire for Your Team
                 </a>
               </div>
@@ -224,7 +224,7 @@ export default function MahaguruMeetupPage() {
                   href="https://wa.me/94777100490?text=Hello,%20I%27m%20interested%20in%20booking%20an%20Education%20session%20for%20my%20group." 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="mt-auto w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
+                  className="mt-auto w-full text-center bg-[#E85D5D] hover:bg-[#D64C4C] text-white font-bold py-3 px-6 rounded-full">
                   Inquire for Your Group
                 </a>
               </div>
@@ -303,7 +303,7 @@ export default function MahaguruMeetupPage() {
               href="https://wa.me/94777100490?text=Hello%20I%20like%20to%20sit%20for%20a%20free%20session.%20Let%20me%20know%20the%20details" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg text-lg">
+              className="bg-[#E85D5D] hover:bg-[#D64C4C] text-white font-bold py-3 px-8 rounded-full text-lg">
               Register for Free Session
             </a>
           </div>

@@ -98,7 +98,7 @@ function ProjectProgressBar({
       </div>
       <div className="h-4 w-full rounded-full bg-gray-200">
         <div
-          className="h-4 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-300 ease-in-out"
+          className="h-4 rounded-full bg-gradient-to-r from-[#E85D5D] to-[#D64C4C] transition-all duration-300 ease-in-out"
           style={{ width: `${percentage}%` }}
           role="progressbar"
           aria-valuenow={percentage}
@@ -187,14 +187,14 @@ function ProjectCard({ project }: { project: Project }) {
       <div className="p-6">
         {/* Project Name and Tags */}
         <div className="mb-4">
-          <h3 className="mb-2 text-xl font-bold text-gray-800">
+          <h3 className="mb-2 text-xl font-bold text-[#301020]">
             {project.projectName}
           </h3>
           <div className="mb-3 flex flex-wrap gap-2">
-            <span className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800">
+            <span className="rounded-full bg-[#FCE8D9] px-3 py-1 text-sm text-[#301020]">
               {project.projectType}
             </span>
-            <span className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-800">
+            <span className="rounded-full bg-[#F3D1C4] px-3 py-1 text-sm text-[#301020]">
               {project.projectNature}
             </span>
           </div>
@@ -215,7 +215,7 @@ function ProjectCard({ project }: { project: Project }) {
         {/* CTA - Donate Button */}
         <a
           href={donationUrl}
-          className="block w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-center font-semibold text-white transition-all duration-300 hover:from-blue-700 hover:to-blue-800"
+          className="block w-full rounded-full bg-[#E85D5D] px-6 py-3 text-center font-semibold text-white transition-all duration-300 hover:bg-[#D64C4C]"
         >
           Donate Now
         </a>
@@ -275,8 +275,8 @@ export default function ProjectsPage() {
         <Navigation />
         <main className="min-h-screen">
           <div className="flex items-center justify-center py-32">
-            <div className="flex items-center space-x-2 text-gray-600">
-              <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
+            <div className="flex items-center space-x-2 text-[#301020]">
+              <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-[#E85D5D]"></div>
               <span className="text-lg">Loading projects...</span>
             </div>
           </div>
@@ -336,7 +336,7 @@ export default function ProjectsPage() {
               </p>
               <a
                 href="/contact?tab=volunteer"
-                className="inline-block rounded-lg bg-blue-600 px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:bg-blue-700 hover:shadow-lg"
+                className="inline-block rounded-full bg-[#E85D5D] px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:bg-[#D64C4C] hover:shadow-lg"
               >
                 Volunteer
               </a>
@@ -345,11 +345,11 @@ export default function ProjectsPage() {
         </section>
 
         {/* Section 02: Arahathmaga Spiritual Center */}
-        <section className="py-16 md:py-24 bg-gradient-to-br from-slate-50 to-blue-50">
+        <section className="py-16 md:py-24 bg-[#FCE8D9]">
           <div className="container mx-auto px-6 max-w-6xl">
             {/* Main Title and Subtitle */}
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#301020] mb-4">
                 Arahathmaga Spiritual Center
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-12">
@@ -378,8 +378,8 @@ export default function ProjectsPage() {
               {/* 2x2 Grid of Features */}
               <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 <div className="flex items-start space-x-4 p-6 rounded-xl bg-white shadow-lg">
-                  <div className="w-12 h-12 bg-[#183F37]/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg className="w-6 h-6 text-[#183F37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-12 h-12 bg-[#E85D5D]/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg className="w-6 h-6 text-[#E85D5D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
                   </div>
@@ -390,8 +390,8 @@ export default function ProjectsPage() {
                 </div>
 
                 <div className="flex items-start space-x-4 p-6 rounded-xl bg-white shadow-lg">
-                  <div className="w-12 h-12 bg-[#236661]/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg className="w-6 h-6 text-[#236661]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-12 h-12 bg-[#E85D5D]/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg className="w-6 h-6 text-[#E85D5D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                   </div>
@@ -402,8 +402,8 @@ export default function ProjectsPage() {
                 </div>
 
                 <div className="flex items-start space-x-4 p-6 rounded-xl bg-white shadow-lg">
-                  <div className="w-12 h-12 bg-[#183F37]/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg className="w-6 h-6 text-[#183F37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-12 h-12 bg-[#E85D5D]/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg className="w-6 h-6 text-[#E85D5D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                     </svg>
                   </div>
@@ -414,8 +414,8 @@ export default function ProjectsPage() {
                 </div>
 
                 <div className="flex items-start space-x-4 p-6 rounded-xl bg-white shadow-lg">
-                  <div className="w-12 h-12 bg-[#236661]/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg className="w-6 h-6 text-[#236661]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-12 h-12 bg-[#D64C4C]/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg className="w-6 h-6 text-[#D64C4C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                     </svg>
                   </div>
@@ -466,32 +466,32 @@ export default function ProjectsPage() {
                 </div>
               </div>
               <div className="order-1 lg:order-2 bg-white rounded-2xl p-8 shadow-lg h-full flex flex-col justify-center">
-                <h3 className="text-3xl font-bold text-gray-900 mb-6 md:text-4xl">
+                <h3 className="text-3xl font-bold text-[#301020] mb-6 md:text-4xl">
                   How the Center is Sustained
                 </h3>
-                <p className="text-gray-600 mb-8 text-lg leading-relaxed">
+                <p className="text-[#301020] mb-8 text-lg leading-relaxed">
                   Every contribution directly supports the daily operations and long-term vision of our sanctuary
                 </p>
                 <div className="grid gap-6 mb-8">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-[#183F37]/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <svg className="w-6 h-6 text-[#183F37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-12 h-12 bg-[#E85D5D]/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <svg className="w-6 h-6 text-[#E85D5D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                       </svg>
                     </div>
                     <span className="text-gray-700 font-medium text-lg">Permanent staff and full-time volunteers</span>
                   </div>
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-[#236661]/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <svg className="w-6 h-6 text-[#236661]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-12 h-12 bg-[#D64C4C]/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <svg className="w-6 h-6 text-[#D64C4C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                       </svg>
                     </div>
                     <span className="text-gray-700 font-medium text-lg">Utilities and facility maintenance</span>
                   </div>
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-[#183F37]/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <svg className="w-6 h-6 text-[#183F37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-12 h-12 bg-[#E85D5D]/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <svg className="w-6 h-6 text-[#E85D5D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
@@ -501,7 +501,7 @@ export default function ProjectsPage() {
                 <div>
                   <a
                     href="/contact?tab=donate&target=daily-dana"
-                    className="inline-block rounded-lg bg-[#183F37] px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-[#152F2E]"
+                    className="inline-block rounded-full bg-[#E85D5D] px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-[#D64C4C]"
                   >
                     Support Our Center
                   </a>
@@ -512,19 +512,19 @@ export default function ProjectsPage() {
         </section>
 
         {/* Section 03: Digital Mission */}
-        <section className="py-16 md:py-24 bg-gray-50">
+        <section className="py-16 md:py-24 bg-[#FFF9F5]">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900">Our Digital Mission</h2>
+              <h2 className="text-3xl font-bold text-[#301020]">Our Digital Mission</h2>
               <p className="mt-4 text-gray-600 max-w-2xl mx-auto">A comprehensive digital repository distilling over two decades of authentic dhamma teachings, supported by dedicated staff and volunteers.</p>
             </div>
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col group">
                 <a href="https://www.maithribodhi.org/" target="_blank" rel="noopener noreferrer" className="block relative aspect-video w-full bg-gray-200 rounded-md overflow-hidden mb-4">
                   <iframe src="https://www.maithribodhi.org/" className="w-full h-full pointer-events-none" title="Maithri Bodhi Website"></iframe>
-                  <div className="absolute inset-0 bg-transparent group-hover:bg-blue-500/10 transition-colors"></div>
+                  <div className="absolute inset-0 bg-transparent group-hover:bg-[#E85D5D]/10 transition-colors"></div>
                 </a>
-                <h3 className="font-semibold text-xl group-hover:text-blue-600 transition-colors">Web Archive</h3>
+                <h3 className="font-semibold text-xl group-hover:text-[#E85D5D] transition-colors">Web Archive</h3>
                 <p className="text-gray-600 text-sm">A complete online platform preserving and organizing spiritual wisdom.</p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col">
@@ -543,7 +543,7 @@ export default function ProjectsPage() {
                     className="object-cover"
                   />
                 </div>
-                <h3 className="font-semibold text-xl group-hover:text-blue-600 transition-colors">Facebook Community</h3>
+                <h3 className="font-semibold text-xl group-hover:text-[#E85D5D] transition-colors">Facebook Community</h3>
                 <p className="text-gray-600 text-sm">Daily inspiration and guidance for our growing community of followers.</p>
               </a>
               <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col">
@@ -564,13 +564,13 @@ export default function ProjectsPage() {
 
         {/* Section 04: Special Projects (Dynamic Projects) */}
         {projects && projects.length > 0 && (
-          <section className="py-16 md:py-24 bg-white">
+          <section className="py-16 md:py-24 bg-[#FCE8D9]">
             <div className="mx-auto max-w-7xl px-4">
               <div className="mb-16 text-center">
-                <h2 className="mb-8 text-3xl font-bold text-gray-800 md:text-4xl">
+                <h2 className="mb-8 text-3xl font-bold text-[#301020] md:text-4xl">
                   Special Projects
                 </h2>
-                <p className="mx-auto max-w-3xl text-lg leading-relaxed text-gray-600">
+                <p className="mx-auto max-w-3xl text-lg leading-relaxed text-[#301020]">
                   One-time projects with specific goals that help us expand our mission and reach new communities.
                 </p>
               </div>

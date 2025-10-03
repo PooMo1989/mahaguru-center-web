@@ -24,7 +24,7 @@ export default function GenAlphaAcademyPage() {
               href={REGISTRATION_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-700"
+              className="inline-block rounded-full bg-[#E85D5D] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#D64C4C]"
             >
               Reserve Now
             </a>
@@ -119,7 +119,7 @@ export default function GenAlphaAcademyPage() {
         </section>
 
         {/* Section 4: Program Details & Inclusions (Left/Right Split Layout) */}
-        <section className="bg-blue-50 px-4 py-12">
+        <section className="bg-[#FCE8D9] px-4 py-12">
           <div className="mx-auto max-w-6xl">
             <div className="grid gap-8 md:grid-cols-2">
               <div className="rounded-lg bg-white p-8 shadow-lg">
@@ -240,7 +240,7 @@ export default function GenAlphaAcademyPage() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block rounded-lg bg-green-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-green-700"
+              className="inline-block rounded-full bg-[#E85D5D] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#D64C4C]"
             >
               Inquire via WhatsApp
             </a>

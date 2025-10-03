@@ -315,19 +315,19 @@ function ContactPageContent() {
             <Tabs.List className="mb-8 flex flex-wrap justify-center gap-2 border-b border-gray-200 pb-4">
               <Tabs.Trigger
                 value="contact"
-                className="rounded-md border-2 border-transparent px-6 py-3 text-sm font-medium transition-colors duration-200 hover:bg-gray-50 data-[state=active]:border-blue-500 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
+                className="rounded-md border-2 border-transparent px-6 py-3 text-sm font-medium transition-colors duration-200 hover:bg-gray-50 data-[state=active]:border-[#E85D5D] data-[state=active]:bg-[#FCE8D9] data-[state=active]:text-[#301020]"
               >
                 Volunteer
               </Tabs.Trigger>
               <Tabs.Trigger
                 value="participate"
-                className="rounded-md border-2 border-transparent px-6 py-3 text-sm font-medium transition-colors duration-200 hover:bg-gray-50 data-[state=active]:border-blue-500 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
+                className="rounded-md border-2 border-transparent px-6 py-3 text-sm font-medium transition-colors duration-200 hover:bg-gray-50 data-[state=active]:border-[#E85D5D] data-[state=active]:bg-[#FCE8D9] data-[state=active]:text-[#301020]"
               >
                 Participate
               </Tabs.Trigger>
               <Tabs.Trigger
                 value="donation"
-                className="rounded-md border-2 border-transparent px-6 py-3 text-sm font-medium transition-colors duration-200 hover:bg-gray-50 data-[state=active]:border-blue-500 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
+                className="rounded-md border-2 border-transparent px-6 py-3 text-sm font-medium transition-colors duration-200 hover:bg-gray-50 data-[state=active]:border-[#E85D5D] data-[state=active]:bg-[#FCE8D9] data-[state=active]:text-[#301020]"
               >
                 Donate
               </Tabs.Trigger>
@@ -440,7 +440,7 @@ function ContactPageContent() {
                   <div>
                     <button
                       type="submit"
-                      className="w-full rounded-md bg-blue-600 px-6 py-3 font-medium text-white transition-colors duration-200 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+                      className="w-full rounded-full bg-[#E85D5D] px-6 py-3 font-medium text-white transition-colors duration-200 hover:bg-[#D64C4C] focus:ring-2 focus:ring-[#E85D5D] focus:ring-offset-2 focus:outline-none"
                     >
                       Submit
                     </button>
@@ -612,7 +612,7 @@ function ContactPageContent() {
                 </h2>
 
                 {/* Project Context Indicator - Always show in donation section */}
-                <div className="mb-6 rounded-r-md border-l-4 border-blue-400 bg-blue-50 p-3">
+                <div className="mb-6 rounded-r-md border-l-4 border-[#E85D5D] bg-[#FCE8D9] p-3">
                   <p className="text-sm font-medium text-blue-700">
                     {contextMessage}
                   </p>
@@ -628,7 +628,7 @@ function ContactPageContent() {
                       <Tabs.Trigger
                         key={fund.id}
                         value={fund.id}
-                        className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-gray-50 hover:text-gray-800 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none data-[state=active]:border-blue-600 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                        className="rounded-full border border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-[#FCE8D9] hover:text-[#301020] focus:ring-2 focus:ring-[#E85D5D] focus:ring-offset-2 focus:outline-none data-[state=active]:border-[#E85D5D] data-[state=active]:bg-[#E85D5D] data-[state=active]:text-white"
                       >
                         {fund.title}
                       </Tabs.Trigger>
