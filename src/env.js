@@ -10,9 +10,9 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    AUTH_SECRET: z.string().min(1),
+    AUTH_SECRET: isCI ? z.string().min(1).optional() : z.string().min(1),
     DATABASE_URL: z.string().url(),
-    SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
+    SUPABASE_SERVICE_ROLE_KEY: isCI ? z.string().min(1).optional() : z.string().min(1),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -24,8 +24,8 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
+    NEXT_PUBLIC_SUPABASE_URL: isCI ? z.string().url().optional() : z.string().url(),
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: isCI ? z.string().min(1).optional() : z.string().min(1),
   },
 
   /**

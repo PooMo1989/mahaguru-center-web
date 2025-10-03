@@ -1,43 +1,42 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { env } from "~/env";
-
-// Supabase client for storage operations
-// In production (Vercel), these MUST be set. Will throw error if missing.
-// In CI/development, they can be optional for build purposes.
-const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabaseServiceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY;
-
-// Helper to validate env vars at runtime (not during build)
-function validateSupabaseEnv() {
-  if (process.env.NODE_ENV === "production" && (!supabaseUrl || !supabaseAnonKey || !supabaseServiceRoleKey)) {
-    const missing = [
-      !supabaseUrl && "NEXT_PUBLIC_SUPABASE_URL",
-      !supabaseAnonKey && "NEXT_PUBLIC_SUPABASE_ANON_KEY", 
-      !supabaseServiceRoleKey && "SUPABASE_SERVICE_ROLE_KEY"
-    ].filter(Boolean).join(", ");
-    throw new Error(`Supabase environment variables are required in production. Missing: ${missing}`);
-  }
-}
-
-// Client-side Supabase client (for public operations)
-export const supabase = createClient(supabaseUrl || "placeholder", supabaseAnonKey || "placeholder");
-
-// Server-side Supabase client with service role key
-// This bypasses RLS, which is OK because we're doing auth checks in NextAuth
-export const supabaseAdmin = createClient(
-  supabaseUrl || "placeholder",
-  supabaseServiceRoleKey || "placeholder",
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  },
-);
 
 // Storage bucket name for images
 export const STORAGE_BUCKET = "event-project-images";
+
+// Lazy-initialized clients to avoid creating them during build
+let _supabase: SupabaseClient | null = null;
+let _supabaseAdmin: SupabaseClient | null = null;
+
+// Client-side Supabase client (for public operations)
+export const supabase = new Proxy({} as SupabaseClient, {
+  get: (target, prop) => {
+    if (!_supabase) {
+      const url = env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!;
+      const key = env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+      _supabase = createClient(url, key);
+    }
+    return (_supabase as any)[prop];
+  }
+});
+
+// Server-side Supabase client with service role key
+// This bypasses RLS, which is OK because we're doing auth checks in NextAuth
+export const supabaseAdmin = new Proxy({} as SupabaseClient, {
+  get: (target, prop) => {
+    if (!_supabaseAdmin) {
+      const url = env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!;
+      const key = env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY!;
+      _supabaseAdmin = createClient(url, key, {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+        },
+      });
+    }
+    return (_supabaseAdmin as any)[prop];
+  }
+});
 
 /**
  * Upload file to Supabase Storage (server-side only)
@@ -50,14 +49,11 @@ export async function uploadFileToSupabase(
   file: File,
   path: string,
 ): Promise<{ url: string; path: string }> {
-  // Validate environment variables at runtime (not during build)
-  validateSupabaseEnv();
-  
   // Log configuration (mask sensitive data)
-  console.log("Supabase config:", {
-    url: supabaseUrl,
-    serviceKeyExists: !!supabaseServiceRoleKey,
-    serviceKeyLength: supabaseServiceRoleKey?.length,
+  console.log("Supabase upload attempt:", {
+    path,
+    fileSize: file.size,
+    fileType: file.type,
     bucket: STORAGE_BUCKET,
   });
 
@@ -124,9 +120,6 @@ export async function uploadFileToSupabase(
  * @param path Storage path to delete
  */
 export async function deleteFileFromSupabase(path: string): Promise<void> {
-  // Validate environment variables at runtime (not during build)
-  validateSupabaseEnv();
-  
   const { error } = await supabaseAdmin.storage.from(STORAGE_BUCKET).remove([path]);
 
   if (error) {
