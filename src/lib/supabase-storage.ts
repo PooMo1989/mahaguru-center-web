@@ -2,18 +2,15 @@ import { createClient } from "@supabase/supabase-js";
 import { env } from "~/env";
 
 // Supabase client for storage operations
-// Use fallback values for build-time (will be replaced at runtime in production)
-const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL ?? "https://placeholder.supabase.co";
-const supabaseAnonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "placeholder-anon-key";
-const supabaseServiceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY ?? "placeholder-service-key";
+const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseServiceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY!;
 
 // Log environment variable status on initialization
 console.log("Supabase storage initialization:", {
-  urlFromEnv: !!env.NEXT_PUBLIC_SUPABASE_URL,
-  anonKeyFromEnv: !!env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-  serviceKeyFromEnv: !!env.SUPABASE_SERVICE_ROLE_KEY,
-  usingPlaceholderUrl: supabaseUrl === "https://placeholder.supabase.co",
-  usingPlaceholderServiceKey: supabaseServiceRoleKey === "placeholder-service-key",
+  urlExists: !!supabaseUrl,
+  anonKeyExists: !!supabaseAnonKey,
+  serviceKeyExists: !!supabaseServiceRoleKey,
 });
 
 // Client-side Supabase client (for public operations)

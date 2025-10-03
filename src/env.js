@@ -1,15 +1,6 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
-// Check if we're in a CI environment or if required vars are missing
-const isCI = process.env.CI === "true" || process.env.GITHUB_ACTIONS === "true";
-const hasRequiredVars = !!(
-  process.env.AUTH_SECRET &&
-  process.env.SUPABASE_SERVICE_ROLE_KEY &&
-  process.env.NEXT_PUBLIC_SUPABASE_URL &&
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
-
 export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
@@ -17,15 +8,17 @@ export const env = createEnv({
    */
   server: {
     AUTH_SECRET:
-      process.env.NODE_ENV === "production" && hasRequiredVars
-        ? z.string()
-        : z.string().optional(),
+      process.env.NODE_ENV === "production"
+        ? z.string().min(1)
+        : z.string().min(1).optional(),
 
     DATABASE_URL: z.string().url(),
+    
     SUPABASE_SERVICE_ROLE_KEY:
-      process.env.NODE_ENV === "production" && hasRequiredVars
-        ? z.string()
-        : z.string().optional(),
+      process.env.NODE_ENV === "production"
+        ? z.string().min(1)
+        : z.string().min(1).optional(),
+        
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -38,13 +31,14 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_SUPABASE_URL:
-      process.env.NODE_ENV === "production" && hasRequiredVars
+      process.env.NODE_ENV === "production"
         ? z.string().url()
         : z.string().url().optional(),
+        
     NEXT_PUBLIC_SUPABASE_ANON_KEY:
-      process.env.NODE_ENV === "production" && hasRequiredVars
-        ? z.string()
-        : z.string().optional(),
+      process.env.NODE_ENV === "production"
+        ? z.string().min(1)
+        : z.string().min(1).optional(),
   },
 
   /**
