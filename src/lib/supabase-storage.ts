@@ -49,54 +49,19 @@ export async function uploadFileToSupabase(
   file: File,
   path: string,
 ): Promise<{ url: string; path: string }> {
-  // Log configuration (mask sensitive data)
-  console.log("Supabase upload attempt:", {
-    path,
-    fileSize: file.size,
-    fileType: file.type,
-    bucket: STORAGE_BUCKET,
-  });
-
   // Convert File to ArrayBuffer for server-side upload
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  console.log("About to upload to Supabase:", {
-    path,
-    bufferSize: buffer.length,
-    contentType: file.type,
-  });
-
-  let data, error;
-  
-  try {
-    const result = await supabaseAdmin.storage
-      .from(STORAGE_BUCKET)
-      .upload(path, buffer, {
-        contentType: file.type,
-        cacheControl: "3600",
-        upsert: false,
-      });
-    data = result.data;
-    error = result.error;
-  } catch (uploadError) {
-    console.error("Supabase upload threw exception:", {
-      error: uploadError,
-      message: uploadError instanceof Error ? uploadError.message : String(uploadError),
-      stack: uploadError instanceof Error ? uploadError.stack : undefined,
-      cause: uploadError instanceof Error ? uploadError.cause : undefined,
+  const { data, error } = await supabaseAdmin.storage
+    .from(STORAGE_BUCKET)
+    .upload(path, buffer, {
+      contentType: file.type,
+      cacheControl: "3600",
+      upsert: false,
     });
-    throw uploadError;
-  }
 
   if (error) {
-    console.error("Supabase upload error details:", {
-      message: error.message,
-      name: error.name,
-      stack: error.stack,
-      statusCode: (error as any).statusCode,
-      error: error,
-    });
     throw new Error(`Upload failed: ${error.message}`);
   }
 

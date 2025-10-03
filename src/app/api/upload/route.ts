@@ -13,24 +13,17 @@ const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 export async function POST(request: NextRequest) {
   try {
-    console.log("Upload API called");
-    
     // Check authentication
     const session = await auth();
-    console.log("Session:", session ? "authenticated" : "not authenticated");
     if (!session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Parse form data
-    console.log("Parsing form data...");
     const formData = await request.formData();
     const file = formData.get("file") as File;
     const entityType = formData.get("entityType") as string;
     const entityId = formData.get("entityId") as string;
-    
-    console.log("File:", file?.name, "Size:", file?.size, "Type:", file?.type);
-    console.log("Entity:", entityType, "ID:", entityId);
 
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
@@ -62,20 +55,9 @@ export async function POST(request: NextRequest) {
     // Generate unique filename
     const filename = generateUniqueFilename(file.name);
     const storagePath = `${entityType}s/${entityId}/${filename}`;
-    
-    console.log("Uploading to path:", storagePath);
-    
-    // Check environment variables before upload
-    console.log("Environment check:", {
-      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ? "SET" : "MISSING",
-      SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ? "SET" : "MISSING",
-      NODE_ENV: process.env.NODE_ENV,
-    });
 
     // Upload to Supabase Storage
     const { url, path } = await uploadFileToSupabase(file, storagePath);
-    
-    console.log("Upload successful, URL:", url);
 
     return NextResponse.json({
       success: true,
@@ -89,25 +71,11 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Upload error FULL DETAILS:", error);
-    console.error("Error message:", error instanceof Error ? error.message : String(error));
-    console.error("Error stack:", error instanceof Error ? error.stack : "No stack");
-    
-    // Return detailed error for debugging
+    console.error("Upload error:", error);
     return NextResponse.json(
       {
-        error: error instanceof Error ? error.message : "Internal server error",
-        debug: {
-          errorName: error instanceof Error ? error.name : "Unknown",
-          errorMessage: error instanceof Error ? error.message : String(error),
-          errorStack: error instanceof Error ? error.stack : "No stack",
-          errorCause: error instanceof Error ? error.cause : undefined,
-          envCheck: {
-            supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ? "SET" : "MISSING",
-            serviceKey: process.env.SUPABASE_SERVICE_ROLE_KEY ? "SET" : "MISSING",
-            nodeEnv: process.env.NODE_ENV,
-          }
-        }
+        error:
+          error instanceof Error ? error.message : "Internal server error",
       },
       { status: 500 },
     );
