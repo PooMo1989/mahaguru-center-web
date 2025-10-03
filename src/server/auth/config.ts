@@ -84,17 +84,21 @@ export const authConfig = {
   },
   callbacks: {
     async redirect({ url, baseUrl }) {
-      // Always use relative URLs to ensure we stay on the current domain
-      // This fixes the issue where staging redirects to production
-      if (url.startsWith("/")) {
-        return url;
-      }
-      // If it's an absolute URL on the same domain, use it
+      // The redirect callback MUST return an absolute URL
+      // baseUrl is the current deployment URL (changes per deployment)
+      
+      // If url is already absolute and starts with our baseUrl, use it
       if (url.startsWith(baseUrl)) {
         return url;
       }
-      // Otherwise, redirect to admin (relative path)
-      return "/admin";
+      
+      // If url is a relative path, make it absolute using baseUrl
+      if (url.startsWith("/")) {
+        return `${baseUrl}${url}`;
+      }
+      
+      // For any other case, redirect to admin on current domain
+      return `${baseUrl}/admin`;
     },
     async jwt({ token, user }) {
       // Persist user data in JWT token

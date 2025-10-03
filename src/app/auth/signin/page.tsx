@@ -14,23 +14,7 @@ function SignInForm() {
   const [csrfToken, setCsrfToken] = useState("");
   const searchParams = useSearchParams();
   const router = useRouter();
-  // Extract only the path from callbackUrl to prevent cross-domain redirects
-  const rawCallbackUrl = searchParams.get("callbackUrl") ?? "/admin";
-  
-  // Safely extract pathname from absolute URLs, otherwise use as-is
-  let callbackUrl = "/admin";
-  try {
-    if (rawCallbackUrl.startsWith("http://") || rawCallbackUrl.startsWith("https://")) {
-      callbackUrl = new URL(rawCallbackUrl).pathname;
-    } else if (rawCallbackUrl.startsWith("/")) {
-      callbackUrl = rawCallbackUrl;
-    } else {
-      callbackUrl = `/${rawCallbackUrl}`;
-    }
-  } catch {
-    // If URL parsing fails, default to /admin
-    callbackUrl = "/admin";
-  }
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/admin";
 
   useEffect(() => {
     void getCsrfToken().then((token) => setCsrfToken(token ?? ""));
@@ -59,23 +43,9 @@ function SignInForm() {
       if (result?.error) {
         setError("Invalid username or password");
       } else if (result?.ok) {
-        // Use result.url if provided by NextAuth, otherwise use our callbackUrl
-        // Extract pathname if it's an absolute URL
-        let redirectUrl = callbackUrl;
-        if (result.url) {
-          try {
-            // If NextAuth returned an absolute URL, extract just the pathname
-            if (result.url.startsWith("http://") || result.url.startsWith("https://")) {
-              redirectUrl = new URL(result.url).pathname;
-            } else {
-              redirectUrl = result.url;
-            }
-          } catch {
-            // If parsing fails, use our original callbackUrl
-            redirectUrl = callbackUrl;
-          }
-        }
-        router.push(redirectUrl);
+        // NextAuth handles the redirect via the redirect callback
+        // Just use window.location for a full page navigation
+        window.location.href = result.url ?? callbackUrl;
       }
     } catch (error) {
       setError("An error occurred during sign-in");
