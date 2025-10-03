@@ -1,6 +1,9 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
+// Check if we're in CI (GitHub Actions) where we don't need Supabase vars
+const isCI = process.env.CI === "true" || process.env.GITHUB_ACTIONS === "true";
+
 export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
@@ -8,14 +11,14 @@ export const env = createEnv({
    */
   server: {
     AUTH_SECRET:
-      process.env.NODE_ENV === "production"
+      process.env.NODE_ENV === "production" && !isCI
         ? z.string().min(1)
         : z.string().min(1).optional(),
 
     DATABASE_URL: z.string().url(),
     
     SUPABASE_SERVICE_ROLE_KEY:
-      process.env.NODE_ENV === "production"
+      process.env.NODE_ENV === "production" && !isCI
         ? z.string().min(1)
         : z.string().min(1).optional(),
         
@@ -31,12 +34,12 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_SUPABASE_URL:
-      process.env.NODE_ENV === "production"
+      process.env.NODE_ENV === "production" && !isCI
         ? z.string().url()
         : z.string().url().optional(),
         
     NEXT_PUBLIC_SUPABASE_ANON_KEY:
-      process.env.NODE_ENV === "production"
+      process.env.NODE_ENV === "production" && !isCI
         ? z.string().min(1)
         : z.string().min(1).optional(),
   },

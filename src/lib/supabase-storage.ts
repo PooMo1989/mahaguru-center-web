@@ -2,25 +2,41 @@ import { createClient } from "@supabase/supabase-js";
 import { env } from "~/env";
 
 // Supabase client for storage operations
-const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabaseServiceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY!;
+// In production (Vercel), these MUST be set. Will throw error if missing.
+// In CI/development, they can be optional for build purposes.
+const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseServiceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY;
+
+// Runtime check - fail fast if variables are missing in production
+if (process.env.NODE_ENV === "production" && (!supabaseUrl || !supabaseAnonKey || !supabaseServiceRoleKey)) {
+  throw new Error(
+    "Supabase environment variables are required in production. " +
+    "Missing: " +
+    [
+      !supabaseUrl && "NEXT_PUBLIC_SUPABASE_URL",
+      !supabaseAnonKey && "NEXT_PUBLIC_SUPABASE_ANON_KEY", 
+      !supabaseServiceRoleKey && "SUPABASE_SERVICE_ROLE_KEY"
+    ].filter(Boolean).join(", ")
+  );
+}
 
 // Log environment variable status on initialization
 console.log("Supabase storage initialization:", {
   urlExists: !!supabaseUrl,
   anonKeyExists: !!supabaseAnonKey,
   serviceKeyExists: !!supabaseServiceRoleKey,
+  nodeEnv: process.env.NODE_ENV,
 });
 
 // Client-side Supabase client (for public operations)
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
 
 // Server-side Supabase client with service role key
 // This bypasses RLS, which is OK because we're doing auth checks in NextAuth
 export const supabaseAdmin = createClient(
-  supabaseUrl,
-  supabaseServiceRoleKey,
+  supabaseUrl!,
+  supabaseServiceRoleKey!,
   {
     auth: {
       autoRefreshToken: false,
