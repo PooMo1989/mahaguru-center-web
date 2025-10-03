@@ -300,8 +300,6 @@ function ContactPageContent() {
   return (
     <>
       <Navigation />
-      {/* Maroon header bar for navbar visibility */}
-      <div className="h-16 bg-[#4A1232]"></div>
       <main className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
         <div className="mx-auto max-w-4xl px-4 py-16">
           <h1 className="mb-12 text-center text-4xl font-bold text-gray-800 md:text-5xl">

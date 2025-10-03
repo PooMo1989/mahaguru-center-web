@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -17,28 +17,10 @@ const navigationLinks = [
 
 export function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Set initial state on mount
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
-        isScrolled
-          ? "bg-[#4A1232]/75 backdrop-blur-lg border-b border-white/10"
-          : "bg-transparent border-b border-transparent"
-      }`}
-    >
+    <nav className="sticky top-0 z-50 border-b border-[#4A1232] bg-[#4A1232] backdrop-blur-sm">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
           {/* Logo */}
@@ -67,10 +49,10 @@ export function Navigation() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`px-3 py-2 text-sm font-medium transition-all relative ${
+                    className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                       isActive
-                        ? "text-[#E85D5D] after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#E85D5D]"
-                        : "text-[#FCE8D9] hover:bg-[#E85D5D] hover:text-white hover:rounded-md"
+                        ? "bg-[#E85D5D] text-white"
+                        : "text-[#FCE8D9] hover:bg-[#E85D5D] hover:text-white"
                     }`}
                   >
                     {link.label}
@@ -109,7 +91,7 @@ export function Navigation() {
                           href={link.href}
                           className={`block px-4 py-2 text-sm transition-colors focus:outline-none ${
                             isActive
-                              ? "text-[#E85D5D] font-semibold border-l-4 border-[#E85D5D]"
+                              ? "bg-[#E85D5D] text-white"
                               : "text-[#301020] hover:bg-[#E85D5D] hover:text-white focus:bg-[#E85D5D] focus:text-white"
                           }`}
                           onClick={() => setIsMobileMenuOpen(false)}
