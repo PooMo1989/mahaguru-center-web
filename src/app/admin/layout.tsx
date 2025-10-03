@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
+import SignOutButton from "./SignOutButton";
 
 export default async function AdminLayout({
   children,
@@ -26,13 +27,7 @@ export default async function AdminLayout({
               <span className="text-sm text-gray-700">
                 Welcome, {session.user.name ?? session.user.email}
               </span>
-              {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-              <a
-                href="/api/auth/signout?callbackUrl=/"
-                className="text-sm text-blue-600 hover:text-blue-800"
-              >
-                Sign out
-              </a>
+              <SignOutButton />
             </div>
           </div>
         </div>

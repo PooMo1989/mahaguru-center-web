@@ -80,6 +80,7 @@ export const authConfig = {
   },
   pages: {
     signIn: "/auth/signin",
+    signOut: "/", // Redirect to home page after sign out
   },
   callbacks: {
     async redirect({ url, baseUrl }) {
