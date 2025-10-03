@@ -16,9 +16,21 @@ function SignInForm() {
   const router = useRouter();
   // Extract only the path from callbackUrl to prevent cross-domain redirects
   const rawCallbackUrl = searchParams.get("callbackUrl") ?? "/admin";
-  const callbackUrl = rawCallbackUrl.startsWith("http") 
-    ? new URL(rawCallbackUrl).pathname 
-    : rawCallbackUrl;
+  
+  // Safely extract pathname from absolute URLs, otherwise use as-is
+  let callbackUrl = "/admin";
+  try {
+    if (rawCallbackUrl.startsWith("http://") || rawCallbackUrl.startsWith("https://")) {
+      callbackUrl = new URL(rawCallbackUrl).pathname;
+    } else if (rawCallbackUrl.startsWith("/")) {
+      callbackUrl = rawCallbackUrl;
+    } else {
+      callbackUrl = `/${rawCallbackUrl}`;
+    }
+  } catch {
+    // If URL parsing fails, default to /admin
+    callbackUrl = "/admin";
+  }
 
   useEffect(() => {
     void getCsrfToken().then((token) => setCsrfToken(token ?? ""));
