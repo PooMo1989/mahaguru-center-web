@@ -59,7 +59,23 @@ function SignInForm() {
       if (result?.error) {
         setError("Invalid username or password");
       } else if (result?.ok) {
-        router.push(callbackUrl);
+        // Use result.url if provided by NextAuth, otherwise use our callbackUrl
+        // Extract pathname if it's an absolute URL
+        let redirectUrl = callbackUrl;
+        if (result.url) {
+          try {
+            // If NextAuth returned an absolute URL, extract just the pathname
+            if (result.url.startsWith("http://") || result.url.startsWith("https://")) {
+              redirectUrl = new URL(result.url).pathname;
+            } else {
+              redirectUrl = result.url;
+            }
+          } catch {
+            // If parsing fails, use our original callbackUrl
+            redirectUrl = callbackUrl;
+          }
+        }
+        router.push(redirectUrl);
       }
     } catch (error) {
       setError("An error occurred during sign-in");
