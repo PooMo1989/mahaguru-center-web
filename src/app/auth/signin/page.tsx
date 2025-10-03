@@ -14,7 +14,11 @@ function SignInForm() {
   const [csrfToken, setCsrfToken] = useState("");
   const searchParams = useSearchParams();
   const router = useRouter();
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/admin";
+  // Extract only the path from callbackUrl to prevent cross-domain redirects
+  const rawCallbackUrl = searchParams.get("callbackUrl") ?? "/admin";
+  const callbackUrl = rawCallbackUrl.startsWith("http") 
+    ? new URL(rawCallbackUrl).pathname 
+    : rawCallbackUrl;
 
   useEffect(() => {
     void getCsrfToken().then((token) => setCsrfToken(token ?? ""));
