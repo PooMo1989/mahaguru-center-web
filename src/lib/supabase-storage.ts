@@ -8,35 +8,26 @@ const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabaseServiceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY;
 
-// Runtime check - fail fast if variables are missing in production
-if (process.env.NODE_ENV === "production" && (!supabaseUrl || !supabaseAnonKey || !supabaseServiceRoleKey)) {
-  throw new Error(
-    "Supabase environment variables are required in production. " +
-    "Missing: " +
-    [
+// Helper to validate env vars at runtime (not during build)
+function validateSupabaseEnv() {
+  if (process.env.NODE_ENV === "production" && (!supabaseUrl || !supabaseAnonKey || !supabaseServiceRoleKey)) {
+    const missing = [
       !supabaseUrl && "NEXT_PUBLIC_SUPABASE_URL",
       !supabaseAnonKey && "NEXT_PUBLIC_SUPABASE_ANON_KEY", 
       !supabaseServiceRoleKey && "SUPABASE_SERVICE_ROLE_KEY"
-    ].filter(Boolean).join(", ")
-  );
+    ].filter(Boolean).join(", ");
+    throw new Error(`Supabase environment variables are required in production. Missing: ${missing}`);
+  }
 }
 
-// Log environment variable status on initialization
-console.log("Supabase storage initialization:", {
-  urlExists: !!supabaseUrl,
-  anonKeyExists: !!supabaseAnonKey,
-  serviceKeyExists: !!supabaseServiceRoleKey,
-  nodeEnv: process.env.NODE_ENV,
-});
-
 // Client-side Supabase client (for public operations)
-export const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
+export const supabase = createClient(supabaseUrl || "placeholder", supabaseAnonKey || "placeholder");
 
 // Server-side Supabase client with service role key
 // This bypasses RLS, which is OK because we're doing auth checks in NextAuth
 export const supabaseAdmin = createClient(
-  supabaseUrl!,
-  supabaseServiceRoleKey!,
+  supabaseUrl || "placeholder",
+  supabaseServiceRoleKey || "placeholder",
   {
     auth: {
       autoRefreshToken: false,
@@ -59,11 +50,13 @@ export async function uploadFileToSupabase(
   file: File,
   path: string,
 ): Promise<{ url: string; path: string }> {
+  // Validate environment variables at runtime (not during build)
+  validateSupabaseEnv();
+  
   // Log configuration (mask sensitive data)
   console.log("Supabase config:", {
     url: supabaseUrl,
     serviceKeyExists: !!supabaseServiceRoleKey,
-    serviceKeyIsPlaceholder: supabaseServiceRoleKey === "placeholder-service-key",
     serviceKeyLength: supabaseServiceRoleKey?.length,
     bucket: STORAGE_BUCKET,
   });
@@ -131,6 +124,9 @@ export async function uploadFileToSupabase(
  * @param path Storage path to delete
  */
 export async function deleteFileFromSupabase(path: string): Promise<void> {
+  // Validate environment variables at runtime (not during build)
+  validateSupabaseEnv();
+  
   const { error } = await supabaseAdmin.storage.from(STORAGE_BUCKET).remove([path]);
 
   if (error) {
