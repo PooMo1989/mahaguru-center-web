@@ -457,7 +457,7 @@ export default function ProjectsPage() {
                   </div>
                   <div className="relative aspect-square rounded-xl overflow-hidden shadow-lg">
                     <Image
-                      src="/kids 2.jpg"
+                      src="/car-four.png"
                       alt="Kids at Center"
                       fill
                       className="object-cover"
@@ -529,7 +529,7 @@ export default function ProjectsPage() {
               </div>
               <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col">
                 <div className="aspect-video w-full bg-gray-200 rounded-md overflow-hidden mb-4">
-                  <iframe className="w-full h-full" src="https://www.youtube.com/embed/l3zSgmQKwsc" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                  <iframe className="w-full h-full" src="https://www.youtube.com/embed/BKBs8NBnOHI" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                 </div>
                 <h3 className="font-semibold text-xl">YouTube Channel</h3>
                 <p className="text-gray-600 text-sm">Extensive dhamma discussions with curated playlists for different spiritual topics.</p>
