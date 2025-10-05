@@ -64,14 +64,16 @@
 /* Carousel animations */
 @keyframes carousel {
   0% { transform: translateX(0); }
-  25% { transform: translateX(-100%); }
-  50% { transform: translateX(-200%); }
-  75% { transform: translateX(-300%); }
-  100% { transform: translateX(-400%); }
+  30% { transform: translateX(0); }
+  33.33% { transform: translateX(-100%); }
+  63.33% { transform: translateX(-100%); }
+  66.66% { transform: translateX(-200%); }
+  96.66% { transform: translateX(-200%); }
+  100% { transform: translateX(0); }
 }
 
 .animate-carousel {
-  animation: carousel 16s infinite;
+  animation: carousel 12s infinite;
 }
 
 /* Flip card animations */

@@ -39,7 +39,7 @@ export default function Home() {
       <Navigation />
       <main>
         {/* Hero Section with Background Video */}
-        <section className="relative flex h-screen items-center overflow-hidden">
+        <section className="relative flex h-screen items-center overflow-hidden pt-20">
           <div className="absolute inset-0">
             <video
               ref={videoRef}
@@ -55,8 +55,11 @@ export default function Home() {
           <div className="relative z-10 w-full max-w-7xl mx-auto px-8 lg:px-16">
             <div className="max-w-2xl">
               <h1 className="mb-16 font-bold text-white animate-fade-in-up">
-                <div className="text-3xl md:text-4xl mb-2">Welcome to</div>
-                <div className="text-6xl md:text-7xl lg:text-8xl leading-none">Mahaguru Center</div>
+                <div className="text-2xl md:text-3xl mb-2">Welcome to</div>
+                <div className="text-5xl md:text-6xl lg:text-7xl leading-none">
+                  <div>Mahaguru</div>
+                  <div>Center</div>
+                </div>
               </h1>
               <p className="mb-10 text-xl text-white/90 italic md:text-2xl animate-fade-in-up animation-delay-300">
                 &ldquo;The mind is everything. What you think you become.&rdquo;
@@ -91,12 +94,13 @@ export default function Home() {
                   </button>
                 </Link>
               </div>
-              <div className="relative h-96 overflow-hidden rounded-2xl lg:h-[500px]">
+              <div className="relative h-96 overflow-hidden rounded-2xl lg:h-[500px] flex items-center justify-center bg-[#FCE8D9]">
                 <Image
-                  src="/Untitled design (1).jpg"
+                  src="/home-mahaguru-icon.svg"
                   alt="Mahaguru"
-                  fill
-                  className="object-cover"
+                  width={400}
+                  height={400}
+                  className="object-contain"
                 />
               </div>
             </div>
@@ -109,7 +113,7 @@ export default function Home() {
             <div className="mb-12 text-center">
               <div className="relative mb-8 h-64 overflow-hidden rounded-2xl border-2 border-white md:h-80">
                 <Image
-                  src="/Screenshot 2025-08-20 185255.jpg"
+                  src="/home-services-image.jpg"
                   alt="Our Services"
                   fill
                   className="object-cover"

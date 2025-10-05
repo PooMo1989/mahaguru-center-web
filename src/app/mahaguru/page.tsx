@@ -1,8 +1,30 @@
+"use client";
+
 import { Navigation, Footer } from "~/components/navigation";
 import * as Tabs from "@radix-ui/react-tabs";
 import Image from "next/image";
+import Link from "next/link";
+import { useRef, useEffect } from "react";
 
 export default function MahaguruPage() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleEnded = () => {
+      // When video ends, pause at the last frame
+      video.pause();
+    };
+
+    video.addEventListener('ended', handleEnded);
+
+    return () => {
+      video.removeEventListener('ended', handleEnded);
+    };
+  }, []);
+
   const lifeStages = [
     {
       id: "early-age",
@@ -65,27 +87,36 @@ export default function MahaguruPage() {
     <>
       <Navigation />
       <main className="relative min-h-screen">
-        {/* Hero Section with Background Image */}
-        <div className="relative h-[60vh] min-h-[400px] overflow-hidden">
-          <Image
-            src="/heroImage.webp"
-            alt="Spiritual journey background"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60"></div>
-          <div className="relative z-10 flex h-full items-center justify-center">
-            <div className="px-4 text-center text-white">
-              <h1 className="mb-4 text-5xl font-bold drop-shadow-lg md:text-7xl">
-                Mahaguru
+        {/* Hero Section with Background Video */}
+        <section className="relative flex h-screen items-center overflow-hidden">
+          <div className="absolute inset-0">
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              playsInline
+              className="h-full w-full object-cover"
+            >
+              <source src="/mahaguru-hero-video.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-black/40"></div>
+          </div>
+          <div className="relative z-10 w-full max-w-7xl mx-auto px-8 lg:px-16">
+            <div className="max-w-2xl">
+              <h1 className="mb-16 font-bold text-white animate-fade-in-up">
+                <div className="text-6xl md:text-7xl lg:text-8xl leading-none">Mahaguru</div>
               </h1>
-              <p className="mx-auto max-w-2xl text-xl font-light drop-shadow-md md:text-2xl">
+              <p className="mb-10 text-xl text-white/90 italic md:text-2xl animate-fade-in-up animation-delay-300">
                 A Journey Through the Five Stages of Spiritual Realization
               </p>
+              <Link href="/mahaguru-meetup" className="inline-block animate-fade-in-up animation-delay-600">
+                <button className="rounded-full bg-[#E85D5D] px-8 py-4 text-lg font-semibold text-white shadow-lg transition-colors hover:bg-[#D64C4C] hover:shadow-xl">
+                  Book Meetup
+                </button>
+              </Link>
             </div>
           </div>
-        </div>
+        </section>
 
         {/* Main Content */}
         <div className="bg-gradient-to-b from-slate-50 to-slate-100 py-16">
